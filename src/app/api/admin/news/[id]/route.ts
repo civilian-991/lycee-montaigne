@@ -1,0 +1,31 @@
+import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const session = await auth();
+  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+
+  const { id } = await params;
+  const body = await req.json();
+  const item = await db.newsItem.update({
+    where: { id },
+    data: {
+      title: body.title,
+      image: body.image,
+      link: body.link,
+      category: body.category,
+    },
+  });
+
+  return NextResponse.json(item);
+}
+
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const session = await auth();
+  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+
+  const { id } = await params;
+  await db.newsItem.delete({ where: { id } });
+  return NextResponse.json({ success: true });
+}

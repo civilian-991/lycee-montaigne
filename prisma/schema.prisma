@@ -1,0 +1,196 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("admin")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Page {
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  title           String
+  metaDescription String?       @map("meta_description")
+  ogImage         String?       @map("og_image")
+  sections        PageSection[]
+  menuItems       MenuItem[]
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  @@map("pages")
+}
+
+model PageSection {
+  id          String  @id @default(cuid())
+  pageId      String  @map("page_id")
+  sectionKey  String  @map("section_key")
+  title       String?
+  contentHtml String? @map("content_html")
+  image       String?
+  order       Int     @default(0)
+  page        Page    @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, sectionKey])
+  @@map("page_sections")
+}
+
+model NewsItem {
+  id          String   @id @default(cuid())
+  title       String
+  image       String?
+  link        String?
+  category    String?
+  publishedAt DateTime @default(now()) @map("published_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("news_items")
+}
+
+model Document {
+  id           String   @id @default(cuid())
+  title        String
+  fileUrl      String   @map("file_url")
+  category     String
+  academicYear String?  @map("academic_year")
+  order        Int      @default(0)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("documents")
+}
+
+model CarouselSlide {
+  id      String  @id @default(cuid())
+  imageUrl String @map("image_url")
+  altText  String @default("") @map("alt_text")
+  link     String?
+  order    Int     @default(0)
+
+  @@map("carousel_slides")
+}
+
+model QuickLink {
+  id     String @id @default(cuid())
+  label  String
+  url    String
+  target String @default("_self")
+  order  Int    @default(0)
+
+  @@map("quick_links")
+}
+
+model StaffMember {
+  id          String  @id @default(cuid())
+  name        String
+  title       String
+  photo       String?
+  messageHtml String? @map("message_html")
+  section     String
+  order       Int     @default(0)
+
+  @@map("staff_members")
+}
+
+model Certification {
+  id          String  @id @default(cuid())
+  name        String
+  image       String?
+  description String?
+  order       Int     @default(0)
+
+  @@map("certifications")
+}
+
+model AlumniEvent {
+  id              String        @id @default(cuid())
+  title           String
+  date            DateTime
+  descriptionHtml String?       @map("description_html")
+  photos          AlumniPhoto[]
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  @@map("alumni_events")
+}
+
+model AlumniPhoto {
+  id       String      @id @default(cuid())
+  eventId  String      @map("event_id")
+  imageUrl String      @map("image_url")
+  altText  String      @default("") @map("alt_text")
+  order    Int         @default(0)
+  event    AlumniEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@map("alumni_photos")
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("contact_submissions")
+}
+
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+
+  @@map("site_settings")
+}
+
+model MenuItem {
+  id       String     @id @default(cuid())
+  label    String
+  url      String?
+  parentId String?    @map("parent_id")
+  order    Int        @default(0)
+  pageId   String?    @map("page_id")
+  parent   MenuItem?  @relation("MenuChildren", fields: [parentId], references: [id])
+  children MenuItem[] @relation("MenuChildren")
+  page     Page?      @relation(fields: [pageId], references: [id])
+
+  @@map("menu_items")
+}
+
+model ActivityItem {
+  id          String  @id @default(cuid())
+  title       String
+  description String?
+  image       String?
+  category    String
+  order       Int     @default(0)
+
+  @@map("activity_items")
+}
+
+model Announcement {
+  id          String    @id @default(cuid())
+  title       String
+  contentHtml String    @map("content_html")
+  active      Boolean   @default(true)
+  startDate   DateTime? @map("start_date")
+  endDate     DateTime? @map("end_date")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@map("announcements")
+}
