@@ -1,0 +1,46 @@
+import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const session = await auth();
+  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+
+  const { id } = await params;
+  const page = await db.page.findUnique({
+    where: { id },
+    include: { sections: { orderBy: { order: "asc" } } },
+  });
+
+  if (!page) return NextResponse.json({ error: "Page introuvable" }, { status: 404 });
+
+  return NextResponse.json(page);
+}
+
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const session = await auth();
+  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+
+  const { id } = await params;
+  const body = await req.json();
+  const page = await db.page.update({
+    where: { id },
+    data: {
+      slug: body.slug,
+      title: body.title,
+      metaDescription: body.metaDescription || null,
+      ogImage: body.ogImage || null,
+    },
+  });
+
+  return NextResponse.json(page);
+}
+
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const session = await auth();
+  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+
+  const { id } = await params;
+  await db.page.delete({ where: { id } });
+  return NextResponse.json({ success: true });
+}

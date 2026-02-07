@@ -15,19 +15,45 @@ import {
   LogOut,
   Menu,
   X,
+  Megaphone,
+  BookOpen,
+  GraduationCap,
+  Activity,
+  Award,
+  FolderOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-const navItems = [
-  { label: "Tableau de bord", href: "/admin", icon: LayoutDashboard },
-  { label: "Actualités", href: "/admin/news", icon: Newspaper },
-  { label: "Documents", href: "/admin/documents", icon: FileText },
-  { label: "Carousel", href: "/admin/carousel", icon: Image },
-  { label: "Liens rapides", href: "/admin/links", icon: Link2 },
-  { label: "Équipe", href: "/admin/staff", icon: Users },
-  { label: "Messages", href: "/admin/contact-submissions", icon: Mail },
-  { label: "Paramètres", href: "/admin/settings", icon: Settings },
+const navSections = [
+  {
+    items: [
+      { label: "Tableau de bord", href: "/admin", icon: LayoutDashboard },
+    ],
+  },
+  {
+    title: "Contenu",
+    items: [
+      { label: "Actualités", href: "/admin/news", icon: Newspaper },
+      { label: "Documents", href: "/admin/documents", icon: FileText },
+      { label: "Annonces", href: "/admin/announcements", icon: Megaphone },
+      { label: "Pages", href: "/admin/pages", icon: BookOpen },
+      { label: "Anciens", href: "/admin/alumni-events", icon: GraduationCap },
+      { label: "Activités", href: "/admin/activities", icon: Activity },
+      { label: "Certifications", href: "/admin/certifications", icon: Award },
+    ],
+  },
+  {
+    title: "Gestion",
+    items: [
+      { label: "Carousel", href: "/admin/carousel", icon: Image },
+      { label: "Liens rapides", href: "/admin/links", icon: Link2 },
+      { label: "Équipe", href: "/admin/staff", icon: Users },
+      { label: "Messages", href: "/admin/contact-submissions", icon: Mail },
+      { label: "Médias", href: "/admin/media", icon: FolderOpen },
+      { label: "Paramètres", href: "/admin/settings", icon: Settings },
+    ],
+  },
 ];
 
 export function AdminSidebar() {
@@ -46,29 +72,40 @@ export function AdminSidebar() {
         </div>
       </div>
       <nav className="flex-1 overflow-y-auto p-3">
-        <ul className="space-y-1">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const active = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
-                    active
-                      ? "bg-primary/10 font-medium text-primary"
-                      : "text-text-muted hover:bg-background-alt hover:text-text"
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        {navSections.map((section, sIdx) => (
+          <div key={sIdx}>
+            {section.title && (
+              <p className="mb-1 mt-4 px-3 text-xs font-semibold uppercase tracking-wider text-text-muted/60">
+                {section.title}
+              </p>
+            )}
+            <ul className="space-y-1">
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                const active =
+                  pathname === item.href ||
+                  (item.href !== "/admin" && pathname.startsWith(item.href));
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+                        active
+                          ? "bg-primary/10 font-medium text-primary"
+                          : "text-text-muted hover:bg-background-alt hover:text-text"
+                      )}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
       <div className="border-t border-border p-3">
         <button

@@ -2,24 +2,49 @@ import { db } from "@/lib/db";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { DeleteButton } from "./delete-button";
+import { Pagination } from "@/components/admin/pagination";
+import { SearchInput } from "@/components/admin/search-input";
+import { parsePagination, parseSearch, totalPages } from "@/lib/admin-utils";
 
-export default async function AdminNewsPage() {
+export default async function AdminNewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const sp = await searchParams;
+  const { page, skip, take, pageSize } = parsePagination(sp);
+  const q = parseSearch(sp);
+
+  const where = q
+    ? { title: { contains: q, mode: "insensitive" as const } }
+    : {};
+
   let items: { id: string; title: string; category: string | null; publishedAt: Date }[] = [];
+  let count = 0;
+
   try {
-    items = await db.newsItem.findMany({
-      orderBy: { publishedAt: "desc" },
-      select: { id: true, title: true, category: true, publishedAt: true },
-    });
+    [items, count] = await Promise.all([
+      db.newsItem.findMany({
+        where,
+        orderBy: { publishedAt: "desc" },
+        select: { id: true, title: true, category: true, publishedAt: true },
+        skip,
+        take,
+      }),
+      db.newsItem.count({ where }),
+    ]);
   } catch {
     // DB not connected yet
   }
+
+  const pages = totalPages(count, pageSize);
 
   return (
     <>
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-text">Actualités</h1>
-          <p className="mt-1 text-sm text-text-muted">{items.length} article(s)</p>
+          <p className="mt-1 text-sm text-text-muted">{count} article(s)</p>
         </div>
         <Link
           href="/admin/news/new"
@@ -30,10 +55,14 @@ export default async function AdminNewsPage() {
         </Link>
       </div>
 
+      <div className="mb-4">
+        <SearchInput placeholder="Rechercher une actualité..." />
+      </div>
+
       <div className="overflow-hidden rounded-xl border border-border bg-white">
         {items.length === 0 ? (
           <div className="p-8 text-center text-sm text-text-muted">
-            Aucune actualité pour le moment.
+            {q ? "Aucun résultat pour cette recherche." : "Aucune actualité pour le moment."}
           </div>
         ) : (
           <table className="w-full text-sm">
@@ -70,6 +99,8 @@ export default async function AdminNewsPage() {
           </table>
         )}
       </div>
+
+      <Pagination totalPages={pages} currentPage={page} />
     </>
   );
 }

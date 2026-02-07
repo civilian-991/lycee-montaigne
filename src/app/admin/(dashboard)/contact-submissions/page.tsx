@@ -1,25 +1,84 @@
+import Link from "next/link";
 import { db } from "@/lib/db";
+import { parsePagination, totalPages } from "@/lib/admin-utils";
+import { Pagination } from "@/components/admin/pagination";
 import { MarkReadButton } from "./mark-read-button";
+import { ContactDeleteButton } from "./delete-button";
 
-export default async function ContactSubmissionsPage() {
+const FILTERS = [
+  { label: "Tous", value: "" },
+  { label: "Non lus", value: "unread" },
+  { label: "Lus", value: "read" },
+] as const;
+
+export default async function ContactSubmissionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const sp = await searchParams;
+  const { page, skip, take, pageSize } = parsePagination(sp);
+  const filter = (sp.filter as string) || "";
+
+  const where =
+    filter === "unread"
+      ? { read: false }
+      : filter === "read"
+        ? { read: true }
+        : {};
+
   let submissions: { id: string; name: string; email: string; message: string; read: boolean; createdAt: Date }[] = [];
+  let count = 0;
+  let unreadCount = 0;
+
   try {
-    submissions = await db.contactSubmission.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+    [submissions, count, unreadCount] = await Promise.all([
+      db.contactSubmission.findMany({
+        where,
+        orderBy: { createdAt: "desc" },
+        skip,
+        take,
+      }),
+      db.contactSubmission.count({ where }),
+      db.contactSubmission.count({ where: { read: false } }),
+    ]);
   } catch {
     // DB not connected
   }
 
-  const unread = submissions.filter((s) => !s.read).length;
+  const pages = totalPages(count, pageSize);
 
   return (
     <>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-text">Messages de contact</h1>
         <p className="mt-1 text-sm text-text-muted">
-          {submissions.length} message(s){unread > 0 ? ` dont ${unread} non lu(s)` : ""}
+          {count} message(s){unreadCount > 0 ? ` dont ${unreadCount} non lu(s)` : ""}
         </p>
+      </div>
+
+      {/* Filter tabs */}
+      <div className="mb-4 flex gap-2">
+        {FILTERS.map((f) => {
+          const active = filter === f.value;
+          const params = new URLSearchParams();
+          if (f.value) params.set("filter", f.value);
+          const href = `/admin/contact-submissions${params.toString() ? `?${params.toString()}` : ""}`;
+
+          return (
+            <Link
+              key={f.value}
+              href={href}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                active
+                  ? "bg-primary text-white"
+                  : "bg-white text-text-muted border border-border hover:bg-background-alt"
+              }`}
+            >
+              {f.label}
+            </Link>
+          );
+        })}
       </div>
 
       <div className="space-y-4">
@@ -63,12 +122,15 @@ export default async function ContactSubmissionsPage() {
                   >
                     Répondre
                   </a>
+                  <ContactDeleteButton id={sub.id} />
                 </div>
               </div>
             </div>
           ))
         )}
       </div>
+
+      <Pagination totalPages={pages} currentPage={page} />
     </>
   );
 }

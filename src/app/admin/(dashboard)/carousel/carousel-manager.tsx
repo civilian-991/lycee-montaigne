@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Pencil } from "lucide-react";
+import { DeleteModal } from "@/components/admin/delete-modal";
 
 interface Slide {
   id: string;
@@ -17,6 +18,44 @@ export function CarouselManager({ initialSlides }: { initialSlides: Slide[] }) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editData, setEditData] = useState<{ imageUrl: string; altText: string; link: string }>({
+    imageUrl: "",
+    altText: "",
+    link: "",
+  });
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+
+  function startEdit(slide: Slide) {
+    setEditingId(slide.id);
+    setEditData({
+      imageUrl: slide.imageUrl,
+      altText: slide.altText,
+      link: slide.link || "",
+    });
+  }
+
+  function cancelEdit() {
+    setEditingId(null);
+    setEditData({ imageUrl: "", altText: "", link: "" });
+  }
+
+  async function handleUpdate(id: string) {
+    setLoading(true);
+    await fetch(`/api/admin/carousel/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        imageUrl: editData.imageUrl,
+        altText: editData.altText,
+        link: editData.link || null,
+      }),
+    });
+    setEditingId(null);
+    setLoading(false);
+    router.refresh();
+  }
 
   async function handleAdd(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -40,11 +79,17 @@ export function CarouselManager({ initialSlides }: { initialSlides: Slide[] }) {
     router.refresh();
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm("Supprimer cette slide ?")) return;
-    await fetch(`/api/admin/carousel/${id}`, { method: "DELETE" });
+  async function confirmDelete() {
+    if (!deleteId) return;
+    setDeleteLoading(true);
+    await fetch(`/api/admin/carousel/${deleteId}`, { method: "DELETE" });
+    setDeleteId(null);
+    setDeleteLoading(false);
     router.refresh();
   }
+
+  const inputClass =
+    "mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary";
 
   return (
     <div>
@@ -60,15 +105,74 @@ export function CarouselManager({ initialSlides }: { initialSlides: Slide[] }) {
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
             </div>
-            <div className="p-3">
-              <p className="truncate text-sm text-text-muted">{slide.altText || "Sans description"}</p>
-            </div>
-            <button
-              onClick={() => handleDelete(slide.id)}
-              className="absolute right-2 top-2 rounded-lg bg-red-500 p-1.5 text-white opacity-0 transition-opacity group-hover:opacity-100"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
+
+            {editingId === slide.id ? (
+              <div className="space-y-3 p-4">
+                <div>
+                  <label className="block text-sm font-medium text-text">URL image *</label>
+                  <input
+                    type="url"
+                    required
+                    value={editData.imageUrl}
+                    onChange={(e) => setEditData({ ...editData, imageUrl: e.target.value })}
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-text">Description</label>
+                  <input
+                    value={editData.altText}
+                    onChange={(e) => setEditData({ ...editData, altText: e.target.value })}
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-text">Lien</label>
+                  <input
+                    type="url"
+                    value={editData.link}
+                    onChange={(e) => setEditData({ ...editData, link: e.target.value })}
+                    className={inputClass}
+                  />
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => handleUpdate(slide.id)}
+                    disabled={loading || !editData.imageUrl}
+                    className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-light disabled:opacity-50"
+                  >
+                    {loading ? "Enregistrement..." : "Enregistrer"}
+                  </button>
+                  <button
+                    onClick={cancelEdit}
+                    className="rounded-lg border border-border px-4 py-2 text-sm text-text-muted hover:bg-background-alt"
+                  >
+                    Annuler
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="p-3">
+                <p className="truncate text-sm text-text-muted">{slide.altText || "Sans description"}</p>
+              </div>
+            )}
+
+            {editingId !== slide.id && (
+              <div className="absolute right-2 top-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                <button
+                  onClick={() => startEdit(slide)}
+                  className="rounded-lg bg-primary p-1.5 text-white"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setDeleteId(slide.id)}
+                  className="rounded-lg bg-red-500 p-1.5 text-white"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -84,15 +188,15 @@ export function CarouselManager({ initialSlides }: { initialSlides: Slide[] }) {
           <div className="space-y-4">
             <div>
               <label htmlFor="imageUrl" className="block text-sm font-medium text-text">URL image *</label>
-              <input id="imageUrl" name="imageUrl" type="url" required className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+              <input id="imageUrl" name="imageUrl" type="url" required className={inputClass} />
             </div>
             <div>
               <label htmlFor="altText" className="block text-sm font-medium text-text">Description</label>
-              <input id="altText" name="altText" className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+              <input id="altText" name="altText" className={inputClass} />
             </div>
             <div>
               <label htmlFor="link" className="block text-sm font-medium text-text">Lien</label>
-              <input id="link" name="link" type="url" className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
+              <input id="link" name="link" type="url" className={inputClass} />
             </div>
           </div>
           <div className="mt-4 flex gap-3">
@@ -113,6 +217,15 @@ export function CarouselManager({ initialSlides }: { initialSlides: Slide[] }) {
           Ajouter une slide
         </button>
       )}
+
+      <DeleteModal
+        open={deleteId !== null}
+        onClose={() => setDeleteId(null)}
+        onConfirm={confirmDelete}
+        title="Supprimer cette slide"
+        description="Cette slide sera définitivement supprimée. Voulez-vous continuer ?"
+        loading={deleteLoading}
+      />
     </div>
   );
 }
