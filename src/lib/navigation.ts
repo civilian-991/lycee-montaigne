@@ -50,7 +50,7 @@ export const navigation: NavItem[] = [
     ],
   },
   {
-    label: "Inscriptions",
+    label: "Inscriptions et réinscriptions",
     href: "/inscriptions",
     children: [
       {
@@ -92,7 +92,7 @@ export const navigation: NavItem[] = [
     ],
   },
   {
-    label: "Infos pratiques",
+    label: "Informations pratiques",
     href: "/informations-pratiques",
     children: [
       {
