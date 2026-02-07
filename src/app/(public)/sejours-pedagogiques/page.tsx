@@ -31,7 +31,7 @@ export default function SejoursPedagogiquesPage() {
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/actions-sportives/May2025/5AyqpqwCqoBIFxIXphFP.jpeg"
+                src="/images/actions-sportives/May2025/5AyqpqwCqoBIFxIXphFP.jpeg"
                 alt="Séjours pédagogiques"
                 fill
                 className="object-cover"

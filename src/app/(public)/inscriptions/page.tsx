@@ -45,7 +45,7 @@ export default function InscriptionsPage() {
             </div>
             <div className="relative aspect-[3/4] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/adm-s1/December2025/xbMaFrODRj51WGOcKi4k.png"
+                src="/images/adm-s1/December2025/xbMaFrODRj51WGOcKi4k.png"
                 alt="Ouverture des inscriptions 2026-2027"
                 fill
                 className="object-cover"
@@ -62,7 +62,7 @@ export default function InscriptionsPage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl lg:order-first">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/s4-files/January2026/U4IfChjnxOFzmzse6Tme.jpeg"
+                src="/images/s4-files/January2026/U4IfChjnxOFzmzse6Tme.jpeg"
                 alt="Portes Ouvertes Maternelle 2025-2026"
                 fill
                 className="object-cover"
@@ -105,7 +105,7 @@ export default function InscriptionsPage() {
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/adm-s3/November2024/VOFelUKYIHWGosCjXmsz.png"
+                src="/images/adm-s3/November2024/VOFelUKYIHWGosCjXmsz.png"
                 alt="Bourses scolaires"
                 fill
                 className="object-cover"

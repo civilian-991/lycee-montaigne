@@ -50,7 +50,7 @@ async function main() {
     {
       name: "Mme Rachel Atallah",
       title: "Cheffe d'établissement",
-      photo: "https://lycee-montaigne.edu.lb//storage/eta-s3/November2024/tN7I8Zm4bodDopvV14Hw.png",
+      photo: "/images/eta-s3/November2024/tN7I8Zm4bodDopvV14Hw.png",
       section: "direction",
       order: 1,
       messageHtml:
@@ -59,7 +59,7 @@ async function main() {
     {
       name: "",
       title: "Proviseure déléguée",
-      photo: "https://lycee-montaigne.edu.lb//storage/mot-directrices/March2025/rLBOCUkYuoLx7jcdp3LE.jpeg",
+      photo: "/images/mot-directrices/March2025/rLBOCUkYuoLx7jcdp3LE.jpeg",
       section: "direction",
       order: 2,
       messageHtml:
@@ -76,19 +76,19 @@ async function main() {
   const news = [
     {
       title: "Inscriptions 2026-2027",
-      image: "https://lycee-montaigne.edu.lb//storage/adm-s1/December2025/xbMaFrODRj51WGOcKi4k.png",
+      image: "/images/adm-s1/December2025/xbMaFrODRj51WGOcKi4k.png",
       link: "/inscriptions",
       category: "inscriptions",
     },
     {
       title: "Portes Ouvertes Maternelle",
-      image: "https://lycee-montaigne.edu.lb//storage/s4-files/January2026/U4IfChjnxOFzmzse6Tme.jpeg",
+      image: "/images/s4-files/January2026/U4IfChjnxOFzmzse6Tme.jpeg",
       link: "/inscriptions#porte-ouvertes",
       category: "événement",
     },
     {
       title: "Résultats 2024-2025",
-      image: "https://lycee-montaigne.edu.lb//storage/examens-resultats/January2026/resized_IMG_6942.PNG",
+      image: "/images/examens-resultats/January2026/resized_IMG_6942.PNG",
       link: "/excellence-academique#resultats",
       category: "résultats",
     },

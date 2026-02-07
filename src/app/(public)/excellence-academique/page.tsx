@@ -16,14 +16,14 @@ const programs = [
     levels: "PS – MS – GS",
     href: "/excellence-academique/offre-pedagogique/maternelle",
     color: "bg-secondary",
-    image: "https://lycee-montaigne.edu.lb//storage/offre-pedagogiques/March2025/yBsX8u4ZVOVu4Ki1b9bZ.png",
+    image: "/images/offre-pedagogiques/March2025/yBsX8u4ZVOVu4Ki1b9bZ.png",
   },
   {
     title: "École Élémentaire",
     levels: "CP – CE1 – CE2 – CM1 – CM2",
     href: "/excellence-academique/offre-pedagogique/elementaire",
     color: "bg-secondary",
-    image: "https://lycee-montaigne.edu.lb//storage/offre-pedagogiques/March2025/FMajMIbeBmTj2pZsVXg2.png",
+    image: "/images/offre-pedagogiques/March2025/FMajMIbeBmTj2pZsVXg2.png",
   },
   {
     title: "Collège",
@@ -31,7 +31,7 @@ const programs = [
     href: "/excellence-academique/offre-pedagogique/college",
     color: "bg-primary",
     extra: "Brevet Libanais ou Diplôme National du Brevet",
-    image: "https://lycee-montaigne.edu.lb//storage/offre-pedagogiques/March2025/V5TaePZh3OK30gBE0zGt.png",
+    image: "/images/offre-pedagogiques/March2025/V5TaePZh3OK30gBE0zGt.png",
   },
   {
     title: "Lycée",
@@ -39,7 +39,7 @@ const programs = [
     href: "/excellence-academique/offre-pedagogique/lycee",
     color: "bg-primary",
     extra: "Bac Français International • Bac Général • Bac Libanais",
-    image: "https://lycee-montaigne.edu.lb//storage/offre-pedagogiques/March2025/ySjFCadTOSWucBhIhl2w.png",
+    image: "/images/offre-pedagogiques/March2025/ySjFCadTOSWucBhIhl2w.png",
   },
 ];
 
@@ -52,12 +52,12 @@ const diplomas = [
 ];
 
 const certifications = [
-  { name: "Cambridge English Certificate", image: "https://lycee-montaigne.edu.lb//storage/certificates/November2024/YutiYtDi0zuxMBPliMh3.jpeg" },
-  { name: "IELTS", image: "https://lycee-montaigne.edu.lb//storage/certificates/November2024/efSpqghzlYYijlgfFavw.png" },
-  { name: "DELE", image: "https://lycee-montaigne.edu.lb//storage/certificates/November2024/ViDy8mEJXK3IcwBFsWR8.png" },
-  { name: "PIX", image: "https://lycee-montaigne.edu.lb//storage/certificates/November2024/Pg3enjuqnTHgxraxiYwT.png" },
-  { name: "SAT", image: "https://lycee-montaigne.edu.lb//storage/certificates/November2024/XyKeUu4XU8MRwE5EwY4z.png" },
-  { name: "CIMA", image: "https://lycee-montaigne.edu.lb//storage/certificates/May2025/fD40mxinf2JZXQHf1GYq.webp" },
+  { name: "Cambridge English Certificate", image: "/images/certificates/November2024/YutiYtDi0zuxMBPliMh3.jpeg" },
+  { name: "IELTS", image: "/images/certificates/November2024/efSpqghzlYYijlgfFavw.png" },
+  { name: "DELE", image: "/images/certificates/November2024/ViDy8mEJXK3IcwBFsWR8.png" },
+  { name: "PIX", image: "/images/certificates/November2024/Pg3enjuqnTHgxraxiYwT.png" },
+  { name: "SAT", image: "/images/certificates/November2024/XyKeUu4XU8MRwE5EwY4z.png" },
+  { name: "CIMA", image: "/images/certificates/May2025/fD40mxinf2JZXQHf1GYq.webp" },
 ];
 
 const axes = [
@@ -71,7 +71,7 @@ const axes = [
       "Accompagner chaque élève vers sa réussite",
       "Renforcer l'évaluation formative",
     ],
-    image: "https://lycee-montaigne.edu.lb//storage/axes/April2024/Fn1kk4j4j4fhc0yTmXkP.png",
+    image: "/images/axes/April2024/Fn1kk4j4j4fhc0yTmXkP.png",
   },
   {
     title: "Axe 2 : Accompagner la montée en puissance du Lycée Montaigne",
@@ -82,7 +82,7 @@ const axes = [
       "Optimiser la gestion des ressources",
       "Développer les partenariats",
     ],
-    image: "https://lycee-montaigne.edu.lb//storage/axes/April2024/hqG7U0znrO7cPD9llXWC.png",
+    image: "/images/axes/April2024/hqG7U0znrO7cPD9llXWC.png",
   },
   {
     title: "Axe 3 : Cultiver l'identité humaniste de l'établissement",
@@ -93,7 +93,7 @@ const axes = [
       "Favoriser l'inclusion et la diversité",
       "Développer le sentiment d'appartenance",
     ],
-    image: "https://lycee-montaigne.edu.lb//storage/axes/April2024/03oaImjGLsLUMIf7Ydtb.png",
+    image: "/images/axes/April2024/03oaImjGLsLUMIf7Ydtb.png",
   },
 ];
 
@@ -151,7 +151,7 @@ export default function ExcellenceAcademiquePage() {
           <div className="mt-12 grid items-center gap-12 lg:grid-cols-2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/examens-resultats/January2026/resized_IMG_6942.PNG"
+                src="/images/examens-resultats/January2026/resized_IMG_6942.PNG"
                 alt="Résultats 2024-2025"
                 fill
                 className="object-cover"
@@ -280,7 +280,7 @@ export default function ExcellenceAcademiquePage() {
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/vie-s1/November2024/GS7jV1MyA75tAjglBQcx.jpg"
+                src="/images/vie-s1/November2024/GS7jV1MyA75tAjglBQcx.jpg"
                 alt="Pôle inclusion"
                 fill
                 className="object-cover"
@@ -298,7 +298,7 @@ export default function ExcellenceAcademiquePage() {
           <div className="mt-12 grid gap-6 md:grid-cols-2">
             <Link href="/excellence-academique/bcd" className="group relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/excellence-bcd-ccc-extras/November2025/4rQCpvOLwImnO4a1DDyT.jpg"
+                src="/images/excellence-bcd-ccc-extras/November2025/4rQCpvOLwImnO4a1DDyT.jpg"
                 alt="Bibliothèque Centre Documentaire"
                 fill
                 className="object-cover transition-transform group-hover:scale-105"
@@ -311,7 +311,7 @@ export default function ExcellenceAcademiquePage() {
             </Link>
             <Link href="/excellence-academique/ccc" className="group relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/excellence-bcd-ccc-extras/March2025/ZknXu3aPYo0iKijrLgFt.jpeg"
+                src="/images/excellence-bcd-ccc-extras/March2025/ZknXu3aPYo0iKijrLgFt.jpeg"
                 alt="Centre de Connaissances et de Culture"
                 fill
                 className="object-cover transition-transform group-hover:scale-105"

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, ChevronDown, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navigation } from "@/lib/navigation";
@@ -64,14 +65,15 @@ export function Navbar() {
       <nav className="mx-auto max-w-7xl px-4" aria-label="Navigation principale">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex shrink-0 items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white">
-              LM
-            </div>
-            <div className="hidden sm:block">
-              <span className="text-base font-bold leading-tight text-primary">Lycée Montaigne</span>
-              <span className="block text-xs text-text-muted">Beit Chabab</span>
-            </div>
+          <Link href="/" className="flex shrink-0 items-center">
+            <Image
+              src="/images/logo.png"
+              alt="Lycée Montaigne - Beit Chabab"
+              width={180}
+              height={69}
+              className="h-12 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop nav */}

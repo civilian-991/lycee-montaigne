@@ -31,7 +31,7 @@ export default function ExtrascolairePage() {
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/activites-prescolaires/May2025/vjpXai9c7VbVIINjggcN.jpeg"
+                src="/images/activites-prescolaires/May2025/vjpXai9c7VbVIINjggcN.jpeg"
                 alt="Activités périscolaires"
                 fill
                 className="object-cover"
@@ -48,7 +48,7 @@ export default function ExtrascolairePage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl lg:order-first">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/actions-sportives/May2025/MJzrvOmYO8rmdfoypZDR.jpeg"
+                src="/images/actions-sportives/May2025/MJzrvOmYO8rmdfoypZDR.jpeg"
                 alt="Association sportive"
                 fill
                 className="object-cover"

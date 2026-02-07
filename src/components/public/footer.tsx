@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, MapPin, Phone } from "lucide-react";
 
 const siteLinks = [
@@ -119,7 +120,14 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-white/20 pt-6 text-center text-xs text-white/60">
+        {/* Homologation badges */}
+        <div className="mt-10 flex items-center justify-center gap-6 border-t border-white/20 pt-6">
+          <Image src="/images/infos/June2025/epI0N3MR04HkiCEJL5RO.png" alt="Homologation AEFE" width={80} height={80} className="h-12 w-auto opacity-90" />
+          <Image src="/images/infos/June2025/rHzXQq9eC2AmCsOYzLgz.png" alt="Certification" width={80} height={80} className="h-12 w-auto opacity-90" />
+          <Image src="/images/infos/June2025/uCw1d3Difxn6BtzjXI90.png" alt="Label" width={80} height={80} className="h-12 w-auto opacity-90" />
+        </div>
+
+        <div className="mt-4 text-center text-xs text-white/60">
           &copy; {new Date().getFullYear()} Lycée Montaigne — Beit Chabab. Tous droits réservés.
         </div>
       </div>

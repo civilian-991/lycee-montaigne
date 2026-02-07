@@ -11,21 +11,21 @@ export const metadata: Metadata = {
 };
 
 const supplyLists = [
-  { title: "PS 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/LkbuRXzAEWZu6MgGs8ey.pdf" },
-  { title: "MS 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/Nnn53vPsziSf7k51md1j.pdf" },
-  { title: "GS 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/jFfpUNum1erRXyh4i7v5.pdf" },
-  { title: "CP 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/xWLw8YK0awBY1hP5Pley.pdf" },
-  { title: "CE1 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/YV5psty1jxoal41T9eUh.pdf" },
-  { title: "CE2 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/NcpBMIHwSncNlGTjx0Fn.pdf" },
-  { title: "CM1 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/RhX3VyydytAzxBma6xLI.pdf" },
-  { title: "CM2 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/zqrlyg2PfGa0tSOQEAFL.pdf" },
-  { title: "6ème 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/vbyAAnbd1ZHIwr5oP2f9.pdf" },
-  { title: "5ème 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/Ymu02aBD7P1r9kKc8p1i.pdf" },
-  { title: "4ème 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/H6LXNQFNdH66zsHeZ9um.pdf" },
-  { title: "3ème 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/4YbiS8nrl2hX5ODfohLG.pdf" },
-  { title: "Seconde 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/r7Nnhm43huO61dv6Ih9L.pdf" },
-  { title: "Première 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/August2025/j51nEsAzVsi257npEwZg.pdf" },
-  { title: "Terminale 2025-2026", href: "https://lycee-montaigne.edu.lb//storage/list-files/September2025/l6PgNMwCKnEgx4pF25kO.pdf" },
+  { title: "PS 2025-2026", href: "/images/list-files/August2025/LkbuRXzAEWZu6MgGs8ey.pdf" },
+  { title: "MS 2025-2026", href: "/images/list-files/August2025/Nnn53vPsziSf7k51md1j.pdf" },
+  { title: "GS 2025-2026", href: "/images/list-files/August2025/jFfpUNum1erRXyh4i7v5.pdf" },
+  { title: "CP 2025-2026", href: "/images/list-files/August2025/xWLw8YK0awBY1hP5Pley.pdf" },
+  { title: "CE1 2025-2026", href: "/images/list-files/August2025/YV5psty1jxoal41T9eUh.pdf" },
+  { title: "CE2 2025-2026", href: "/images/list-files/August2025/NcpBMIHwSncNlGTjx0Fn.pdf" },
+  { title: "CM1 2025-2026", href: "/images/list-files/August2025/RhX3VyydytAzxBma6xLI.pdf" },
+  { title: "CM2 2025-2026", href: "/images/list-files/August2025/zqrlyg2PfGa0tSOQEAFL.pdf" },
+  { title: "6ème 2025-2026", href: "/images/list-files/August2025/vbyAAnbd1ZHIwr5oP2f9.pdf" },
+  { title: "5ème 2025-2026", href: "/images/list-files/August2025/Ymu02aBD7P1r9kKc8p1i.pdf" },
+  { title: "4ème 2025-2026", href: "/images/list-files/August2025/H6LXNQFNdH66zsHeZ9um.pdf" },
+  { title: "3ème 2025-2026", href: "/images/list-files/August2025/4YbiS8nrl2hX5ODfohLG.pdf" },
+  { title: "Seconde 2025-2026", href: "/images/list-files/August2025/r7Nnhm43huO61dv6Ih9L.pdf" },
+  { title: "Première 2025-2026", href: "/images/list-files/August2025/j51nEsAzVsi257npEwZg.pdf" },
+  { title: "Terminale 2025-2026", href: "/images/list-files/September2025/l6PgNMwCKnEgx4pF25kO.pdf" },
 ];
 
 const healthStaff = [
@@ -66,14 +66,14 @@ export default function InformationsPratiquesPage() {
           <SectionHeader title="Calendrier scolaire & Examens officiels" />
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             <a
-              href="https://lycee-montaigne.edu.lb//storage/calendrier-scolaires/August2025/VNpHBW2LnqOi8ZjeTJpD.pdf"
+              href="/images/calendrier-scolaires/August2025/VNpHBW2LnqOi8ZjeTJpD.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="group overflow-hidden rounded-xl border border-border bg-white transition-all hover:shadow-lg"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src="https://lycee-montaigne.edu.lb//storage/calendrier-scolaires/March2025/nJHbjJlDuj3pXSvvQxIu.jpg"
+                  src="/images/calendrier-scolaires/March2025/nJHbjJlDuj3pXSvvQxIu.jpg"
                   alt="Calendrier scolaire 2025-2026"
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
@@ -86,14 +86,14 @@ export default function InformationsPratiquesPage() {
               </div>
             </a>
             <a
-              href="https://lycee-montaigne.edu.lb//storage/examens-officiels/December2025/N8h4O64ek0R28q9ArxEL.pdf"
+              href="/images/examens-officiels/December2025/N8h4O64ek0R28q9ArxEL.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="group overflow-hidden rounded-xl border border-border bg-white transition-all hover:shadow-lg"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src="https://lycee-montaigne.edu.lb//storage/examens-officiels/August2025/elnXnRUD1Y1EH0pH2mOU.png"
+                  src="/images/examens-officiels/August2025/elnXnRUD1Y1EH0pH2mOU.png"
                   alt="Calendrier des examens officiels 2025-2026"
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
@@ -127,14 +127,14 @@ export default function InformationsPratiquesPage() {
           <SectionHeader title="Restauration" />
           <div className="mt-12 grid gap-8 md:grid-cols-2">
             <a
-              href="https://lycee-montaigne.edu.lb//storage/restauration-files/January2026/mpYrj6lfFbbmG89EhsCF.pdf"
+              href="/images/restauration-files/January2026/mpYrj6lfFbbmG89EhsCF.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="group overflow-hidden rounded-xl border border-border bg-white transition-all hover:shadow-lg"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src="https://lycee-montaigne.edu.lb//storage/restauration-files/March2025/G3bDh7L45UblbOBgyJ6b.jpeg"
+                  src="/images/restauration-files/March2025/G3bDh7L45UblbOBgyJ6b.jpeg"
                   alt="Menu Cantine"
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
@@ -147,14 +147,14 @@ export default function InformationsPratiquesPage() {
               </div>
             </a>
             <a
-              href="https://lycee-montaigne.edu.lb//storage/restauration-files/September2025/Yi7GGMLiugwxHhD02Xek.pdf"
+              href="/images/restauration-files/September2025/Yi7GGMLiugwxHhD02Xek.pdf"
               target="_blank"
               rel="noopener noreferrer"
               className="group overflow-hidden rounded-xl border border-border bg-white transition-all hover:shadow-lg"
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src="https://lycee-montaigne.edu.lb//storage/restauration-files/March2025/Ga6FKNC32Bt3xf28FjPH.jpeg"
+                  src="/images/restauration-files/March2025/Ga6FKNC32Bt3xf28FjPH.jpeg"
                   alt="Menu Kiosque"
                   fill
                   className="object-cover transition-transform group-hover:scale-105"

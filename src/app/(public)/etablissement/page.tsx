@@ -13,14 +13,14 @@ const staffMessages = [
     id: "chef",
     title: "Mot de la cheffe d'établissement",
     name: "Mme Rachel Atallah",
-    image: "https://lycee-montaigne.edu.lb//storage/eta-s3/November2024/tN7I8Zm4bodDopvV14Hw.png",
+    image: "/images/eta-s3/November2024/tN7I8Zm4bodDopvV14Hw.png",
     text: `Le Lycée Montaigne est un établissement jeune et dynamique qui accueille près de 1100 élèves de la maternelle à la terminale. Notre mission est de ré-enchanter l'école, comme le dit Edgar Morin, en offrant à chaque élève un parcours d'excellence adapté à ses talents et à ses aspirations. Nous croyons en l'éducabilité de tous et en la force du regard positif pour accompagner nos élèves vers la réussite.`,
   },
   {
     id: "delegue",
     title: "Mot de la proviseure déléguée",
     name: "",
-    image: "https://lycee-montaigne.edu.lb//storage/mot-directrices/March2025/rLBOCUkYuoLx7jcdp3LE.jpeg",
+    image: "/images/mot-directrices/March2025/rLBOCUkYuoLx7jcdp3LE.jpeg",
     text: `Au Lycée Montaigne, nous mettons tout en œuvre pour accompagner chaque élève dans son parcours scolaire et personnel. Notre équipe pédagogique s'engage au quotidien pour offrir un enseignement de qualité dans un environnement bienveillant et stimulant.`,
   },
 ];
@@ -57,7 +57,7 @@ export default function EtablissementPage() {
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/eta-s2/November2024/mJKjRY5yzkeXW04S1XmZ.jpg"
+                src="/images/eta-s2/November2024/mJKjRY5yzkeXW04S1XmZ.jpg"
                 alt="Élèves en classe au Lycée Montaigne"
                 fill
                 className="object-cover"
@@ -125,7 +125,7 @@ export default function EtablissementPage() {
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/comite-parents/December2025/ex9aVmzf9X4A0EDTgZEz.jpg"
+                src="/images/comite-parents/December2025/ex9aVmzf9X4A0EDTgZEz.jpg"
                 alt="Comité des parents du Lycée Montaigne"
                 fill
                 className="object-cover"

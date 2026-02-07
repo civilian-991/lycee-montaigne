@@ -12,41 +12,41 @@ export const metadata: Metadata = {
 const news = [
   {
     title: "Nuits de la lecture – À la découverte de la BD avec Tintin",
-    image: "https://lycee-montaigne.edu.lb//storage/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
+    image: "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
     href: "https://www.instagram.com/lyceemontaignebeitchabab/",
   },
   {
     title: "Nuits de la lecture – Contes et radiocassette en CM1 et CM2",
-    image: "https://lycee-montaigne.edu.lb//storage/actualites/January2026/hjohJyJ8Yz3P14BGKWCk.jpeg",
+    image: "/images/actualites/January2026/hjohJyJ8Yz3P14BGKWCk.jpeg",
     href: "https://www.instagram.com/lyceemontaignebeitchabab/",
   },
   {
     title: "2025 MUN Conference Recap",
-    image: "https://lycee-montaigne.edu.lb//storage/actualites/January2026/Yjx2dWMAEQgjzmlB9hcy.jpeg",
+    image: "/images/actualites/January2026/Yjx2dWMAEQgjzmlB9hcy.jpeg",
     href: "https://www.instagram.com/lyceemontaignebeitchabab/",
   },
   {
     title: "Visite de Mme Isabelle Picault, conseillère adjointe et d'action culturelle",
-    image: "https://lycee-montaigne.edu.lb//storage/actualites/January2026/UnkBO3aNJBHYDaqui4nt.jpeg",
+    image: "/images/actualites/January2026/UnkBO3aNJBHYDaqui4nt.jpeg",
     href: "https://www.instagram.com/lyceemontaignebeitchabab/",
   },
   {
     title: "Explorer le rôle des enzymes en spécialité SVT",
-    image: "https://lycee-montaigne.edu.lb//storage/actualites/January2026/dcdN3CWKF92prbbgkGCc.jpeg",
+    image: "/images/actualites/January2026/dcdN3CWKF92prbbgkGCc.jpeg",
     href: "https://www.instagram.com/lyceemontaignebeitchabab/",
   },
   {
     title: "Dissection du cœur du mouton en 3ème SVT",
-    image: "https://lycee-montaigne.edu.lb//storage/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
+    image: "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
     href: "https://www.instagram.com/lyceemontaignebeitchabab/",
   },
 ];
 
 const sustainabilityImages = [
-  "https://lycee-montaigne.edu.lb//storage/development-durables/November2024/IXjTyiAwx79KnYFRYWvR.jpg",
-  "https://lycee-montaigne.edu.lb//storage/development-durables/November2024/uhlbgzGIhcHxPIM03Upx.jpg",
-  "https://lycee-montaigne.edu.lb//storage/development-durables/November2024/OypqboJndmfFo5oDOEdN.jpg",
-  "https://lycee-montaigne.edu.lb//storage/development-durables/November2024/bPAc0bMPRxQ50hIGnNA5.png",
+  "/images/development-durables/November2024/IXjTyiAwx79KnYFRYWvR.jpg",
+  "/images/development-durables/November2024/uhlbgzGIhcHxPIM03Upx.jpg",
+  "/images/development-durables/November2024/OypqboJndmfFo5oDOEdN.jpg",
+  "/images/development-durables/November2024/bPAc0bMPRxQ50hIGnNA5.png",
 ];
 
 export default function VieDuLMPage() {
@@ -130,7 +130,7 @@ export default function VieDuLMPage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl lg:order-first">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/webradios/November2024/amxLKLrgOzIeBoHAVT4x.jpeg"
+                src="/images/webradios/November2024/amxLKLrgOzIeBoHAVT4x.jpeg"
                 alt="Webradio du Lycée Montaigne"
                 fill
                 className="object-cover"
@@ -169,7 +169,7 @@ export default function VieDuLMPage() {
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/climat-categories/April2025/mNHwl4NOWUZkZgPfyTNi.jpeg"
+                src="/images/climat-categories/April2025/mNHwl4NOWUZkZgPfyTNi.jpeg"
                 alt="Démocratie scolaire"
                 fill
                 className="object-cover"
@@ -186,7 +186,7 @@ export default function VieDuLMPage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl lg:order-first">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/egalite-intros/October2024/7QOD9LQ0ZmvqaH1ck4qJ.jpg"
+                src="/images/egalite-intros/October2024/7QOD9LQ0ZmvqaH1ck4qJ.jpg"
                 alt="Égalité filles-garçons"
                 fill
                 className="object-cover"
@@ -224,7 +224,7 @@ export default function VieDuLMPage() {
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/actions-sportives/May2025/5AyqpqwCqoBIFxIXphFP.jpeg"
+                src="/images/actions-sportives/May2025/5AyqpqwCqoBIFxIXphFP.jpeg"
                 alt="Séjours pédagogiques"
                 fill
                 className="object-cover"

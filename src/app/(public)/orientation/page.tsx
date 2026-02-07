@@ -12,25 +12,25 @@ const activities = [
   {
     title: "Forum des universités – 14 novembre 2025",
     description: "18 universités et 12 grandes écoles ont participé à cette journée d'orientation pour nos élèves.",
-    image: "https://lycee-montaigne.edu.lb//storage/oriantation-activities/November2025/0HnUrhMFu9ReUOd5Dcbs.jpeg",
+    image: "/images/oriantation-activities/November2025/0HnUrhMFu9ReUOd5Dcbs.jpeg",
   },
   {
     title: "Forum des Métiers – 22 mars 2025",
     description: "Rencontre entre professionnels et élèves pour découvrir différents parcours et métiers.",
-    image: "https://lycee-montaigne.edu.lb//storage/oriantation-activities/July2025/xKaDU1qKXJrvkFI8kJc3.jpeg",
+    image: "/images/oriantation-activities/July2025/xKaDU1qKXJrvkFI8kJc3.jpeg",
   },
   {
     title: "Forum des universités – 20 décembre 2024",
     description: "Journée d'échanges avec les représentants des universités locales et internationales.",
-    image: "https://lycee-montaigne.edu.lb//storage/oriantation-activities/July2025/E74I8wu2UsLKK4EImXJU.jpeg",
+    image: "/images/oriantation-activities/July2025/E74I8wu2UsLKK4EImXJU.jpeg",
   },
 ];
 
 const admissionImages = [
-  "https://lycee-montaigne.edu.lb//storage/oriantation-activities/August2025/jGcBleXqGThjKsghZXBQ.jpeg",
-  "https://lycee-montaigne.edu.lb//storage/oriantation-activities/August2025/cZJX6xPO7h3xZDULgEXn.jpeg",
-  "https://lycee-montaigne.edu.lb//storage/oriantation-activities/August2025/Vuu9x02s0E1dfDfps58b.jpeg",
-  "https://lycee-montaigne.edu.lb//storage/oriantation-activities/August2025/XMhQO1k8tKpQaRhCt5AY.jpeg",
+  "/images/oriantation-activities/August2025/jGcBleXqGThjKsghZXBQ.jpeg",
+  "/images/oriantation-activities/August2025/cZJX6xPO7h3xZDULgEXn.jpeg",
+  "/images/oriantation-activities/August2025/Vuu9x02s0E1dfDfps58b.jpeg",
+  "/images/oriantation-activities/August2025/XMhQO1k8tKpQaRhCt5AY.jpeg",
 ];
 
 export default function OrientationPage() {
@@ -57,7 +57,7 @@ export default function OrientationPage() {
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/orientation-s1/July2025/4WWbVtfsEoVLlFT5F8AR.png"
+                src="/images/orientation-s1/July2025/4WWbVtfsEoVLlFT5F8AR.png"
                 alt="Parcours avenir – Ton orientation: un chemin à parcourir ensemble"
                 fill
                 className="object-cover"
@@ -74,7 +74,7 @@ export default function OrientationPage() {
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl lg:order-first">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/orientation-s4/March2025/85D8l8qy1D3xZHVOrctC.png"
+                src="/images/orientation-s4/March2025/85D8l8qy1D3xZHVOrctC.png"
                 alt="Parcoursup"
                 fill
                 className="object-cover"

@@ -14,12 +14,12 @@ const events = [
     description:
       "Retrouvailles entre anciens, enseignants et personnel du lycée autour d'un brunch convivial sur le campus de Beit Chabab.",
     images: [
-      "https://lycee-montaigne.edu.lb//storage/anciens/August2025/tbgbFWe3V7nhiqK9KdbW.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/August2025/aFC7rOpJhr2G0lM9Dr1M.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/August2025/NWoTxLZNaGoLGqN3ALNM.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/August2025/34dQliGXtze4qbuV35El.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/August2025/e56wswRlMyehZbdlhHeN.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/August2025/fAUvjSZcpr1xXwR8z0y9.jpeg",
+      "/images/anciens/August2025/tbgbFWe3V7nhiqK9KdbW.jpeg",
+      "/images/anciens/August2025/aFC7rOpJhr2G0lM9Dr1M.jpeg",
+      "/images/anciens/August2025/NWoTxLZNaGoLGqN3ALNM.jpeg",
+      "/images/anciens/August2025/34dQliGXtze4qbuV35El.jpeg",
+      "/images/anciens/August2025/e56wswRlMyehZbdlhHeN.jpeg",
+      "/images/anciens/August2025/fAUvjSZcpr1xXwR8z0y9.jpeg",
     ],
   },
   {
@@ -27,12 +27,12 @@ const events = [
     description:
       "Retrouvailles festives des anciens élèves à l'occasion des fêtes de fin d'année.",
     images: [
-      "https://lycee-montaigne.edu.lb//storage/anciens/March2025/LBqkCVHdyv78XpGnfAH1.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/March2025/HEQxBeweJfWguNossQOS.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/March2025/f3vVhxbqZ3nUKILttEH9.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/March2025/WSLY3ZnIDWp00MfIrMMT.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/March2025/67aHfEHl4KuY6fxQ2vGe.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/March2025/5iiQNILm422XxkXqGkFe.jpeg",
+      "/images/anciens/March2025/LBqkCVHdyv78XpGnfAH1.jpeg",
+      "/images/anciens/March2025/HEQxBeweJfWguNossQOS.jpeg",
+      "/images/anciens/March2025/f3vVhxbqZ3nUKILttEH9.jpeg",
+      "/images/anciens/March2025/WSLY3ZnIDWp00MfIrMMT.jpeg",
+      "/images/anciens/March2025/67aHfEHl4KuY6fxQ2vGe.jpeg",
+      "/images/anciens/March2025/5iiQNILm422XxkXqGkFe.jpeg",
     ],
   },
   {
@@ -40,11 +40,11 @@ const events = [
     description:
       "Premier brunch des anciens sur le campus de Beit Chabab pour les promos 2022-2023-2024. Formation du comité constitutif de l'AALM.",
     images: [
-      "https://lycee-montaigne.edu.lb//storage/anciens/December2024/Gr126Yxp86fX8jQaSwnh.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/December2024/hjohJyJ8Yz3P14BGKWCk.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/December2024/Yjx2dWMAEQgjzmlB9hcy.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/December2024/UnkBO3aNJBHYDaqui4nt.jpeg",
-      "https://lycee-montaigne.edu.lb//storage/anciens/December2024/dcdN3CWKF92prbbgkGCc.jpeg",
+      "/images/anciens/December2024/Gr126Yxp86fX8jQaSwnh.jpeg",
+      "/images/anciens/December2024/hjohJyJ8Yz3P14BGKWCk.jpeg",
+      "/images/anciens/December2024/Yjx2dWMAEQgjzmlB9hcy.jpeg",
+      "/images/anciens/December2024/UnkBO3aNJBHYDaqui4nt.jpeg",
+      "/images/anciens/December2024/dcdN3CWKF92prbbgkGCc.jpeg",
     ],
   },
 ];

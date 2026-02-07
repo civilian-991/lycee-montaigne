@@ -150,19 +150,19 @@ export default function HomePage() {
               title="Inscriptions 2026-2027"
               description="Les inscriptions pour l'année scolaire 2026-2027 sont ouvertes. Consultez la procédure et les documents nécessaires."
               href="/inscriptions"
-              image="https://lycee-montaigne.edu.lb//storage/adm-s1/December2025/xbMaFrODRj51WGOcKi4k.png"
+              image="/images/adm-s1/December2025/xbMaFrODRj51WGOcKi4k.png"
             />
             <Card
               title="Portes Ouvertes Maternelle"
               description="Venez découvrir notre école maternelle lors de nos portes ouvertes."
               href="/inscriptions#porte-ouvertes"
-              image="https://lycee-montaigne.edu.lb//storage/s4-files/January2026/U4IfChjnxOFzmzse6Tme.jpeg"
+              image="/images/s4-files/January2026/U4IfChjnxOFzmzse6Tme.jpeg"
             />
             <Card
               title="Résultats 2024-2025"
               description="100% de réussite au baccalauréat. Découvrez les résultats de nos élèves aux examens nationaux et internationaux."
               href="/excellence-academique#resultats"
-              image="https://lycee-montaigne.edu.lb//storage/examens-resultats/January2026/resized_IMG_6942.PNG"
+              image="/images/examens-resultats/January2026/resized_IMG_6942.PNG"
             />
           </div>
         </div>

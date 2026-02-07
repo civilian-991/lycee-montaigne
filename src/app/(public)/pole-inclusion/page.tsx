@@ -54,7 +54,7 @@ export default function PoleInclusionPage() {
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <Image
-                src="https://lycee-montaigne.edu.lb//storage/vie-s1/November2024/GS7jV1MyA75tAjglBQcx.jpg"
+                src="/images/vie-s1/November2024/GS7jV1MyA75tAjglBQcx.jpg"
                 alt="Pôle inclusion"
                 fill
                 className="object-cover"
