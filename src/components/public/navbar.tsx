@@ -83,9 +83,9 @@ export function Navbar() {
         "overflow-hidden transition-all duration-300",
         scrolled ? "max-h-0" : "max-h-16"
       )}>
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-4 px-4 py-2 lg:justify-between">
           {/* Search */}
-          <div className="relative hidden md:block">
+          <div className="relative hidden lg:block">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
             <input
               type="text"
@@ -169,7 +169,7 @@ export function Navbar() {
       </div>
 
       {/* Row 3 — Navigation bar */}
-      <nav className="bg-white" aria-label="Navigation principale">
+      <nav className="border-b-2 border-primary/20 bg-white" aria-label="Navigation principale">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex h-12 items-center justify-between">
             {/* Collapsed logo — shows when rows 1+2 are hidden on scroll */}
@@ -186,8 +186,8 @@ export function Navbar() {
               />
             </Link>
 
-            {/* Desktop nav links */}
-            <div className="hidden items-center gap-0 lg:flex">
+            {/* Desktop nav links — evenly spread */}
+            <div className="hidden w-full items-center justify-between lg:flex">
               {navigation.map((item) => (
                 <div
                   key={item.label}
@@ -198,7 +198,7 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-1 px-3 py-3 text-sm font-medium transition-colors",
+                      "block px-2 py-3 text-center text-sm font-medium transition-colors",
                       isActive(item.href)
                         ? "rounded-full bg-primary text-white"
                         : "text-text hover:text-primary",
@@ -206,16 +206,10 @@ export function Navbar() {
                     )}
                   >
                     {item.label}
-                    {item.children && (
-                      <ChevronDown className={cn(
-                        "h-3 w-3",
-                        isActive(item.href) ? "text-white/80" : ""
-                      )} />
-                    )}
                   </Link>
 
                   {item.children && openDropdown === item.label && (
-                    <div className="absolute left-0 top-full z-50 min-w-56 rounded-lg border border-border bg-white py-1.5 shadow-xl">
+                    <div className="absolute left-1/2 top-full z-50 min-w-56 -translate-x-1/2 rounded-lg border border-border bg-white py-1.5 shadow-xl">
                       {item.children.map((child) => (
                         <Link
                           key={child.href}
@@ -233,20 +227,20 @@ export function Navbar() {
 
             {/* Right side — condensed actions when scrolled */}
             <div className={cn(
-              "hidden items-center gap-2 transition-all duration-300 lg:flex",
-              scrolled ? "opacity-100" : "pointer-events-none opacity-0"
+              "hidden shrink-0 items-center gap-2 transition-all duration-300 lg:flex",
+              scrolled ? "ml-2 opacity-100" : "pointer-events-none w-0 overflow-hidden opacity-0"
             )}>
               <a
                 href="https://2050048n.index-education.net/pronote/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-primary px-3 py-1 text-xs font-semibold uppercase text-primary transition-colors hover:bg-primary hover:text-white"
+                className="whitespace-nowrap rounded-full border border-primary px-3 py-1 text-xs font-semibold uppercase text-primary transition-colors hover:bg-primary hover:text-white"
               >
                 Pronote
               </a>
               <Link
                 href="/contact"
-                className="rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase text-white transition-colors hover:bg-primary-light"
+                className="whitespace-nowrap rounded-full bg-primary px-3 py-1 text-xs font-semibold uppercase text-white transition-colors hover:bg-primary-light"
               >
                 Contact
               </Link>
