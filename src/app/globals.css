@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  /* Brand colors — unchanged */
   --color-primary: #02355b;
   --color-primary-light: #0a4a7a;
   --color-primary-dark: #012440;
@@ -10,16 +11,28 @@
   --color-accent: #169179;
   --color-accent-light: #1aab8f;
   --color-accent-dark: #117a65;
-  --color-background: #ffffff;
-  --color-background-alt: #f8f9fa;
-  --color-background-dark: #f0f1f3;
-  --color-text: #1a1a1a;
-  --color-text-muted: #6b7280;
-  --color-text-light: #9ca3af;
-  --color-border: #e5e7eb;
-  --color-border-dark: #d1d5db;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Warm tones */
+  --color-background: #FFFDF9;
+  --color-background-alt: #FAF6F0;
+  --color-background-dark: #F2EBE0;
+  --color-text: #1C1917;
+  --color-text-muted: #78716C;
+  --color-text-light: #A8A29E;
+  --color-border: #E7E0D6;
+  --color-border-dark: #D6CFC5;
+
+  /* Typography — next/font injects --font-fraunces and --font-source-sans on <html> */
+  --font-sans: var(--font-source-sans), "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-fraunces), "Fraunces", ui-serif, Georgia, serif;
+
+  /* Shadows */
+  --shadow-soft: 0 1px 3px 0 rgba(28, 25, 23, 0.04), 0 1px 2px -1px rgba(28, 25, 23, 0.04);
+  --shadow-warm: 0 4px 6px -1px rgba(28, 25, 23, 0.06), 0 2px 4px -2px rgba(28, 25, 23, 0.04);
+  --shadow-elevated: 0 10px 25px -3px rgba(28, 25, 23, 0.08), 0 4px 10px -4px rgba(28, 25, 23, 0.04);
+
+  /* Radius */
+  --radius-soft: 20px;
 }
 
 @layer base {
@@ -29,6 +42,7 @@
 
   body {
     @apply bg-background text-text antialiased;
+    font-family: var(--font-sans);
   }
 
   h1,
@@ -37,10 +51,17 @@
   h4,
   h5,
   h6 {
-    @apply font-heading font-bold text-primary;
+    font-family: var(--font-heading);
+    @apply font-bold text-primary;
+    font-variation-settings: "SOFT" 100, "WONK" 1;
   }
 
   a {
     @apply transition-colors duration-200;
+  }
+
+  ::selection {
+    background-color: rgba(51, 153, 51, 0.15);
+    color: #1C1917;
   }
 }

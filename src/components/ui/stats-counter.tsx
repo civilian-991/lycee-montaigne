@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { motion, useInView, useSpring, useMotionValue } from "framer-motion";
 
 interface StatItem {
   value: number;
@@ -15,49 +16,33 @@ interface StatsCounterProps {
 }
 
 function AnimatedNumber({ value, suffix }: { value: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const motionValue = useMotionValue(0);
+  const springValue = useSpring(motionValue, { duration: 2000, bounce: 0 });
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+    if (inView) {
+      motionValue.set(value);
+    }
+  }, [inView, motionValue, value]);
 
   useEffect(() => {
-    if (!visible) return;
-    const duration = 2000;
-    const steps = 60;
-    const increment = value / steps;
-    let current = 0;
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= value) {
-        setCount(value);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(current));
-      }
-    }, duration / steps);
-    return () => clearInterval(timer);
-  }, [visible, value]);
+    const unsubscribe = springValue.on("change", (v) => {
+      setDisplay(Math.round(v));
+    });
+    return unsubscribe;
+  }, [springValue]);
 
   return (
-    <span ref={ref} className="text-4xl font-bold tabular-nums md:text-5xl">
-      {count.toLocaleString("fr-FR")}
+    <motion.span
+      ref={ref}
+      className="text-4xl font-bold tabular-nums md:text-5xl"
+    >
+      {display.toLocaleString("fr-FR")}
       {suffix}
-    </span>
+    </motion.span>
   );
 }
 

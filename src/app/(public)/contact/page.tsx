@@ -1,12 +1,9 @@
-import type { Metadata } from "next";
+"use client";
+
 import { PageHero } from "@/components/ui/page-hero";
+import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { MapPin, Phone, Mail, Printer } from "lucide-react";
 import { ContactForm } from "./contact-form";
-
-export const metadata: Metadata = {
-  title: "Contact",
-  description: "Contactez le Lycée Montaigne de Beit Chabab. Formulaire de contact, adresse, téléphone et plan d'accès.",
-};
 
 const contactInfo = [
   {
@@ -23,7 +20,7 @@ const contactInfo = [
   },
   {
     icon: Phone,
-    label: "Téléphone",
+    label: "Telephone",
     value: "+961 4 982 082 / 983 845 / 985 256",
     href: "tel:+9614982082",
   },
@@ -44,54 +41,59 @@ export default function ContactPage() {
         <div className="mx-auto max-w-7xl px-4">
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Contact Form */}
-            <div>
-              <h2 className="text-2xl font-bold">Formulaire de contact</h2>
-              <p className="mt-2 text-text-muted">
-                Envoyez-nous un message et nous vous répondrons dans les plus brefs délais.
-              </p>
-              <ContactForm />
-            </div>
+            <FadeInView>
+              <div>
+                <h2 className="text-2xl font-bold">Formulaire de contact</h2>
+                <p className="mt-2 text-text-muted">
+                  Envoyez-nous un message et nous vous repondrons dans les plus brefs delais.
+                </p>
+                <ContactForm />
+              </div>
+            </FadeInView>
 
             {/* Contact Info + Map */}
-            <div>
-              <h2 className="text-2xl font-bold">Nos coordonnées</h2>
-              <div className="mt-6 space-y-4">
-                {contactInfo.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      target={item.icon === MapPin ? "_blank" : undefined}
-                      rel={item.icon === MapPin ? "noopener noreferrer" : undefined}
-                      className="flex items-start gap-4 rounded-lg p-3 transition-colors hover:bg-background-alt"
-                    >
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-text">{item.label}</p>
-                        <p className="text-sm text-text-muted">{item.value}</p>
-                      </div>
-                    </a>
-                  );
-                })}
-              </div>
+            <FadeInView delay={0.2}>
+              <div>
+                <h2 className="text-2xl font-bold">Nos coordonnees</h2>
+                <StaggerChildren className="mt-6 space-y-4">
+                  {contactInfo.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <StaggerItem key={item.label}>
+                        <a
+                          href={item.href}
+                          target={item.icon === MapPin ? "_blank" : undefined}
+                          rel={item.icon === MapPin ? "noopener noreferrer" : undefined}
+                          className="flex items-start gap-4 rounded-2xl p-3 transition-colors hover:bg-background-alt"
+                        >
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary/10 text-secondary">
+                            <Icon className="h-5 w-5" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-text">{item.label}</p>
+                            <p className="text-sm text-text-muted">{item.value}</p>
+                          </div>
+                        </a>
+                      </StaggerItem>
+                    );
+                  })}
+                </StaggerChildren>
 
-              {/* Map */}
-              <div className="mt-8 overflow-hidden rounded-xl border border-border">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3312.5!2d35.6636834!3d33.923034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDU1JzIyLjkiTiAzNcKwMzknNDkuMyJF!5e0!3m2!1sfr!2slb!4v1"
-                  width="100%"
-                  height="300"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Lycée Montaigne - Beit Chabab"
-                />
+                {/* Map */}
+                <div className="mt-8 overflow-hidden rounded-2xl border border-border">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3312.5!2d35.6636834!3d33.923034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDU1JzIyLjkiTiAzNcKwMzknNDkuMyJF!5e0!3m2!1sfr!2slb!4v1"
+                    width="100%"
+                    height="300"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Lycee Montaigne - Beit Chabab"
+                  />
+                </div>
               </div>
-            </div>
+            </FadeInView>
           </div>
         </div>
       </section>

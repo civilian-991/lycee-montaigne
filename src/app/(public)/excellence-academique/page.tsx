@@ -1,54 +1,51 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
+import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { BookOpen, GraduationCap, Award, Heart } from "lucide-react";
-
-export const metadata: Metadata = {
-  title: "Excellence Académique",
-  description: "Offre pédagogique, examens, certifications et projet d'établissement du Lycée Montaigne de Beit Chabab.",
-};
 
 const programs = [
   {
-    title: "École Maternelle",
+    title: "Ecole Maternelle",
     levels: "PS – MS – GS",
     href: "/excellence-academique/offre-pedagogique/maternelle",
     color: "bg-secondary",
     image: "/images/offre-pedagogiques/March2025/yBsX8u4ZVOVu4Ki1b9bZ.png",
   },
   {
-    title: "École Élémentaire",
+    title: "Ecole Elementaire",
     levels: "CP – CE1 – CE2 – CM1 – CM2",
     href: "/excellence-academique/offre-pedagogique/elementaire",
     color: "bg-secondary",
     image: "/images/offre-pedagogiques/March2025/FMajMIbeBmTj2pZsVXg2.png",
   },
   {
-    title: "Collège",
-    levels: "6ème – 5ème – 4ème – 3ème",
+    title: "College",
+    levels: "6eme – 5eme – 4eme – 3eme",
     href: "/excellence-academique/offre-pedagogique/college",
     color: "bg-primary",
-    extra: "Brevet Libanais ou Diplôme National du Brevet",
+    extra: "Brevet Libanais ou Diplome National du Brevet",
     image: "/images/offre-pedagogiques/March2025/V5TaePZh3OK30gBE0zGt.png",
   },
   {
-    title: "Lycée",
-    levels: "2nde – 1ère – Terminale",
+    title: "Lycee",
+    levels: "2nde – 1ere – Terminale",
     href: "/excellence-academique/offre-pedagogique/lycee",
     color: "bg-primary",
-    extra: "Bac Français International • Bac Général • Bac Libanais",
+    extra: "Bac Francais International • Bac General • Bac Libanais",
     image: "/images/offre-pedagogiques/March2025/ySjFCadTOSWucBhIhl2w.png",
   },
 ];
 
 const diplomas = [
-  "Le Diplôme National du Brevet (DNB)",
+  "Le Diplome National du Brevet (DNB)",
   "Brevet Libanais",
-  "Bac Français",
+  "Bac Francais",
   "Bac Libanais",
-  "Bac Français International (BFI)",
+  "Bac Francais International (BFI)",
 ];
 
 const certifications = [
@@ -62,232 +59,237 @@ const certifications = [
 
 const axes = [
   {
-    title: "Axe 1 : Assurer un parcours d'excellence à tous les élèves",
+    title: "Axe 1 : Assurer un parcours d'excellence a tous les eleves",
     items: [
-      "Renforcer la maîtrise de la langue française",
-      "Développer les compétences en langues vivantes",
-      "Promouvoir les sciences et la culture numérique",
+      "Renforcer la maitrise de la langue francaise",
+      "Developper les competences en langues vivantes",
+      "Promouvoir les sciences et la culture numerique",
       "Favoriser les parcours artistiques et culturels",
-      "Accompagner chaque élève vers sa réussite",
-      "Renforcer l'évaluation formative",
+      "Accompagner chaque eleve vers sa reussite",
+      "Renforcer l'evaluation formative",
     ],
     image: "/images/axes/April2024/Fn1kk4j4j4fhc0yTmXkP.png",
   },
   {
-    title: "Axe 2 : Accompagner la montée en puissance du Lycée Montaigne",
+    title: "Axe 2 : Accompagner la montee en puissance du Lycee Montaigne",
     items: [
-      "Développer une politique d'attractivité",
+      "Developper une politique d'attractivite",
       "Renforcer la communication interne et externe",
-      "Moderniser les pratiques pédagogiques",
+      "Moderniser les pratiques pedagogiques",
       "Optimiser la gestion des ressources",
-      "Développer les partenariats",
+      "Developper les partenariats",
     ],
     image: "/images/axes/April2024/hqG7U0znrO7cPD9llXWC.png",
   },
   {
-    title: "Axe 3 : Cultiver l'identité humaniste de l'établissement",
+    title: "Axe 3 : Cultiver l'identite humaniste de l'etablissement",
     items: [
-      "Promouvoir les valeurs de tolérance et de respect",
-      "Développer l'éco-citoyenneté",
-      "Renforcer l'égalité filles-garçons",
-      "Favoriser l'inclusion et la diversité",
-      "Développer le sentiment d'appartenance",
+      "Promouvoir les valeurs de tolerance et de respect",
+      "Developper l'eco-citoyennete",
+      "Renforcer l'egalite filles-garcons",
+      "Favoriser l'inclusion et la diversite",
+      "Developper le sentiment d'appartenance",
     ],
     image: "/images/axes/April2024/03oaImjGLsLUMIf7Ydtb.png",
   },
 ];
 
 const parcours = [
-  { title: "Parcours citoyen", description: "Formation du citoyen responsable et engagé.", icon: Heart },
-  { title: "Parcours Avenir", description: "Orientation et découverte du monde professionnel dès la 6ème.", icon: GraduationCap },
-  { title: "Parcours éducatif de santé", description: "Éducation à la santé, prévention et protection.", icon: Heart },
-  { title: "Parcours d'éducation artistique et culturelle", description: "Rencontre avec les œuvres, pratique artistique et acquisition de connaissances.", icon: BookOpen },
+  { title: "Parcours citoyen", description: "Formation du citoyen responsable et engage.", icon: Heart },
+  { title: "Parcours Avenir", description: "Orientation et decouverte du monde professionnel des la 6eme.", icon: GraduationCap },
+  { title: "Parcours educatif de sante", description: "Education a la sante, prevention et protection.", icon: Heart },
+  { title: "Parcours d'education artistique et culturelle", description: "Rencontre avec les oeuvres, pratique artistique et acquisition de connaissances.", icon: BookOpen },
 ];
 
 export default function ExcellenceAcademiquePage() {
   return (
     <>
-      <PageHero title="Excellence Académique" />
+      <PageHero title="Excellence Academique" />
 
-      {/* Offre pédagogique */}
+      {/* Offre pedagogique */}
       <section id="pedagogie" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader title="Offre pédagogique" />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <SectionHeader title="Offre pedagogique" />
+          <StaggerChildren className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {programs.map((program) => (
-              <Link
-                key={program.title}
-                href={program.href}
-                className="group overflow-hidden rounded-xl border border-border bg-white transition-all hover:shadow-lg"
-              >
-                <div className={`${program.color} flex h-32 items-center justify-center p-4`}>
-                  <div className="relative h-20 w-20">
-                    <Image
-                      src={program.image}
-                      alt={program.title}
-                      fill
-                      className="object-contain"
-                      sizes="80px"
-                    />
+              <StaggerItem key={program.title}>
+                <Link
+                  href={program.href}
+                  className="group block overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
+                >
+                  <div className={`${program.color} flex h-32 items-center justify-center p-4`}>
+                    <div className="relative h-20 w-20">
+                      <Image
+                        src={program.image}
+                        alt={program.title}
+                        fill
+                        className="object-contain"
+                        sizes="80px"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-text group-hover:text-primary">{program.title}</h3>
-                  <p className="mt-1 text-xs text-text-muted">{program.levels}</p>
-                  {program.extra && (
-                    <p className="mt-2 text-xs font-medium text-secondary">{program.extra}</p>
-                  )}
-                </div>
-              </Link>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-text group-hover:text-primary">{program.title}</h3>
+                    <p className="mt-1 text-xs text-text-muted">{program.levels}</p>
+                    {program.extra && (
+                      <p className="mt-2 text-xs font-medium text-secondary">{program.extra}</p>
+                    )}
+                  </div>
+                </Link>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerChildren>
         </div>
       </section>
 
-      {/* Résultats et Diplômes */}
+      {/* Resultats et Diplomes */}
       <section id="resultats" className="bg-background-alt py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader title="Examens et Certificats" />
-          <div className="mt-12 grid items-center gap-12 lg:grid-cols-2">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image
-                src="/images/examens-resultats/January2026/resized_IMG_6942.PNG"
-                alt="Résultats 2024-2025"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+          <FadeInView>
+            <div className="mt-12 grid items-center gap-12 lg:grid-cols-2">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
+                <Image
+                  src="/images/examens-resultats/January2026/resized_IMG_6942.PNG"
+                  alt="Resultats 2024-2025"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold">Diplomes prepares</h3>
+                <ul className="mt-4 space-y-3">
+                  {diplomas.map((d) => (
+                    <li key={d} className="flex items-center gap-3">
+                      <Award className="h-5 w-5 shrink-0 text-secondary" />
+                      <span className="text-sm text-text">{d}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <div>
-              <h3 className="text-xl font-semibold">Diplômes préparés</h3>
-              <ul className="mt-4 space-y-3">
-                {diplomas.map((d) => (
-                  <li key={d} className="flex items-center gap-3">
-                    <Award className="h-5 w-5 shrink-0 text-secondary" />
-                    <span className="text-sm text-text">{d}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          </FadeInView>
 
           {/* Certifications */}
           <div className="mt-16">
             <h3 className="text-center text-xl font-semibold">Certifications</h3>
-            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <StaggerChildren className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
               {certifications.map((cert) => (
-                <div
-                  key={cert.name}
-                  className="flex flex-col items-center rounded-lg border border-border bg-white p-4 text-center"
-                >
-                  <div className="relative h-16 w-16">
-                    <Image
-                      src={cert.image}
-                      alt={cert.name}
-                      fill
-                      className="object-contain"
-                      sizes="64px"
-                    />
+                <StaggerItem key={cert.name}>
+                  <div className="flex flex-col items-center rounded-2xl border border-border bg-background p-4 text-center shadow-[var(--shadow-soft)]">
+                    <div className="relative h-16 w-16">
+                      <Image
+                        src={cert.image}
+                        alt={cert.name}
+                        fill
+                        className="object-contain"
+                        sizes="64px"
+                      />
+                    </div>
+                    <p className="mt-2 text-xs font-medium text-text">{cert.name}</p>
                   </div>
-                  <p className="mt-2 text-xs font-medium text-text">{cert.name}</p>
-                </div>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerChildren>
           </div>
         </div>
       </section>
 
-      {/* Projet d'établissement */}
+      {/* Projet d'etablissement */}
       <section id="projet" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader title="Projet d'établissement 2021-2026" />
+          <SectionHeader title="Projet d'etablissement 2021-2026" />
           <p className="mx-auto mt-6 max-w-3xl text-center text-text-muted">
-            Le projet d&apos;établissement du Lycée Montaigne s&apos;articule autour de trois axes stratégiques
-            pour accompagner chaque élève vers la réussite.
+            Le projet d&apos;etablissement du Lycee Montaigne s&apos;articule autour de trois axes strategiques
+            pour accompagner chaque eleve vers la reussite.
           </p>
           <div className="mt-12 space-y-12">
             {axes.map((axe, i) => (
-              <div
-                key={axe.title}
-                className={`grid items-center gap-8 lg:grid-cols-2 ${i % 2 !== 0 ? "lg:grid-flow-dense" : ""}`}
-              >
-                <div className={i % 2 !== 0 ? "lg:col-start-2" : ""}>
-                  <div className="relative aspect-video overflow-hidden rounded-xl">
-                    <Image
-                      src={axe.image}
-                      alt={axe.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                    />
+              <FadeInView key={axe.title}>
+                <div className={`grid items-center gap-8 lg:grid-cols-2 ${i % 2 !== 0 ? "lg:grid-flow-dense" : ""}`}>
+                  <div className={i % 2 !== 0 ? "lg:col-start-2" : ""}>
+                    <div className="relative aspect-video overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
+                      <Image
+                        src={axe.image}
+                        alt={axe.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-primary">{axe.title}</h3>
+                    <ul className="mt-4 space-y-2">
+                      {axe.items.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-sm text-text-muted">
+                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-primary">{axe.title}</h3>
-                  <ul className="mt-4 space-y-2">
-                    {axe.items.map((item) => (
-                      <li key={item} className="flex items-start gap-2 text-sm text-text-muted">
-                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              </FadeInView>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Parcours éducatifs */}
+      {/* Parcours educatifs */}
       <section id="parcours" className="bg-background-alt py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader title="Parcours éducatifs" />
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <SectionHeader title="Parcours educatifs" />
+          <StaggerChildren className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {parcours.map((p) => {
               const Icon = p.icon;
               return (
-                <div key={p.title} className="rounded-xl border border-border bg-white p-6">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Icon className="h-5 w-5" />
+                <StaggerItem key={p.title}>
+                  <div className="rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="mt-4 font-semibold">{p.title}</h3>
+                    <p className="mt-2 text-sm text-text-muted">{p.description}</p>
                   </div>
-                  <h3 className="mt-4 font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm text-text-muted">{p.description}</p>
-                </div>
+                </StaggerItem>
               );
             })}
-          </div>
+          </StaggerChildren>
         </div>
       </section>
 
-      {/* Pôle inclusion */}
+      {/* Pole inclusion */}
       <section id="pole" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
-              <SectionHeader title="Pôle inclusion" className="text-left" />
-              <p className="mt-6 text-text-muted">
-                Le Lycée Montaigne s&apos;engage pour l&apos;inclusion de tous les élèves à besoins éducatifs
-                particuliers (EBEP). Notre pôle inclusion accompagne chaque enfant dans son parcours scolaire
-                avec des dispositifs adaptés.
-              </p>
-              <Link
-                href="/pole-inclusion"
-                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-light"
-              >
-                Découvrir le pôle inclusion
-              </Link>
+          <FadeInView>
+            <div className="grid items-center gap-12 lg:grid-cols-2">
+              <div>
+                <SectionHeader title="Pole inclusion" className="text-left" />
+                <p className="mt-6 text-text-muted">
+                  Le Lycee Montaigne s&apos;engage pour l&apos;inclusion de tous les eleves a besoins educatifs
+                  particuliers (EBEP). Notre pole inclusion accompagne chaque enfant dans son parcours scolaire
+                  avec des dispositifs adaptes.
+                </p>
+                <Link
+                  href="/pole-inclusion"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-light hover:shadow-[var(--shadow-warm)]"
+                >
+                  Decouvrir le pole inclusion
+                </Link>
+              </div>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
+                <Image
+                  src="/images/vie-s1/November2024/GS7jV1MyA75tAjglBQcx.jpg"
+                  alt="Pole inclusion"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
             </div>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image
-                src="/images/vie-s1/November2024/GS7jV1MyA75tAjglBQcx.jpg"
-                alt="Pôle inclusion"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-          </div>
+          </FadeInView>
         </div>
       </section>
 
@@ -295,34 +297,38 @@ export default function ExcellenceAcademiquePage() {
       <section id="bcd" className="bg-background-alt py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader title="BCD – CCC" />
-          <div className="mt-12 grid gap-6 md:grid-cols-2">
-            <Link href="/excellence-academique/bcd" className="group relative aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image
-                src="/images/excellence-bcd-ccc-extras/November2025/4rQCpvOLwImnO4a1DDyT.jpg"
-                alt="Bibliothèque Centre Documentaire"
-                fill
-                className="object-cover transition-transform group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-              <div className="absolute bottom-0 p-6">
-                <h3 className="text-xl font-bold text-white">Bibliothèque Centre Documentaire (BCD)</h3>
-              </div>
-            </Link>
-            <Link href="/excellence-academique/ccc" className="group relative aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image
-                src="/images/excellence-bcd-ccc-extras/March2025/ZknXu3aPYo0iKijrLgFt.jpeg"
-                alt="Centre de Connaissances et de Culture"
-                fill
-                className="object-cover transition-transform group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-              <div className="absolute bottom-0 p-6">
-                <h3 className="text-xl font-bold text-white">Centre de Connaissances et de Culture (CCC)</h3>
-              </div>
-            </Link>
-          </div>
+          <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2">
+            <StaggerItem>
+              <Link href="/excellence-academique/bcd" className="group relative block aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
+                <Image
+                  src="/images/excellence-bcd-ccc-extras/November2025/4rQCpvOLwImnO4a1DDyT.jpg"
+                  alt="Bibliotheque Centre Documentaire"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <div className="absolute bottom-0 p-6">
+                  <h3 className="text-xl font-bold text-white">Bibliotheque Centre Documentaire (BCD)</h3>
+                </div>
+              </Link>
+            </StaggerItem>
+            <StaggerItem>
+              <Link href="/excellence-academique/ccc" className="group relative block aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
+                <Image
+                  src="/images/excellence-bcd-ccc-extras/March2025/ZknXu3aPYo0iKijrLgFt.jpeg"
+                  alt="Centre de Connaissances et de Culture"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                <div className="absolute bottom-0 p-6">
+                  <h3 className="text-xl font-bold text-white">Centre de Connaissances et de Culture (CCC)</h3>
+                </div>
+              </Link>
+            </StaggerItem>
+          </StaggerChildren>
         </div>
       </section>
     </>

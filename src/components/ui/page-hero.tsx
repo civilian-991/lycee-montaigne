@@ -1,5 +1,9 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { TextReveal } from "./motion";
+import { WaveDivider } from "./wave-divider";
 
 interface PageHeroProps {
   title: string;
@@ -11,7 +15,7 @@ export function PageHero({ title, image, className }: PageHeroProps) {
   return (
     <section
       className={cn(
-        "relative flex min-h-[240px] items-center justify-center overflow-hidden bg-primary md:min-h-[320px]",
+        "relative flex min-h-[280px] items-center justify-center overflow-hidden bg-primary md:min-h-[380px]",
         className
       )}
     >
@@ -24,9 +28,10 @@ export function PageHero({ title, image, className }: PageHeroProps) {
           priority
         />
       )}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/60 to-primary/90" />
       <div className="relative z-10 px-4 text-center">
         <h1 className="text-3xl font-bold text-white md:text-4xl lg:text-5xl">
-          {title}
+          <TextReveal text={title} />
         </h1>
         <svg
           className="mx-auto mt-4 h-3 w-24"
@@ -42,6 +47,9 @@ export function PageHero({ title, image, className }: PageHeroProps) {
             fill="none"
           />
         </svg>
+      </div>
+      <div className="absolute bottom-0 left-0 right-0">
+        <WaveDivider fill="var(--color-background)" />
       </div>
     </section>
   );

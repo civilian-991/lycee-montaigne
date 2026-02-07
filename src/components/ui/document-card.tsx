@@ -14,11 +14,11 @@ export function DocumentCard({ title, fileUrl, className }: DocumentCardProps) {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "group flex items-center gap-3 rounded-lg border border-border bg-white p-4 transition-all hover:border-secondary hover:shadow-md",
+        "group flex items-center gap-3 rounded-2xl border border-border bg-background p-4 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-0.5 hover:border-secondary hover:shadow-[var(--shadow-warm)]",
         className
       )}
     >
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary transition-colors group-hover:bg-secondary group-hover:text-white">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary/10 text-secondary transition-colors group-hover:bg-secondary group-hover:text-white">
         <FileText className="h-5 w-5" />
       </div>
       <span className="flex-1 text-sm font-medium text-text">{title}</span>

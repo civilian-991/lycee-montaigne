@@ -1,73 +1,74 @@
+"use client";
+
 import Image from "next/image";
-import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
-
-export const metadata: Metadata = {
-  title: "Extrascolaire",
-  description: "Activités périscolaires et association sportive au Lycée Montaigne de Beit Chabab.",
-};
+import { FadeInView } from "@/components/ui/motion";
 
 export default function ExtrascolairePage() {
   return (
     <>
       <PageHero title="Extrascolaire" />
 
-      {/* Activités périscolaires */}
+      {/* Activites periscolaires */}
       <section id="activite" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
-              <SectionHeader title="Activités périscolaires" className="text-left" />
-              <p className="mt-6 text-text-muted">
-                Le Lycée Montaigne propose un large éventail d&apos;activités périscolaires pour
-                enrichir le parcours de chaque élève. Que vous soyez passionné de sport, d&apos;art,
-                de robotique ou de sciences, il y a une activité pour chacun !
-              </p>
-              <p className="mt-4 text-text-muted">
-                Les activités sont organisées en deux périodes au cours de l&apos;année scolaire.
-                Les inscriptions se font en début de chaque période.
-              </p>
+          <FadeInView>
+            <div className="grid items-center gap-12 lg:grid-cols-2">
+              <div>
+                <SectionHeader title="Activites periscolaires" className="text-left" />
+                <p className="mt-6 text-text-muted">
+                  Le Lycee Montaigne propose un large eventail d&apos;activites periscolaires pour
+                  enrichir le parcours de chaque eleve. Que vous soyez passionne de sport, d&apos;art,
+                  de robotique ou de sciences, il y a une activite pour chacun !
+                </p>
+                <p className="mt-4 text-text-muted">
+                  Les activites sont organisees en deux periodes au cours de l&apos;annee scolaire.
+                  Les inscriptions se font en debut de chaque periode.
+                </p>
+              </div>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
+                <Image
+                  src="/images/activites-prescolaires/May2025/vjpXai9c7VbVIINjggcN.jpeg"
+                  alt="Activites periscolaires"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
             </div>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image
-                src="/images/activites-prescolaires/May2025/vjpXai9c7VbVIINjggcN.jpeg"
-                alt="Activités périscolaires"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-          </div>
+          </FadeInView>
         </div>
       </section>
 
       {/* Association sportive */}
       <section id="action" className="bg-background-alt py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl lg:order-first">
-              <Image
-                src="/images/actions-sportives/May2025/MJzrvOmYO8rmdfoypZDR.jpeg"
-                alt="Association sportive"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+          <FadeInView>
+            <div className="grid items-center gap-12 lg:grid-cols-2">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)] lg:order-first">
+                <Image
+                  src="/images/actions-sportives/May2025/MJzrvOmYO8rmdfoypZDR.jpeg"
+                  alt="Association sportive"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+              <div>
+                <SectionHeader title="Association sportive" className="text-left" />
+                <p className="mt-6 text-text-muted">
+                  L&apos;association sportive du Lycee Montaigne offre aux eleves la possibilite de
+                  pratiquer differentes disciplines sportives et de participer a des competitions
+                  inter-etablissements dans le cadre de la ligue sportive AEFE-UNSS.
+                </p>
+                <p className="mt-4 text-text-muted">
+                  Les entrainements ont lieu en dehors des heures de cours et les competitions
+                  sont organisees tout au long de l&apos;annee.
+                </p>
+              </div>
             </div>
-            <div>
-              <SectionHeader title="Association sportive" className="text-left" />
-              <p className="mt-6 text-text-muted">
-                L&apos;association sportive du Lycée Montaigne offre aux élèves la possibilité de
-                pratiquer différentes disciplines sportives et de participer à des compétitions
-                inter-établissements dans le cadre de la ligue sportive AEFE-UNSS.
-              </p>
-              <p className="mt-4 text-text-muted">
-                Les entraînements ont lieu en dehors des heures de cours et les compétitions
-                sont organisées tout au long de l&apos;année.
-              </p>
-            </div>
-          </div>
+          </FadeInView>
         </div>
       </section>
     </>

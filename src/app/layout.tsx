@@ -1,31 +1,44 @@
 import type { Metadata } from "next";
+import { Fraunces, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+});
+
+const sourceSans = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-source-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
-    default: "Lycée Montaigne — Beit Chabab",
-    template: "%s | Lycée Montaigne",
+    default: "Lycee Montaigne -- Beit Chabab",
+    template: "%s | Lycee Montaigne",
   },
   description:
-    "Le Lycée Montaigne de Beit Chabab est un établissement scolaire francophone au Liban, de la maternelle à la terminale.",
+    "Le Lycee Montaigne de Beit Chabab est un etablissement scolaire francophone au Liban, de la maternelle a la terminale.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
   ),
   openGraph: {
     type: "website",
     locale: "fr_FR",
-    siteName: "Lycée Montaigne",
+    siteName: "Lycee Montaigne",
   },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "School",
-  name: "Lycée Montaigne",
-  alternateName: "Lycée Montaigne Beit Chabab",
+  name: "Lycee Montaigne",
+  alternateName: "Lycee Montaigne Beit Chabab",
   url: "https://lycee-montaigne.edu.lb",
   description:
-    "Établissement scolaire francophone au Liban, de la maternelle à la terminale, homologué par le Ministère français de l'Éducation nationale.",
+    "Etablissement scolaire francophone au Liban, de la maternelle a la terminale, homologue par le Ministere francais de l'Education nationale.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Quartier Baydar Chouar",
@@ -50,7 +63,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={`${fraunces.variable} ${sourceSans.variable}`} suppressHydrationWarning>
       <body>
         <script
           type="application/ld+json"

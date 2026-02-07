@@ -22,7 +22,7 @@ export function Card({
   const content = (
     <div
       className={cn(
-        "group overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 hover:shadow-lg",
+        "group overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]",
         className
       )}
     >
@@ -32,7 +32,7 @@ export function Card({
             src={image}
             alt={title}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>

@@ -1,16 +1,23 @@
+"use client";
+
 import { cn } from "@/lib/utils";
+import { FadeInView } from "./motion";
 
 interface SectionHeaderProps {
   title: string;
+  subtitle?: string;
   className?: string;
 }
 
-export function SectionHeader({ title, className }: SectionHeaderProps) {
+export function SectionHeader({ title, subtitle, className }: SectionHeaderProps) {
   return (
-    <div className={cn("mb-8 text-center", className)}>
-      <h2 className="text-2xl font-bold md:text-3xl">{title}</h2>
+    <FadeInView className={cn("mb-8 text-center", className)}>
+      <h2 className="text-3xl font-bold md:text-4xl">{title}</h2>
+      {subtitle && (
+        <p className="mt-3 text-lg text-text-muted">{subtitle}</p>
+      )}
       <svg
-        className="mx-auto mt-3 h-3 w-24"
+        className="mx-auto mt-4 h-3 w-24"
         viewBox="0 0 100 12"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -23,6 +30,6 @@ export function SectionHeader({ title, className }: SectionHeaderProps) {
           fill="none"
         />
       </svg>
-    </div>
+    </FadeInView>
   );
 }
