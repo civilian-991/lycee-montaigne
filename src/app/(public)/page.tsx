@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, BookOpen, Users, Award, Globe } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,14 @@ export default function HomePage() {
     <>
       {/* Hero Section */}
       <section className="relative flex min-h-[500px] items-center overflow-hidden bg-primary md:min-h-[600px]">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-light to-accent opacity-90" />
+        <Image
+          src="/images/hp-sliders/February2026/xsOXezH2jzRWmKTDo9zN.jpeg"
+          alt="Lycée Montaigne - Beit Chabab"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-primary/60" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-20">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
