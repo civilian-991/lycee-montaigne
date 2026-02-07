@@ -171,35 +171,45 @@ export default function ExcellenceAcademiquePage() {
         <WaveDivider fill="var(--color-background)" flip className="relative z-10" />
         <div className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">
-            <SectionHeader title="Examens et Certificats" />
+            <SectionHeader
+              title="Examens et Certificats"
+              subtitle="Des diplomes reconnus et des certifications internationales"
+            />
+
+            {/* Diplomas + Results — balanced layout */}
             <FadeInView>
-              <div className="mt-12 grid items-center gap-10 lg:grid-cols-5">
-                {/* Results image — larger */}
-                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl shadow-[var(--shadow-elevated)] lg:col-span-3">
+              <div className="mt-12 grid items-center gap-8 lg:grid-cols-2">
+                {/* Results image */}
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)]">
                   <Image
                     src="/images/examens-resultats/January2026/resized_IMG_6942.PNG"
                     alt="Resultats 2024-2025"
                     fill
                     className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                   />
                 </div>
-                {/* Diplomas as visual badges */}
-                <div className="lg:col-span-2">
+                {/* Diplomas */}
+                <div>
                   <h3 className="font-heading text-2xl font-bold text-primary">Diplomes prepares</h3>
-                  <div className="mt-6 space-y-3">
+                  <p className="mt-2 text-sm text-text-muted">
+                    Nos eleves sont prepares aux examens francais, libanais et internationaux
+                  </p>
+                  <div className="mt-5 space-y-2.5">
                     {diplomas.map((d) => (
                       <div
                         key={d.name}
-                        className="flex items-center gap-3 rounded-xl border border-border bg-background p-3.5 shadow-[var(--shadow-soft)]"
+                        className="flex items-center gap-3.5 rounded-2xl border border-border bg-background p-4 shadow-[var(--shadow-soft)] transition-all duration-200 hover:shadow-[var(--shadow-warm)]"
                       >
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary/10">
-                          <Award className="h-4.5 w-4.5 text-secondary" />
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary/10">
+                          <Award className="h-5 w-5 text-secondary" />
                         </div>
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <p className="text-sm font-semibold text-text">{d.name}</p>
-                          <p className="text-xs text-text-muted">{d.type}</p>
                         </div>
+                        <span className="shrink-0 rounded-full bg-primary/8 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+                          {d.type}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -207,25 +217,25 @@ export default function ExcellenceAcademiquePage() {
               </div>
             </FadeInView>
 
-            {/* Certifications — larger cards */}
-            <div className="mt-20">
+            {/* Certifications */}
+            <div className="mt-16">
               <FadeInView>
-                <h3 className="text-center font-heading text-2xl font-bold text-primary">Certifications</h3>
+                <h3 className="text-center font-heading text-2xl font-bold text-primary">Certifications internationales</h3>
                 <p className="mx-auto mt-2 max-w-xl text-center text-sm text-text-muted">
-                  Nos eleves preparent et obtiennent des certifications internationales reconnues
+                  Nos eleves preparent et obtiennent des certifications reconnues mondialement
                 </p>
               </FadeInView>
               <StaggerChildren className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
                 {certifications.map((cert) => (
                   <StaggerItem key={cert.name}>
                     <div className="group flex flex-col items-center rounded-2xl border border-border bg-background p-5 text-center shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]">
-                      <div className="relative h-20 w-20 transition-transform duration-300 group-hover:scale-110">
+                      <div className="relative h-16 w-16 transition-transform duration-300 group-hover:scale-110">
                         <Image
                           src={cert.image}
                           alt={cert.name}
                           fill
                           className="object-contain"
-                          sizes="80px"
+                          sizes="64px"
                         />
                       </div>
                       <p className="mt-3 text-xs font-semibold text-text">{cert.name}</p>
