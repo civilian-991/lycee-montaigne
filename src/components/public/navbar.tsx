@@ -224,34 +224,28 @@ export function Navbar() {
       {/* ─── Row 3: Sticky Navigation Bar ──────────────────────── */}
       <nav
         className={cn(
-          "sticky top-0 z-50 transition-all duration-300",
+          "sticky top-0 z-50 border-b transition-all duration-300",
           navStuck
-            ? "bg-background/95 shadow-[var(--shadow-warm)] backdrop-blur-lg"
-            : "bg-background-alt"
+            ? "border-border/60 bg-background/97 shadow-[0_4px_20px_-4px_rgba(28,25,23,0.10)] backdrop-blur-xl"
+            : "border-border/40 bg-background-alt"
         )}
         aria-label="Navigation principale"
       >
-        {/* Top accent line */}
-        <div className={cn(
-          "h-[2px] bg-gradient-to-r from-secondary/0 via-secondary to-secondary/0 transition-opacity duration-300",
-          navStuck ? "opacity-100" : "opacity-0"
-        )} />
-
         <div className="mx-auto max-w-7xl px-4">
-          <div className="flex h-12 items-center">
+          <div className="flex h-14 items-center">
             {/* Compact logo — appears when stuck */}
             <div className={cn(
               "shrink-0 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              navStuck ? "mr-6 w-[120px] opacity-100" : "mr-0 w-0 opacity-0"
+              navStuck ? "mr-8 w-[130px] opacity-100" : "mr-0 w-0 opacity-0"
             )}>
-              <Link href="/">
-                <Image src="/images/logo.png" alt="Lycee Montaigne" width={120} height={46} className="h-8 w-auto" />
+              <Link href="/" className="block">
+                <Image src="/images/logo.png" alt="Lycee Montaigne" width={130} height={50} className="h-9 w-auto" />
               </Link>
             </div>
 
             {/* Desktop nav links */}
             <div className="hidden flex-1 items-center justify-center lg:flex">
-              <div className="flex items-center gap-0.5">
+              <div className="flex items-center gap-1">
                 {navigation.map((item) => (
                   <div
                     key={item.label}
@@ -262,8 +256,10 @@ export function Navbar() {
                     <Link
                       href={item.href}
                       className={cn(
-                        "relative block px-3 py-1.5 text-center text-[13px] font-medium transition-colors duration-200",
-                        isActive(item.href) ? "text-primary" : "text-text-muted hover:text-primary"
+                        "relative block rounded-lg px-3 py-2 text-center text-sm font-medium transition-all duration-200",
+                        isActive(item.href)
+                          ? "text-primary"
+                          : "text-text/70 hover:bg-primary/[0.04] hover:text-primary"
                       )}
                     >
                       {item.label}
@@ -271,7 +267,7 @@ export function Navbar() {
                       {isActive(item.href) && (
                         <motion.div
                           layoutId="nav-indicator"
-                          className="absolute -bottom-[7px] left-2 right-2 h-[2px] rounded-full bg-secondary"
+                          className="absolute -bottom-[9px] left-3 right-3 h-[2.5px] rounded-full bg-secondary"
                           transition={{ type: "spring", stiffness: 400, damping: 30 }}
                         />
                       )}
@@ -323,20 +319,20 @@ export function Navbar() {
 
             {/* Compact CTAs — appear when stuck */}
             <div className={cn(
-              "hidden shrink-0 items-center gap-2 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:flex",
+              "hidden shrink-0 items-center gap-2.5 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:flex",
               navStuck ? "w-auto opacity-100" : "pointer-events-none w-0 overflow-hidden opacity-0"
             )}>
               <a
                 href="https://2050048n.index-education.net/pronote/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="whitespace-nowrap rounded-full border border-primary/30 px-3 py-1 text-xs font-semibold text-primary transition-all duration-200 hover:border-primary hover:bg-primary hover:text-white"
+                className="whitespace-nowrap rounded-full border border-primary/25 px-4 py-1.5 text-xs font-semibold text-primary transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:bg-primary hover:text-white hover:shadow-[var(--shadow-soft)]"
               >
                 Pronote
               </a>
               <Link
                 href="/contact"
-                className="whitespace-nowrap rounded-full bg-primary px-3 py-1 text-xs font-semibold text-white transition-all duration-200 hover:bg-primary-light"
+                className="whitespace-nowrap rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-light hover:shadow-[var(--shadow-soft)]"
               >
                 Contact
               </Link>
@@ -344,7 +340,7 @@ export function Navbar() {
 
             {/* Mobile hamburger (in sticky bar) */}
             <button
-              className="ml-auto flex h-9 w-9 items-center justify-center rounded-xl text-text-muted transition-colors hover:bg-background-dark hover:text-primary lg:hidden"
+              className="ml-auto flex h-10 w-10 items-center justify-center rounded-xl text-text-muted transition-colors hover:bg-background-dark hover:text-primary lg:hidden"
               onClick={() => setMobileOpen(true)}
               aria-label="Ouvrir le menu"
             >
@@ -352,9 +348,6 @@ export function Navbar() {
             </button>
           </div>
         </div>
-
-        {/* Bottom border */}
-        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </nav>
 
       {/* ─── Mobile Menu Overlay ───────────────────────────────── */}
