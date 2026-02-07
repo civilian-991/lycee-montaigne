@@ -28,7 +28,7 @@ async function main() {
     { key: "fax", value: "+961 4 985 256" },
     { key: "address", value: "Beit Chabab, Quartier Baydar Chouar, Metn, Liban" },
     { key: "facebook", value: "https://www.facebook.com/LyceeMontaigneBeitChabab" },
-    { key: "instagram", value: "https://www.instagram.com/lyceemontaignebeitchabab/" },
+    { key: "instagram", value: "https://www.instagram.com/lyceemontaigne.liban/" },
     { key: "linkedin", value: "https://www.linkedin.com/school/lyc%C3%A9e-montaigne-beit-chabab/" },
     { key: "stat_eleves", value: "1085" },
     { key: "stat_reussite", value: "100%" },

@@ -23,7 +23,7 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 const socialLinks = [
   { href: "https://www.facebook.com/LyceeMontaigneBeitChabab", label: "Facebook", Icon: FacebookIcon },
   { href: "https://www.linkedin.com/school/lyc%C3%A9e-montaigne-beit-chabab/", label: "LinkedIn", Icon: LinkedInIcon },
-  { href: "https://www.instagram.com/lyceemontaignebeitchabab/", label: "Instagram", Icon: InstagramIcon },
+  { href: "https://www.instagram.com/lyceemontaigne.liban/", label: "Instagram", Icon: InstagramIcon },
 ];
 
 /* ── Dropdown item stagger variants ──────────────────────────── */

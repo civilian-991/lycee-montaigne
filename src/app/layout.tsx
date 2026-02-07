@@ -51,7 +51,7 @@ const jsonLd = {
   email: "info@lycee-montaigne.edu.lb",
   sameAs: [
     "https://www.facebook.com/LyceeMontaigneBeitChabab",
-    "https://www.instagram.com/lyceemontaignebeitchabab/",
+    "https://www.instagram.com/lyceemontaigne.liban/",
     "https://www.linkedin.com/school/lyc%C3%A9e-montaigne-beit-chabab/",
   ],
   numberOfStudents: 1085,
