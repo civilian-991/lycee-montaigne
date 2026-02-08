@@ -1,9 +1,44 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
+import {
+  Building2,
+  Scale,
+  GraduationCap,
+  BookOpen,
+  Gavel,
+  ClipboardList,
+  Megaphone,
+  HeartPulse,
+  UserCheck,
+  Globe,
+  Shield,
+  ChevronRight,
+  type LucideIcon,
+} from "lucide-react";
+
+const governanceInstances: {
+  id: string;
+  title: string;
+  icon: LucideIcon;
+  color: string;
+}[] = [
+  { id: "conseil-strategique", title: "Conseil Strategique", icon: Building2, color: "from-primary to-primary-dark" },
+  { id: "conseil-etablissement", title: "Conseil d'Etablissement", icon: Scale, color: "from-secondary to-secondary-dark" },
+  { id: "conseil-ecole", title: "Conseil d'Ecole", icon: GraduationCap, color: "from-primary to-primary-dark" },
+  { id: "conseil-pedagogique", title: "Conseil Pedagogique", icon: BookOpen, color: "from-secondary to-secondary-dark" },
+  { id: "conseil-discipline", title: "Conseil de Discipline", icon: Gavel, color: "from-primary to-primary-dark" },
+  { id: "conseil-classe", title: "Conseil de Classe", icon: ClipboardList, color: "from-secondary to-secondary-dark" },
+  { id: "conseil-vie-collegienne", title: "Conseil de Vie Collegienne", icon: Megaphone, color: "from-primary to-primary-dark" },
+  { id: "commission-hygiene-securite", title: "Commission Hygiene et Securite", icon: HeartPulse, color: "from-secondary to-secondary-dark" },
+  { id: "conseil-vie-lyceenne", title: "Conseil de Vie Lyceenne", icon: UserCheck, color: "from-primary to-primary-dark" },
+  { id: "cellule-formation", title: "Cellule de Formation", icon: Globe, color: "from-secondary to-secondary-dark" },
+  { id: "cesce", title: "CESCE", icon: Shield, color: "from-primary to-primary-dark" },
+];
 
 const staffMessages = [
   {
@@ -141,29 +176,53 @@ export default function EtablissementPage() {
         </div>
       </section>
 
-      {/* Reglement + Instances */}
+      {/* Reglement Interieur */}
       <section id="reglement" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader title="Reglement Interieur & Instances" />
-          <StaggerChildren className="mt-12 grid gap-8 md:grid-cols-2">
-            <StaggerItem>
-              <div className="rounded-[20px] border border-border bg-background p-8 shadow-[var(--shadow-soft)]">
-                <h3 className="text-xl font-semibold">Reglement Interieur</h3>
-                <p className="mt-4 text-text-muted">
-                  Le reglement interieur du Lycee Montaigne definit les droits et devoirs de chaque membre
-                  de la communaute scolaire. Il garantit un cadre de vie harmonieux et propice a l&apos;apprentissage.
-                </p>
-              </div>
-            </StaggerItem>
-            <StaggerItem>
-              <div id="instances" className="rounded-[20px] border border-border bg-background p-8 shadow-[var(--shadow-soft)]">
-                <h3 className="text-xl font-semibold">Instances</h3>
-                <p className="mt-4 text-text-muted">
-                  Les instances de l&apos;etablissement (conseil d&apos;etablissement, conseil pedagogique,
-                  conseil de discipline) assurent la bonne gouvernance et le fonctionnement democratique du lycee.
-                </p>
-              </div>
-            </StaggerItem>
+          <FadeInView>
+            <div className="mx-auto mt-12 max-w-4xl rounded-[20px] border border-border bg-background p-8 shadow-[var(--shadow-soft)]">
+              <h3 className="text-xl font-semibold">Reglement Interieur</h3>
+              <p className="mt-4 text-text-muted">
+                Le reglement interieur du Lycee Montaigne definit les droits et devoirs de chaque membre
+                de la communaute scolaire. Il garantit un cadre de vie harmonieux et propice a l&apos;apprentissage.
+              </p>
+            </div>
+          </FadeInView>
+        </div>
+      </section>
+
+      {/* Instances de Gouvernance */}
+      <section id="fonctionnement" className="bg-background-alt py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHeader
+            title="Instances de Gouvernance"
+            subtitle="Les organes qui assurent le fonctionnement democratique du lycee"
+          />
+          <StaggerChildren className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {governanceInstances.map((inst) => {
+              const Icon = inst.icon;
+              return (
+                <StaggerItem key={inst.id}>
+                  <Link
+                    href={`/etablissement/fonctionnement/${inst.id}`}
+                    className="group flex items-center gap-4 rounded-[20px] border border-border bg-background p-5 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
+                  >
+                    <div
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${inst.color} transition-transform duration-300 group-hover:scale-110`}
+                    >
+                      <Icon className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="truncate font-semibold text-text transition-colors group-hover:text-secondary">
+                        {inst.title}
+                      </h4>
+                    </div>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-text-muted transition-transform duration-300 group-hover:translate-x-1 group-hover:text-secondary" />
+                  </Link>
+                </StaggerItem>
+              );
+            })}
           </StaggerChildren>
         </div>
       </section>
