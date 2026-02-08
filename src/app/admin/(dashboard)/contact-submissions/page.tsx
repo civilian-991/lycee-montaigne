@@ -28,7 +28,7 @@ export default async function ContactSubmissionsPage({
         ? { read: true }
         : {};
 
-  let submissions: { id: string; name: string; email: string; message: string; read: boolean; createdAt: Date }[] = [];
+  let submissions: { id: string; name: string; email: string; subject: string | null; message: string; read: boolean; createdAt: Date }[] = [];
   let count = 0;
   let unreadCount = 0;
 
@@ -104,6 +104,11 @@ export default async function ContactSubmissionsPage({
                     )}
                   </div>
                   <p className="mt-0.5 text-sm text-text-muted">{sub.email}</p>
+                  {sub.subject && (
+                    <p className="mt-2 text-sm font-medium text-text">
+                      Sujet : {sub.subject}
+                    </p>
+                  )}
                   <p className="mt-3 text-sm text-text whitespace-pre-wrap">{sub.message}</p>
                   <p className="mt-3 text-xs text-text-muted">
                     {new Intl.DateTimeFormat("fr-FR", {
@@ -118,7 +123,7 @@ export default async function ContactSubmissionsPage({
                 <div className="flex shrink-0 gap-2">
                   {!sub.read && <MarkReadButton id={sub.id} />}
                   <a
-                    href={`mailto:${sub.email}?subject=Re: Message de contact`}
+                    href={`mailto:${sub.email}?subject=Re: ${sub.subject || "Message de contact"}`}
                     className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-text-muted hover:bg-background-alt"
                   >
                     Répondre

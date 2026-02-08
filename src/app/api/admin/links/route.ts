@@ -4,6 +4,18 @@ import { db } from "@/lib/db";
 import { z } from "zod";
 import { quickLinkSchema } from "@/lib/validations";
 
+export async function GET() {
+  try {
+    const session = await auth();
+    if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+
+    const links = await db.quickLink.findMany({ orderBy: { order: "asc" } });
+    return NextResponse.json(links);
+  } catch {
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const session = await auth();
