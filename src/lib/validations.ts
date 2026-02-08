@@ -125,6 +125,14 @@ export const governanceInstanceSchema = z.object({
   order: z.coerce.number().int().default(0),
 });
 
+export const menuItemSchema = z.object({
+  label: z.string().min(1, "Le libellé est requis"),
+  url: z.string().nullable().optional(),
+  parentId: z.string().nullable().optional(),
+  order: z.number().optional().default(0),
+  pageId: z.string().nullable().optional(),
+});
+
 export const contactSubmissionPatchSchema = z.object({
   read: z.boolean(),
 });

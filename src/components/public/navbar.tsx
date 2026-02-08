@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ChevronDown, ExternalLink, Search, Phone, Mail, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { navigation } from "@/lib/navigation";
+import { navigation as staticNavigation, type NavItem } from "@/lib/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 /* ── Social icon SVGs ────────────────────────────────────────── */
@@ -54,7 +54,8 @@ const mobileNavItem = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
-export function Navbar() {
+export function Navbar({ navigationItems }: { navigationItems?: NavItem[] } = {}) {
+  const navigation = navigationItems && navigationItems.length > 0 ? navigationItems : staticNavigation;
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);

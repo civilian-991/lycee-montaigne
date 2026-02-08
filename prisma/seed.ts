@@ -26,6 +26,7 @@ async function main() {
   await db.activityItem.deleteMany();
   await db.announcement.deleteMany();
   await db.governanceInstance.deleteMany();
+  await db.menuItem.deleteMany();
   console.log("  Done.\n");
 
   /* ── 2. Admin user ───────────────────────────────────── */
@@ -957,6 +958,121 @@ async function main() {
     },
   });
   console.log("Announcements seeded.");
+
+  /* ── 15. Menu items (navigation) ─────────────────────── */
+  const navigationData = [
+    {
+      label: "Accueil",
+      url: "/",
+      order: 0,
+      children: [
+        { label: "Liens utiles", url: "/#liens-utiles", order: 0 },
+        { label: "Pourquoi l'enseignement français", url: "/#pourquoi", order: 1 },
+        { label: "Info à la une", url: "/#info-une", order: 2 },
+        { label: "Trait d'union", url: "/#trait-union", order: 3 },
+      ],
+    },
+    {
+      label: "Établissement",
+      url: "/etablissement",
+      order: 1,
+      children: [
+        { label: "Mission et Vision", url: "/etablissement#mission", order: 0 },
+        { label: "Mot de la cheffe", url: "/etablissement#chef", order: 1 },
+        { label: "Mot de la proviseure déléguée", url: "/etablissement#delegue", order: 2 },
+        { label: "Mot de la directrice", url: "/etablissement#directrice", order: 3 },
+        { label: "Comité des parents", url: "/etablissement#comite", order: 4 },
+        { label: "Règlement Intérieur", url: "/etablissement#reglement", order: 5 },
+        { label: "Instances", url: "/etablissement#instances", order: 6 },
+      ],
+    },
+    {
+      label: "Excellence académique",
+      url: "/excellence-academique",
+      order: 2,
+      children: [
+        { label: "Offre pédagogique", url: "/excellence-academique#pedagogie", order: 0 },
+        { label: "Examens et certificats", url: "/excellence-academique#resultats", order: 1 },
+        { label: "Projet d'établissement", url: "/excellence-academique#projet", order: 2 },
+        { label: "Parcours éducatifs", url: "/excellence-academique#parcours", order: 3 },
+        { label: "Pôle inclusion", url: "/excellence-academique#pole", order: 4 },
+        { label: "BCD - CCC", url: "/excellence-academique#bcd", order: 5 },
+      ],
+    },
+    {
+      label: "Inscriptions et réinscriptions",
+      url: "/inscriptions",
+      order: 3,
+      children: [
+        { label: "Inscriptions et réinscriptions", url: "/inscriptions#inscription", order: 0 },
+        { label: "Portes Ouvertes", url: "/inscriptions#porte-ouvertes", order: 1 },
+        { label: "Bourses Scolaires", url: "/inscriptions#bourse", order: 2 },
+      ],
+    },
+    {
+      label: "Vie du LM",
+      url: "/vie-du-lm",
+      order: 4,
+      children: [
+        { label: "Actualités", url: "/vie-du-lm#actualite", order: 0 },
+        { label: "Développement durable", url: "/vie-du-lm#dev", order: 1 },
+        { label: "Webradio", url: "/vie-du-lm#web", order: 2 },
+        { label: "Démocratie scolaire", url: "/vie-du-lm#climat", order: 3 },
+        { label: "Égalité", url: "/vie-du-lm#egalite", order: 4 },
+        { label: "Séjours", url: "/vie-du-lm#sejour", order: 5 },
+      ],
+    },
+    {
+      label: "Orientation",
+      url: "/orientation",
+      order: 5,
+      children: [
+        { label: "Parcours avenir", url: "/orientation#presentation", order: 0 },
+        { label: "Parcoursup", url: "/orientation#parcoursup", order: 1 },
+        { label: "Inscriptions Universités", url: "/orientation#uni", order: 2 },
+        { label: "Activités", url: "/orientation#activites", order: 3 },
+      ],
+    },
+    {
+      label: "Extrascolaire",
+      url: "/extrascolaire",
+      order: 6,
+      children: [
+        { label: "Activités périscolaires", url: "/extrascolaire#activite", order: 0 },
+        { label: "Association sportive", url: "/extrascolaire#action", order: 1 },
+      ],
+    },
+    {
+      label: "Informations pratiques",
+      url: "/informations-pratiques",
+      order: 7,
+      children: [
+        { label: "Calendrier scolaire", url: "/informations-pratiques#calendrier", order: 0 },
+        { label: "Listes de manuels", url: "/informations-pratiques#liste", order: 1 },
+        { label: "Restauration", url: "/informations-pratiques#restauration", order: 2 },
+        { label: "Santé", url: "/informations-pratiques#sante", order: 3 },
+        { label: "Recrutement", url: "/informations-pratiques#recrutement", order: 4 },
+      ],
+    },
+    {
+      label: "Contact",
+      url: "/contact",
+      order: 8,
+      children: [],
+    },
+  ];
+
+  for (const nav of navigationData) {
+    const parent = await db.menuItem.create({
+      data: { label: nav.label, url: nav.url, order: nav.order },
+    });
+    for (const child of nav.children) {
+      await db.menuItem.create({
+        data: { label: child.label, url: child.url, order: child.order, parentId: parent.id },
+      });
+    }
+  }
+  console.log("Menu items seeded.");
 
   console.log("\n✅ Seeding complete! All CMS tables populated.");
 }

@@ -22,6 +22,7 @@ import {
   Award,
   FolderOpen,
   Building2,
+  Navigation2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -52,6 +53,7 @@ const navSections = [
       { label: "Liens rapides", href: "/admin/links", icon: Link2 },
       { label: "Équipe", href: "/admin/staff", icon: Users },
       { label: "Messages", href: "/admin/contact-submissions", icon: Mail },
+      { label: "Navigation", href: "/admin/menu-items", icon: Navigation2 },
       { label: "Médias", href: "/admin/media", icon: FolderOpen },
       { label: "Paramètres", href: "/admin/settings", icon: Settings },
     ],
