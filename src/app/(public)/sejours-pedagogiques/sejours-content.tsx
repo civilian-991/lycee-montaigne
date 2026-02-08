@@ -4,6 +4,7 @@ import Image from "next/image";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView } from "@/components/ui/motion";
+import { localImage } from "@/lib/utils";
 
 type PageSectionRow = {
   id: string;
@@ -55,7 +56,7 @@ export function SejoursContent({ sections }: { sections: PageSectionRow[] }) {
               </div>
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                 <Image
-                  src={introSection?.image || "/images/actions-sportives/May2025/5AyqpqwCqoBIFxIXphFP.jpeg"}
+                  src={localImage(introSection?.image) || "/images/actions-sportives/May2025/5AyqpqwCqoBIFxIXphFP.jpeg"}
                   alt="Sejours pedagogiques"
                   fill
                   className="object-cover"

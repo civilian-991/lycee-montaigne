@@ -1,4 +1,5 @@
 "use client";
+import { localImage } from "@/lib/utils";
 
 import Image from "next/image";
 import { SectionHeader } from "@/components/ui/section-header";
@@ -175,7 +176,7 @@ export function AnciensContent({
         date: formatDate(e.date),
         year: getYear(e.date),
         description: e.descriptionHtml || "",
-        images: e.photos.map((p) => p.imageUrl),
+        images: e.photos.map((p) => localImage(p.imageUrl) ?? p.imageUrl),
       }))
     : hardcodedEvents;
 

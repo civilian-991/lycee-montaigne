@@ -4,6 +4,7 @@ import Image from "next/image";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
+import { localImage } from "@/lib/utils";
 import { Heart, Users, BookOpen, Shield } from "lucide-react";
 
 const pillars = [
@@ -92,7 +93,7 @@ export function PoleInclusionContent({ sections }: { sections: PageSectionRow[] 
               </div>
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                 <Image
-                  src={introSection?.image || "/images/vie-s1/November2024/GS7jV1MyA75tAjglBQcx.jpg"}
+                  src={localImage(introSection?.image) || "/images/vie-s1/November2024/GS7jV1MyA75tAjglBQcx.jpg"}
                   alt="Pole inclusion"
                   fill
                   className="object-cover"

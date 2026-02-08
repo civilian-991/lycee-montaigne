@@ -5,6 +5,7 @@ import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { WaveDivider } from "@/components/ui/wave-divider";
+import { localImage } from "@/lib/utils";
 import { Calendar, FileDown, Compass, GraduationCap, ExternalLink, BookOpen, Trophy } from "lucide-react";
 
 /* ── Types ────────────────────────────────────────────── */
@@ -222,7 +223,7 @@ export function OrientationContent({ documents }: OrientationContentProps) {
                 <div className="group overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]">
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <Image
-                      src={activity.image}
+                      src={localImage(activity.image) || activity.image}
                       alt={activity.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -354,7 +355,7 @@ export function OrientationContent({ documents }: OrientationContentProps) {
                 >
                   <div className="relative h-16 w-full">
                     <Image
-                      src={uni.image}
+                      src={localImage(uni.image) || uni.image}
                       alt={uni.name}
                       fill
                       className="object-contain transition-transform duration-300 group-hover:scale-110"

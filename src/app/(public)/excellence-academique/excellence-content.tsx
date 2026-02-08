@@ -1,4 +1,5 @@
 "use client";
+import { localImage } from "@/lib/utils";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -150,7 +151,7 @@ interface ExcellenceContentProps {
 export function ExcellenceContent({ certifications, sections }: ExcellenceContentProps) {
   // Use CMS certifications if available, otherwise fall back to hardcoded defaults
   const displayCertifications = certifications.length > 0
-    ? certifications.map((c) => ({ name: c.name, image: c.image ?? "" }))
+    ? certifications.map((c) => ({ name: c.name, image: localImage(c.image) ?? "" }))
     : defaultCertifications;
 
   // Parse CMS sections for diplomas, axes, and parcours
@@ -351,7 +352,7 @@ export function ExcellenceContent({ certifications, sections }: ExcellenceConten
                     {/* Image side */}
                     <div className={`relative min-h-[240px] lg:col-span-2 ${i % 2 !== 0 ? "lg:col-start-4" : ""}`}>
                       <Image
-                        src={axe.image}
+                        src={localImage(axe.image) ?? axe.image}
                         alt={axe.title}
                         fill
                         className="object-cover"

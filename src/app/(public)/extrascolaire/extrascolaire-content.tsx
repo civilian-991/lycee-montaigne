@@ -4,6 +4,7 @@ import Image from "next/image";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView } from "@/components/ui/motion";
+import { localImage } from "@/lib/utils";
 
 interface ActivityItemData {
   id: string;
@@ -42,10 +43,10 @@ export function ExtrascolaireContent({ activities, sportsActivities }: Extrascol
                       key={activity.id}
                       className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]"
                     >
-                      {activity.image && (
+                      {localImage(activity.image) && (
                         <div className="relative aspect-[4/3] overflow-hidden">
                           <Image
-                            src={activity.image}
+                            src={localImage(activity.image)!}
                             alt={activity.title}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -114,10 +115,10 @@ export function ExtrascolaireContent({ activities, sportsActivities }: Extrascol
                       key={activity.id}
                       className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]"
                     >
-                      {activity.image && (
+                      {localImage(activity.image) && (
                         <div className="relative aspect-[4/3] overflow-hidden">
                           <Image
-                            src={activity.image}
+                            src={localImage(activity.image)!}
                             alt={activity.title}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-105"

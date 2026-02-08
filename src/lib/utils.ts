@@ -31,3 +31,25 @@ export function absoluteUrl(path: string): string {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   return `${base}${path}`;
 }
+
+/**
+ * Converts external image URLs from the original site to local paths.
+ * e.g. "https://lycee-montaigne.edu.lb/storage/foo/bar.png" → "/images/foo/bar.png"
+ *      "https://lycee-montaigne.edu.lb//storage/foo/bar.png" → "/images/foo/bar.png"
+ * Already-local paths (starting with "/") are returned unchanged.
+ * Null/undefined returns undefined.
+ */
+export function localImage(url: string | null | undefined): string | undefined {
+  if (!url) return undefined;
+  if (url.startsWith("/")) return url;
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname === "lycee-montaigne.edu.lb") {
+      const path = parsed.pathname.replace(/^\/*storage\//, "/images/");
+      return path;
+    }
+  } catch {
+    // not a valid URL, return as-is
+  }
+  return url;
+}

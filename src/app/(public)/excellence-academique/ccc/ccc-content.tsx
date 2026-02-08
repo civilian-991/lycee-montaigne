@@ -10,6 +10,7 @@ import {
   StaggerItem,
 } from "@/components/ui/motion";
 import { WaveDivider } from "@/components/ui/wave-divider";
+import { localImage } from "@/lib/utils";
 import {
   Library,
   Monitor,
@@ -377,10 +378,10 @@ export function CccContent({ activities }: CccContentProps) {
                   <StaggerItem key={activity.id}>
                     <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]">
                       {/* Activity photo */}
-                      {activity.image && (
+                      {localImage(activity.image) && (
                         <div className="relative aspect-[4/3] overflow-hidden">
                           <Image
-                            src={activity.image}
+                            src={localImage(activity.image)!}
                             alt={activity.title}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-105"

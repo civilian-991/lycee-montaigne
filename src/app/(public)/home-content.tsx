@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { WaveDivider } from "@/components/ui/wave-divider";
 import { StatsCounter } from "@/components/ui/stats-counter";
+import { localImage } from "@/lib/utils";
 import {
   FadeInView,
   StaggerChildren,
@@ -121,7 +122,7 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
   ];
 
   const heroImage =
-    heroSlides.length > 0 ? heroSlides[0].imageUrl : defaultHeroImage;
+    heroSlides.length > 0 ? (localImage(heroSlides[0].imageUrl) ?? defaultHeroImage) : defaultHeroImage;
   const heroAlt =
     heroSlides.length > 0
       ? heroSlides[0].altText

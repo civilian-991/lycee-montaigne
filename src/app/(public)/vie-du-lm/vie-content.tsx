@@ -7,6 +7,7 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { WaveDivider } from "@/components/ui/wave-divider";
 import { ArrowRight, Leaf, Radio, Vote, Equal, Plane, ExternalLink } from "lucide-react";
+import { localImage } from "@/lib/utils";
 
 const INSTAGRAM_URL = "https://www.instagram.com/lyceemontaigne.liban/";
 
@@ -75,7 +76,7 @@ export function VieContent({ news, sections }: VieContentProps) {
   const displayNews = news.length > 0
     ? news.map((n) => ({
         title: n.title,
-        image: n.image ?? "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
+        image: localImage(n.image) ?? "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
         link: n.link,
       }))
     : defaultNews.map((n) => ({ ...n, link: null as string | null }));
@@ -227,7 +228,7 @@ export function VieContent({ news, sections }: VieContentProps) {
               <div className="grid items-stretch lg:grid-cols-2">
                 <div className="relative min-h-[280px]">
                   <Image
-                    src={webradioSection?.image || "/images/webradios/November2024/amxLKLrgOzIeBoHAVT4x.jpeg"}
+                    src={localImage(webradioSection?.image) || "/images/webradios/November2024/amxLKLrgOzIeBoHAVT4x.jpeg"}
                     alt="Webradio du Lycee Montaigne"
                     fill
                     className="object-cover"
@@ -286,7 +287,7 @@ export function VieContent({ news, sections }: VieContentProps) {
                 <div className="group h-full overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
-                      src={climatSection?.image || "/images/climat-categories/April2025/mNHwl4NOWUZkZgPfyTNi.jpeg"}
+                      src={localImage(climatSection?.image) || "/images/climat-categories/April2025/mNHwl4NOWUZkZgPfyTNi.jpeg"}
                       alt="Democratie scolaire"
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -321,7 +322,7 @@ export function VieContent({ news, sections }: VieContentProps) {
                 <div id="egalite" className="group h-full overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
-                      src={egaliteSection?.image || "/images/egalite-intros/October2024/7QOD9LQ0ZmvqaH1ck4qJ.jpg"}
+                      src={localImage(egaliteSection?.image) || "/images/egalite-intros/October2024/7QOD9LQ0ZmvqaH1ck4qJ.jpg"}
                       alt="Egalite filles-garcons"
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"

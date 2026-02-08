@@ -1,4 +1,5 @@
 "use client";
+import { localImage } from "@/lib/utils";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -110,7 +111,7 @@ export function EtablissementContent({
           id: s.id,
           title: s.title,
           name: s.name,
-          image: s.photo || "/images/eta-s3/November2024/tN7I8Zm4bodDopvV14Hw.png",
+          image: localImage(s.photo) || "/images/eta-s3/November2024/tN7I8Zm4bodDopvV14Hw.png",
           text: s.messageHtml || "",
         }))
       : hardcodedStaffMessages;

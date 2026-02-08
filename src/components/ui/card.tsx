@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn, localImage } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -19,6 +19,7 @@ export function Card({
   className,
   children,
 }: CardProps) {
+  const imgSrc = localImage(image);
   const content = (
     <div
       className={cn(
@@ -26,10 +27,10 @@ export function Card({
         className
       )}
     >
-      {image && (
+      {imgSrc && (
         <div className="relative aspect-[16/10] overflow-hidden">
           <Image
-            src={image}
+            src={imgSrc}
             alt={title}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
