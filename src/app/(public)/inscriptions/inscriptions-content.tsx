@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { localImage } from "@/lib/utils";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
@@ -13,6 +14,16 @@ type DocumentRow = {
   fileUrl: string;
   category: string;
   academicYear: string | null;
+  order: number;
+};
+
+type PageSectionRow = {
+  id: string;
+  pageId: string;
+  sectionKey: string;
+  title: string | null;
+  contentHtml: string | null;
+  image: string | null;
   order: number;
 };
 
@@ -31,15 +42,21 @@ const defaultRequiredDocs = [
 /* ── Props ────────────────────────────────────────────── */
 interface InscriptionsContentProps {
   documents: DocumentRow[];
+  sections: PageSectionRow[];
 }
 
 /* ── Component ────────────────────────────────────────── */
-export function InscriptionsContent({ documents }: InscriptionsContentProps) {
+export function InscriptionsContent({ documents, sections }: InscriptionsContentProps) {
   /* ── Derive required docs from DB or fall back ── */
   const dbInscriptionDocs = documents.filter((d) => d.category === "inscription-documents");
   const requiredDocs = dbInscriptionDocs.length > 0
     ? dbInscriptionDocs.map((d) => d.title)
     : defaultRequiredDocs;
+
+  /* ── Look up CMS sections by key ── */
+  const procedureSection = sections.find((s) => s.sectionKey === "procedure");
+  const portesOuvertesSection = sections.find((s) => s.sectionKey === "portes-ouvertes");
+  const boursesSection = sections.find((s) => s.sectionKey === "bourses");
 
   return (
     <>
@@ -51,24 +68,33 @@ export function InscriptionsContent({ documents }: InscriptionsContentProps) {
           <FadeInView>
             <div className="grid items-start gap-12 lg:grid-cols-2">
               <div>
-                <SectionHeader title="Procedure d'inscription 2026-2027" className="text-left" />
-                <p className="mt-6 text-text-muted">
-                  Pour inscrire votre enfant au Lycee Montaigne, veuillez preparer les documents suivants :
-                </p>
-                <StaggerChildren className="mt-6 space-y-3">
-                  {requiredDocs.map((doc) => (
-                    <StaggerItem key={doc}>
-                      <div className="flex items-start gap-3">
-                        <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
-                        <span className="text-sm text-text">{doc}</span>
-                      </div>
-                    </StaggerItem>
-                  ))}
-                </StaggerChildren>
+                <SectionHeader title={procedureSection?.title || "Procedure d'inscription 2026-2027"} className="text-left" />
+                {procedureSection?.contentHtml ? (
+                  <div
+                    className="mt-6 text-text-muted [&>p]:mt-4"
+                    dangerouslySetInnerHTML={{ __html: procedureSection.contentHtml }}
+                  />
+                ) : (
+                  <>
+                    <p className="mt-6 text-text-muted">
+                      Pour inscrire votre enfant au Lycee Montaigne, veuillez preparer les documents suivants :
+                    </p>
+                    <StaggerChildren className="mt-6 space-y-3">
+                      {requiredDocs.map((doc) => (
+                        <StaggerItem key={doc}>
+                          <div className="flex items-start gap-3">
+                            <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
+                            <span className="text-sm text-text">{doc}</span>
+                          </div>
+                        </StaggerItem>
+                      ))}
+                    </StaggerChildren>
+                  </>
+                )}
               </div>
               <div className="relative aspect-[3/4] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                 <Image
-                  src="/images/adm-s1/December2025/xbMaFrODRj51WGOcKi4k.png"
+                  src={localImage(procedureSection?.image) || "/images/adm-s1/December2025/xbMaFrODRj51WGOcKi4k.png"}
                   alt="Ouverture des inscriptions 2026-2027"
                   fill
                   className="object-cover"
@@ -87,7 +113,7 @@ export function InscriptionsContent({ documents }: InscriptionsContentProps) {
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)] lg:order-first">
                 <Image
-                  src="/images/s4-files/January2026/U4IfChjnxOFzmzse6Tme.jpeg"
+                  src={localImage(portesOuvertesSection?.image) || "/images/s4-files/January2026/U4IfChjnxOFzmzse6Tme.jpeg"}
                   alt="Portes Ouvertes Maternelle 2025-2026"
                   fill
                   className="object-cover"
@@ -95,18 +121,27 @@ export function InscriptionsContent({ documents }: InscriptionsContentProps) {
                 />
               </div>
               <div>
-                <SectionHeader title="Portes Ouvertes Maternelle" className="text-left" />
-                <p className="mt-6 text-text-muted">
-                  Venez decouvrir notre ecole maternelle lors de nos journees portes ouvertes.
-                  Un moment d&apos;accueil, de visite des locaux et d&apos;echanges avec l&apos;equipe pedagogique
-                  vous attend.
-                </p>
-                <div className="mt-6 rounded-2xl border border-secondary/20 bg-secondary/5 p-4">
-                  <p className="font-medium text-secondary">Prochaines portes ouvertes</p>
-                  <p className="mt-1 text-sm text-text-muted">
-                    Consultez nos reseaux sociaux pour les dates a venir.
-                  </p>
-                </div>
+                <SectionHeader title={portesOuvertesSection?.title || "Portes Ouvertes Maternelle"} className="text-left" />
+                {portesOuvertesSection?.contentHtml ? (
+                  <div
+                    className="mt-6 text-text-muted [&>p]:mt-4"
+                    dangerouslySetInnerHTML={{ __html: portesOuvertesSection.contentHtml }}
+                  />
+                ) : (
+                  <>
+                    <p className="mt-6 text-text-muted">
+                      Venez decouvrir notre ecole maternelle lors de nos journees portes ouvertes.
+                      Un moment d&apos;accueil, de visite des locaux et d&apos;echanges avec l&apos;equipe pedagogique
+                      vous attend.
+                    </p>
+                    <div className="mt-6 rounded-2xl border border-secondary/20 bg-secondary/5 p-4">
+                      <p className="font-medium text-secondary">Prochaines portes ouvertes</p>
+                      <p className="mt-1 text-sm text-text-muted">
+                        Consultez nos reseaux sociaux pour les dates a venir.
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </FadeInView>
@@ -119,20 +154,29 @@ export function InscriptionsContent({ documents }: InscriptionsContentProps) {
           <FadeInView>
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div>
-                <SectionHeader title="Bourses Scolaires" className="text-left" />
-                <p className="mt-6 text-text-muted">
-                  Les bourses scolaires sont destinees aux enfants francais residant a l&apos;etranger.
-                  Elles permettent de couvrir tout ou partie des frais de scolarite dans les
-                  etablissements d&apos;enseignement francais a l&apos;etranger.
-                </p>
-                <p className="mt-4 text-text-muted">
-                  Pour plus d&apos;informations sur les conditions d&apos;eligibilite et la procedure
-                  de demande, veuillez consulter le site de l&apos;AEFE ou contacter l&apos;ambassade de France au Liban.
-                </p>
+                <SectionHeader title={boursesSection?.title || "Bourses Scolaires"} className="text-left" />
+                {boursesSection?.contentHtml ? (
+                  <div
+                    className="mt-6 text-text-muted [&>p]:mt-4"
+                    dangerouslySetInnerHTML={{ __html: boursesSection.contentHtml }}
+                  />
+                ) : (
+                  <>
+                    <p className="mt-6 text-text-muted">
+                      Les bourses scolaires sont destinees aux enfants francais residant a l&apos;etranger.
+                      Elles permettent de couvrir tout ou partie des frais de scolarite dans les
+                      etablissements d&apos;enseignement francais a l&apos;etranger.
+                    </p>
+                    <p className="mt-4 text-text-muted">
+                      Pour plus d&apos;informations sur les conditions d&apos;eligibilite et la procedure
+                      de demande, veuillez consulter le site de l&apos;AEFE ou contacter l&apos;ambassade de France au Liban.
+                    </p>
+                  </>
+                )}
               </div>
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                 <Image
-                  src="/images/adm-s3/November2024/VOFelUKYIHWGosCjXmsz.png"
+                  src={localImage(boursesSection?.image) || "/images/adm-s3/November2024/VOFelUKYIHWGosCjXmsz.png"}
                   alt="Bourses scolaires"
                   fill
                   className="object-cover"

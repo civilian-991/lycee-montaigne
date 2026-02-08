@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PageHero } from "@/components/ui/page-hero";
@@ -86,6 +87,53 @@ interface ProgramData {
     items: string[];
   }[];
 }
+
+/* ── CMS types & icon maps ─────────────────────────────── */
+
+type PageSectionRow = {
+  id: string;
+  pageId: string;
+  sectionKey: string;
+  title: string | null;
+  contentHtml: string | null;
+  image: string | null;
+  order: number;
+};
+
+/** Maps icon name strings from CMS JSON to Lucide components */
+const domainIconMap: Record<string, LucideIcon> = {
+  BookOpen,
+  Users,
+  Music,
+  Calculator,
+  Compass,
+  Globe,
+  Lightbulb,
+  Baby,
+  Pencil,
+  School,
+  GraduationCap,
+};
+
+const trackIconMap: Record<string, LucideIcon> = {
+  FlaskConical,
+  BookOpen,
+  Globe,
+  Calculator,
+  Compass,
+  Lightbulb,
+  GraduationCap,
+};
+
+const dnbIconMap: Record<string, LucideIcon> = {
+  BookOpen,
+  Calculator,
+  Globe,
+  FlaskConical,
+  Users,
+  Award,
+  FileText,
+};
 
 const programs: Record<string, ProgramData> = {
   maternelle: {
@@ -327,7 +375,13 @@ const programs: Record<string, ProgramData> = {
    CLIENT COMPONENT
    ================================================================ */
 
-export function OffrePedagogiqueContent({ slug }: { slug: string }) {
+export function OffrePedagogiqueContent({
+  slug,
+  sections = [],
+}: {
+  slug: string;
+  sections?: PageSectionRow[];
+}) {
   const program = programs[slug];
 
   // Safety fallback — the server page already calls notFound() for bad slugs
@@ -335,10 +389,182 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
 
   const Icon = program.icon;
 
+  /* ── Helper to find a CMS section by key ────────────── */
+  const getSection = (key: string) =>
+    sections.find((s) => s.sectionKey === key);
+
+  /* ── CMS overrides with hardcoded fallbacks ─────────── */
+
+  const overviewSection = getSection("overview");
+  const secondaryImageSection = getSection("secondary-image");
+
+  const tagline = overviewSection?.title || program.tagline;
+  const heroImage = overviewSection?.image || program.heroImage;
+  const secondaryImage = secondaryImageSection?.image || program.secondaryImage;
+
+  const overviewParagraphs = useMemo(() => {
+    if (overviewSection?.contentHtml) {
+      // contentHtml may be HTML — split by paragraph tags or use as-is
+      return null; // signal to use dangerouslySetInnerHTML
+    }
+    return program.overview;
+  }, [overviewSection, program.overview]);
+
+  const keyFeatures = useMemo(() => {
+    const sec = getSection("key-features");
+    if (sec?.contentHtml) {
+      try {
+        const parsed = JSON.parse(sec.contentHtml) as string[];
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch { /* fall back */ }
+    }
+    return program.keyFeatures;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, program.keyFeatures]);
+
+  const philosophy = useMemo(() => {
+    const sec = getSection("philosophy");
+    if (sec?.contentHtml) return sec.contentHtml;
+    return program.philosophy;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, program.philosophy]);
+
+  const domains = useMemo(() => {
+    const sec = getSection("domains");
+    if (sec?.contentHtml) {
+      try {
+        const parsed = JSON.parse(sec.contentHtml) as Array<{
+          title: string;
+          description: string;
+          icon?: string;
+        }>;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((d) => ({
+            title: d.title,
+            description: d.description,
+            icon: (d.icon && domainIconMap[d.icon]) || BookOpen,
+          }));
+        }
+      } catch { /* fall back */ }
+    }
+    return program.domains;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, program.domains]);
+
+  const gallery = useMemo(() => {
+    const sec = getSection("gallery");
+    if (sec?.contentHtml) {
+      try {
+        const parsed = JSON.parse(sec.contentHtml) as string[];
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch { /* fall back */ }
+    }
+    return program.gallery;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, program.gallery]);
+
+  const cycles = useMemo(() => {
+    const sec = getSection("cycles");
+    if (sec?.contentHtml) {
+      try {
+        const parsed = JSON.parse(sec.contentHtml) as Array<{
+          name: string;
+          levels: string;
+          description: string;
+        }>;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch { /* fall back */ }
+    }
+    return program.cycles;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, program.cycles]);
+
+  const enrichment = useMemo(() => {
+    const sec = getSection("enrichment");
+    if (sec?.contentHtml) {
+      try {
+        const parsed = JSON.parse(sec.contentHtml) as string[];
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch { /* fall back */ }
+    }
+    return program.enrichment;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, program.enrichment]);
+
+  const dnbSection = getSection("dnb");
+  const dnbDescription = dnbSection?.contentHtml || program.dnbDescription;
+
+  const dnbExams = useMemo(() => {
+    const sec = getSection("dnb-exams");
+    if (sec?.contentHtml) {
+      try {
+        const parsed = JSON.parse(sec.contentHtml) as Array<{
+          subject: string;
+          description: string;
+          icon?: string;
+        }>;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((e) => ({
+            subject: e.subject,
+            description: e.description,
+            icon: (e.icon && dnbIconMap[e.icon]) || BookOpen,
+          }));
+        }
+      } catch { /* fall back */ }
+    }
+    return program.dnbExams;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, program.dnbExams]);
+
+  const tracksIntroSection = getSection("tracks-intro");
+  const tracksIntro = tracksIntroSection?.contentHtml || program.tracksIntro;
+
+  const tracks = useMemo(() => {
+    const sec = getSection("tracks");
+    if (sec?.contentHtml) {
+      try {
+        const parsed = JSON.parse(sec.contentHtml) as Array<{
+          name: string;
+          description: string;
+          icon?: string;
+          color?: string;
+        }>;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((t, i) => ({
+            name: t.name,
+            description: t.description,
+            icon: (t.icon && trackIconMap[t.icon]) || FlaskConical,
+            color:
+              t.color ||
+              (program.tracks?.[i]?.color ?? "from-primary to-primary-dark"),
+          }));
+        }
+      } catch { /* fall back */ }
+    }
+    return program.tracks;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, program.tracks]);
+
+  const additionalSections = useMemo(() => {
+    const sec = getSection("additional");
+    if (sec?.contentHtml) {
+      try {
+        const parsed = JSON.parse(sec.contentHtml) as Array<{
+          title: string;
+          description: string;
+          items: string[];
+        }>;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch { /* fall back */ }
+    }
+    return program.additionalSections;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, program.additionalSections]);
+
   return (
     <>
       {/* ─── Hero ──────────────────────────────────────────────── */}
-      <PageHero title={program.title} image={program.heroImage} />
+      <PageHero title={program.title} image={heroImage} />
 
       {/* ─── Overview ──────────────────────────────────────────── */}
       <section className="py-16 md:py-24">
@@ -364,19 +590,28 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
                 </div>
 
                 <h2 className="text-2xl font-bold text-primary md:text-3xl">
-                  {program.tagline}
+                  {tagline}
                 </h2>
 
-                {program.overview.map((paragraph, i) => (
-                  <p key={i} className="mt-4 leading-relaxed text-text-muted">
-                    {paragraph}
-                  </p>
-                ))}
+                {overviewParagraphs ? (
+                  overviewParagraphs.map((paragraph, i) => (
+                    <p key={i} className="mt-4 leading-relaxed text-text-muted">
+                      {paragraph}
+                    </p>
+                  ))
+                ) : (
+                  <div
+                    className="mt-4 leading-relaxed text-text-muted [&>p]:mt-4"
+                    dangerouslySetInnerHTML={{
+                      __html: overviewSection!.contentHtml!,
+                    }}
+                  />
+                )}
               </div>
 
               <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-warm)]">
                 <Image
-                  src={program.heroImage}
+                  src={heroImage}
                   alt={program.title}
                   fill
                   className="object-cover"
@@ -389,7 +624,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
       </section>
 
       {/* ─── Philosophy (Maternelle) ───────────────────────────── */}
-      {program.philosophy && (
+      {philosophy && (
         <section className="relative overflow-hidden bg-background-alt">
           <WaveDivider
             fill="var(--color-background)"
@@ -403,9 +638,16 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
                   <SectionHeader title="Notre philosophie pedagogique" />
                   <div className="mt-8 rounded-[20px] border border-border bg-background p-8 shadow-[var(--shadow-soft)] md:p-10">
                     <Lightbulb className="mx-auto h-10 w-10 text-secondary" />
-                    <p className="mt-6 text-lg leading-relaxed text-text-muted">
-                      {program.philosophy}
-                    </p>
+                    {getSection("philosophy")?.contentHtml ? (
+                      <div
+                        className="mt-6 text-lg leading-relaxed text-text-muted [&>p]:mt-4"
+                        dangerouslySetInnerHTML={{ __html: philosophy! }}
+                      />
+                    ) : (
+                      <p className="mt-6 text-lg leading-relaxed text-text-muted">
+                        {philosophy}
+                      </p>
+                    )}
                   </div>
                 </div>
               </FadeInView>
@@ -416,7 +658,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
       )}
 
       {/* ─── Five Learning Domains (Maternelle) ────────────────── */}
-      {program.domains && (
+      {domains && (
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">
             <SectionHeader
@@ -424,7 +666,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
               subtitle="Un programme riche et equilibre pour le developpement global de l&apos;enfant"
             />
             <StaggerChildren className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {program.domains.map((domain) => {
+              {domains.map((domain) => {
                 const DomainIcon = domain.icon;
                 return (
                   <StaggerItem key={domain.title}>
@@ -448,7 +690,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
       )}
 
       {/* ─── Photo Gallery (Maternelle) ────────────────────────── */}
-      {program.gallery && (
+      {gallery && (
         <section className="relative overflow-hidden bg-background-alt">
           <WaveDivider
             fill="var(--color-background)"
@@ -462,7 +704,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
                 subtitle="Nos eleves en action"
               />
               <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
-                {program.gallery.map((src, i) => (
+                {gallery.map((src, i) => (
                   <StaggerItem key={src}>
                     <div className="group relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)] transition-transform duration-300 hover:scale-[1.03]">
                       <Image
@@ -483,7 +725,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
       )}
 
       {/* ─── Cycles (Elementaire) ──────────────────────────────── */}
-      {program.cycles && (
+      {cycles && (
         <section className="relative overflow-hidden bg-background-alt">
           <WaveDivider
             fill="var(--color-background)"
@@ -497,7 +739,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
                 subtitle="Une progression structuree et adaptee a chaque etape du developpement"
               />
               <StaggerChildren className="mt-12 grid gap-8 md:grid-cols-2">
-                {program.cycles.map((cycle, i) => (
+                {cycles.map((cycle, i) => (
                   <StaggerItem key={cycle.name}>
                     <div className="group overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
                       <div
@@ -524,14 +766,14 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
       )}
 
       {/* ─── Enrichment (Elementaire) ──────────────────────────── */}
-      {program.enrichment && (
+      {enrichment && (
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">
             <FadeInView>
               <div className="grid items-center gap-12 lg:grid-cols-2">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-warm)]">
                   <Image
-                    src={program.secondaryImage}
+                    src={secondaryImage}
                     alt="Activites enrichissantes"
                     fill
                     className="object-cover"
@@ -549,7 +791,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
                     et developpent leurs talents.
                   </p>
                   <ul className="mt-6 space-y-3">
-                    {program.enrichment.map((item) => (
+                    {enrichment.map((item) => (
                       <li key={item} className="flex items-start gap-3">
                         <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
                         <span className="text-text-muted">{item}</span>
@@ -564,7 +806,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
       )}
 
       {/* ─── Key Features ──────────────────────────────────────── */}
-      {program.keyFeatures && (
+      {keyFeatures && (
         <section className="relative overflow-hidden bg-background-alt">
           <WaveDivider
             fill="var(--color-background)"
@@ -590,7 +832,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
                 }
               />
               <StaggerChildren className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {program.keyFeatures.map((feature) => (
+                {keyFeatures.map((feature) => (
                   <StaggerItem key={feature}>
                     <div className="flex h-full items-start gap-4 rounded-[20px] border border-border bg-background p-5 shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/8">
@@ -608,7 +850,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
       )}
 
       {/* ─── DNB Section (College) ─────────────────────────────── */}
-      {program.dnbExams && (
+      {dnbExams && (
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">
             <SectionHeader
@@ -623,16 +865,23 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary-dark text-white shadow-[var(--shadow-soft)]">
                       <Award className="h-6 w-6" />
                     </div>
-                    <p className="leading-relaxed text-text-muted">
-                      {program.dnbDescription}
-                    </p>
+                    {dnbSection?.contentHtml ? (
+                      <div
+                        className="leading-relaxed text-text-muted [&>p]:mt-2"
+                        dangerouslySetInnerHTML={{ __html: dnbDescription! }}
+                      />
+                    ) : (
+                      <p className="leading-relaxed text-text-muted">
+                        {dnbDescription}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
             </FadeInView>
 
             <StaggerChildren className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {program.dnbExams.map((exam) => {
+              {dnbExams.map((exam) => {
                 const ExamIcon = exam.icon;
                 return (
                   <StaggerItem key={exam.subject}>
@@ -656,7 +905,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
       )}
 
       {/* ─── Tracks (Lycee) ────────────────────────────────────── */}
-      {program.tracks && (
+      {tracks && (
         <section className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">
             <SectionHeader
@@ -664,16 +913,23 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
               subtitle="Trois parcours d&apos;excellence pour preparer l&apos;avenir"
             />
 
-            {program.tracksIntro && (
+            {tracksIntro && (
               <FadeInView>
-                <p className="mx-auto mt-6 max-w-3xl text-center leading-relaxed text-text-muted">
-                  {program.tracksIntro}
-                </p>
+                {tracksIntroSection?.contentHtml ? (
+                  <div
+                    className="mx-auto mt-6 max-w-3xl text-center leading-relaxed text-text-muted [&>p]:mt-4"
+                    dangerouslySetInnerHTML={{ __html: tracksIntro! }}
+                  />
+                ) : (
+                  <p className="mx-auto mt-6 max-w-3xl text-center leading-relaxed text-text-muted">
+                    {tracksIntro}
+                  </p>
+                )}
               </FadeInView>
             )}
 
             <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-3">
-              {program.tracks.map((track) => {
+              {tracks.map((track) => {
                 const TrackIcon = track.icon;
                 return (
                   <StaggerItem key={track.name}>
@@ -703,7 +959,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
       )}
 
       {/* ─── Additional Sections (Lycee exam prep) ─────────────── */}
-      {program.additionalSections?.map((sec) => (
+      {additionalSections?.map((sec) => (
         <section
           key={sec.title}
           className="relative overflow-hidden bg-background-alt"
@@ -735,7 +991,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
                   </div>
                   <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-warm)]">
                     <Image
-                      src={program.secondaryImage}
+                      src={secondaryImage}
                       alt={sec.title}
                       fill
                       className="object-cover"
@@ -764,7 +1020,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
                     {program.title}
                   </h2>
                   <p className="mt-4 text-base leading-relaxed text-white/75">
-                    {program.tagline} Rejoignez le Lycee Montaigne et offrez a
+                    {tagline} Rejoignez le Lycee Montaigne et offrez a
                     votre enfant un parcours d&apos;excellence dans un
                     environnement bienveillant et stimulant.
                   </p>
@@ -778,7 +1034,7 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
                 </div>
                 <div className="relative min-h-[300px] lg:min-h-full">
                   <Image
-                    src={program.secondaryImage}
+                    src={secondaryImage}
                     alt={program.title}
                     fill
                     className="object-cover"

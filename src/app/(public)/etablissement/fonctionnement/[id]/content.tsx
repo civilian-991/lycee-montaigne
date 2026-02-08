@@ -27,7 +27,7 @@ import {
   ChevronRight,
   type LucideIcon,
 } from "lucide-react";
-import { instances, getInstanceById, type GovernanceInstance } from "./data";
+import { instances, getInstanceById, type GovernanceInstance, type Member } from "./data";
 
 /* ── Icon Map ──────────────────────────────────────────── */
 
@@ -49,27 +49,78 @@ function getIcon(name: string): LucideIcon {
   return iconMap[name] || Users;
 }
 
+/* ── DB Data Type ──────────────────────────────────────── */
+
+interface DbGovernanceInstance {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle: string;
+  iconName: string;
+  accentColor: string;
+  descriptionHtml: string;
+  compositionHtml: string;
+  membersJson: string | null;
+  meetingFrequency: string | null;
+  presidence: string | null;
+  responsibilitiesHtml: string;
+  order: number;
+}
+
 /* ── Component ─────────────────────────────────────────── */
 
 export function FonctionnementContent({
   instanceId,
+  dbData,
 }: {
   instanceId: string;
+  dbData?: DbGovernanceInstance;
 }) {
-  const instance = getInstanceById(instanceId);
-  if (!instance) return null;
+  // Use DB data if available, otherwise fall back to hardcoded
+  const hardcodedInstance = getInstanceById(instanceId);
 
-  const IconComponent = getIcon(instance.iconName);
+  // Resolve display values from DB or hardcoded
+  const title = dbData?.title ?? hardcodedInstance?.title;
+  const subtitle = dbData?.subtitle ?? hardcodedInstance?.subtitle;
+  const iconName = dbData?.iconName ?? hardcodedInstance?.iconName ?? "Building2";
+  const accentColor = dbData?.accentColor ?? hardcodedInstance?.accentColor ?? "from-primary to-primary-dark";
+  const presidence = dbData?.presidence ?? hardcodedInstance?.presidence;
+  const meetingFrequency = dbData?.meetingFrequency ?? hardcodedInstance?.meetingFrequency;
 
-  /* Determine which sections have content to manage alternating backgrounds */
-  const hasResponsibilities =
-    instance.keyResponsibilities && instance.keyResponsibilities.length > 0;
-  const hasMeetingFrequency = !!instance.meetingFrequency;
+  if (!title) return null;
+
+  const IconComponent = getIcon(iconName);
+
+  // Parse DB members JSON if present
+  let dbMembers: Member[] | null = null;
+  if (dbData?.membersJson) {
+    try {
+      dbMembers = JSON.parse(dbData.membersJson);
+    } catch {
+      dbMembers = null;
+    }
+  }
+
+  // Determine data source flags
+  const useDbDescription = !!dbData;
+  const useDbComposition = !!dbData;
+  const useDbResponsibilities = !!dbData;
+  const members = dbMembers ?? hardcodedInstance?.members ?? null;
+  const hasMembers = members && members.length > 0;
+
+  // For hardcoded data
+  const hardcodedDescription = hardcodedInstance?.description ?? [];
+  const hardcodedComposition = hardcodedInstance?.composition ?? [];
+  const hardcodedResponsibilities = hardcodedInstance?.keyResponsibilities ?? [];
+  const hasResponsibilities = useDbResponsibilities
+    ? !!dbData?.responsibilitiesHtml?.trim()
+    : hardcodedResponsibilities.length > 0;
+  const hasMeetingFrequency = !!meetingFrequency;
 
   return (
     <>
       {/* Hero */}
-      <PageHero title={instance.title} />
+      <PageHero title={title} />
 
       {/* Breadcrumb + Subtitle */}
       <section className="py-12 md:py-16">
@@ -91,22 +142,22 @@ export function FonctionnementContent({
                 Instances
               </Link>
               <ChevronRight className="h-3.5 w-3.5" />
-              <span className="font-medium text-text">{instance.title}</span>
+              <span className="font-medium text-text">{title}</span>
             </nav>
 
             {/* Title card with icon */}
             <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
               <div
-                className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br ${instance.accentColor} shadow-[var(--shadow-elevated)]`}
+                className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br ${accentColor} shadow-[var(--shadow-elevated)]`}
               >
                 <IconComponent className="h-10 w-10 text-white" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-text md:text-3xl">
-                  {instance.title}
+                  {title}
                 </h2>
                 <p className="mt-2 max-w-2xl text-lg leading-relaxed text-text-muted">
-                  {instance.subtitle}
+                  {subtitle}
                 </p>
               </div>
             </div>
@@ -133,26 +184,33 @@ export function FonctionnementContent({
               <div className="rounded-[20px] border border-border bg-background p-8 shadow-[var(--shadow-soft)] md:p-10">
                 <div className="mb-6 flex items-center gap-3">
                   <div
-                    className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${instance.accentColor}`}
+                    className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${accentColor}`}
                   >
                     <IconComponent className="h-5 w-5 text-white" />
                   </div>
                   <h3 className="text-xl font-semibold text-text">
-                    {instance.title}
+                    {title}
                   </h3>
                 </div>
-                <div className="space-y-4">
-                  {instance.description.map((paragraph, i) => (
-                    <p key={i} className="leading-relaxed text-text-muted">
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-                {instance.presidence && (
+                {useDbDescription ? (
+                  <div
+                    className="space-y-4 leading-relaxed text-text-muted [&_p]:leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: dbData!.descriptionHtml }}
+                  />
+                ) : (
+                  <div className="space-y-4">
+                    {hardcodedDescription.map((paragraph, i) => (
+                      <p key={i} className="leading-relaxed text-text-muted">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                {presidence && (
                   <div className="mt-6 flex items-center gap-3 rounded-2xl bg-primary/5 px-5 py-4">
                     <Users className="h-5 w-5 shrink-0 text-primary" />
                     <p className="text-sm font-medium text-primary">
-                      {instance.presidence}
+                      {presidence}
                     </p>
                   </div>
                 )}
@@ -168,22 +226,22 @@ export function FonctionnementContent({
           <SectionHeader
             title="Composition"
             subtitle={
-              instance.members
+              hasMembers
                 ? "Membres et responsabilites"
                 : "Parties representees au sein de cette instance"
             }
           />
 
-          {instance.members && instance.members.length > 0 ? (
+          {hasMembers ? (
             <StaggerChildren className="mx-auto mt-12 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {instance.members.map((member) => (
+              {members!.map((member) => (
                 <StaggerItem key={member.name}>
                   <div className="group relative overflow-hidden rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)] transition-shadow duration-300 hover:shadow-[var(--shadow-elevated)]">
                     {/* Decorative circle */}
                     <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-gradient-to-br from-primary/5 to-secondary/5 transition-transform duration-500 group-hover:scale-150" />
                     <div className="relative">
                       <div
-                        className={`mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${instance.accentColor}`}
+                        className={`mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${accentColor}`}
                       >
                         <span className="text-lg font-bold text-white">
                           {member.name.charAt(0)}
@@ -198,13 +256,22 @@ export function FonctionnementContent({
                 </StaggerItem>
               ))}
             </StaggerChildren>
+          ) : useDbComposition ? (
+            <FadeInView>
+              <div className="mx-auto mt-12 max-w-4xl">
+                <div
+                  className="rounded-[20px] border border-border bg-background p-8 shadow-[var(--shadow-soft)] leading-relaxed text-text-muted [&_li]:mb-2 [&_ul]:list-disc [&_ul]:pl-5 md:p-10"
+                  dangerouslySetInnerHTML={{ __html: dbData!.compositionHtml }}
+                />
+              </div>
+            </FadeInView>
           ) : (
             <StaggerChildren className="mx-auto mt-12 grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {instance.composition.map((item, i) => (
+              {hardcodedComposition.map((item, i) => (
                 <StaggerItem key={i}>
                   <div className="flex items-center gap-4 rounded-[20px] border border-border bg-background p-5 shadow-[var(--shadow-soft)] transition-shadow duration-300 hover:shadow-[var(--shadow-elevated)]">
                     <div
-                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${instance.accentColor}`}
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${accentColor}`}
                     >
                       <Users className="h-5 w-5 text-white" />
                     </div>
@@ -235,24 +302,31 @@ export function FonctionnementContent({
             <FadeInView>
               <div className="mx-auto max-w-4xl">
                 <div className="rounded-[20px] border border-border bg-background p-8 shadow-[var(--shadow-soft)] md:p-10">
-                  <StaggerChildren className="space-y-5">
-                    {instance.keyResponsibilities!.map((responsibility, i) => (
-                      <StaggerItem key={i}>
-                        <div className="flex items-start gap-4">
-                          <div
-                            className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${instance.accentColor}`}
-                          >
-                            <span className="text-xs font-bold text-white">
-                              {String(i + 1).padStart(2, "0")}
-                            </span>
+                  {useDbResponsibilities ? (
+                    <div
+                      className="space-y-4 leading-relaxed text-text-muted [&_li]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ul]:list-disc [&_ul]:pl-5"
+                      dangerouslySetInnerHTML={{ __html: dbData!.responsibilitiesHtml }}
+                    />
+                  ) : (
+                    <StaggerChildren className="space-y-5">
+                      {hardcodedResponsibilities.map((responsibility, i) => (
+                        <StaggerItem key={i}>
+                          <div className="flex items-start gap-4">
+                            <div
+                              className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${accentColor}`}
+                            >
+                              <span className="text-xs font-bold text-white">
+                                {String(i + 1).padStart(2, "0")}
+                              </span>
+                            </div>
+                            <p className="pt-1 leading-relaxed text-text-muted">
+                              {responsibility}
+                            </p>
                           </div>
-                          <p className="pt-1 leading-relaxed text-text-muted">
-                            {responsibility}
-                          </p>
-                        </div>
-                      </StaggerItem>
-                    ))}
-                  </StaggerChildren>
+                        </StaggerItem>
+                      ))}
+                    </StaggerChildren>
+                  )}
                 </div>
               </div>
             </FadeInView>
@@ -279,7 +353,7 @@ export function FonctionnementContent({
                         Frequence des reunions
                       </h3>
                       <p className="mt-2 leading-relaxed text-text-muted">
-                        {instance.meetingFrequency}
+                        {meetingFrequency}
                       </p>
                     </div>
                   </div>
@@ -305,7 +379,7 @@ export function FonctionnementContent({
           />
           <StaggerChildren className="mx-auto mt-12 grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {instances
-              .filter((inst) => inst.id !== instance.id)
+              .filter((inst) => inst.id !== instanceId)
               .slice(0, 6)
               .map((inst) => {
                 const OtherIcon = getIcon(inst.iconName);
@@ -333,11 +407,11 @@ export function FonctionnementContent({
           </StaggerChildren>
 
           {/* Show remaining if more than 6 */}
-          {instances.filter((inst) => inst.id !== instance.id).length > 6 && (
+          {instances.filter((inst) => inst.id !== instanceId).length > 6 && (
             <FadeInView className="mt-6">
               <StaggerChildren className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {instances
-                  .filter((inst) => inst.id !== instance.id)
+                  .filter((inst) => inst.id !== instanceId)
                   .slice(6)
                   .map((inst) => {
                     const OtherIcon = getIcon(inst.iconName);

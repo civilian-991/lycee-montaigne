@@ -18,6 +18,25 @@ type DocumentRow = {
   order: number;
 };
 
+type PageSectionRow = {
+  id: string;
+  pageId: string;
+  sectionKey: string;
+  title: string | null;
+  contentHtml: string | null;
+  image: string | null;
+  order: number;
+};
+
+type ActivityItemRow = {
+  id: string;
+  title: string;
+  description: string | null;
+  image: string | null;
+  category: string;
+  order: number;
+};
+
 /* ── Hardcoded fallback data ─────────────────────────── */
 
 const defaultOrientationCalendars = [
@@ -59,7 +78,7 @@ const defaultParcoursupDocs = [
   },
 ];
 
-const universities = [
+const defaultUniversities = [
   { name: "USJ", image: "/images/inscriptions-universites/April2024/IKh5ECmCosO0wEXbHJfE.png", url: "https://usj.edu.lb/e-doors/" },
   { name: "AUB", image: "/images/inscriptions-universites/April2024/mNyKwjEsKTILxE3Drypm.png", url: "https://www.aub.edu.lb/admissions/Pages/default.aspx" },
   { name: "NDU", image: "/images/inscriptions-universites/April2024/rRdze9NpnGrIp1CoPCfh.png", url: "https://www.ndu.edu.lb/apply" },
@@ -72,7 +91,7 @@ const universities = [
   { name: "Common App", image: "/images/inscriptions-universites/September2025/IOb6uT1ImkYMoE7MKong.png", url: "https://www.commonapp.org/" },
 ];
 
-const activities = [
+const defaultActivities = [
   {
     title: "Forum des universites",
     date: "14 novembre 2025",
@@ -93,7 +112,7 @@ const activities = [
   },
 ];
 
-const admissionImages = [
+const defaultAdmissionImages = [
   "/images/oriantation-activities/August2025/jGcBleXqGThjKsghZXBQ.jpeg",
   "/images/oriantation-activities/August2025/cZJX6xPO7h3xZDULgEXn.jpeg",
   "/images/oriantation-activities/August2025/Vuu9x02s0E1dfDfps58b.jpeg",
@@ -107,13 +126,47 @@ const calendarColors = [
   "from-[#8B6914] to-[#C4961A]",
 ];
 
+/* ── Helpers ─────────────────────────────────────────── */
+
+/** Try to parse a date prefix from the beginning of a description string.
+ *  Expected format: "14 novembre 2025 — rest of description..."
+ *  Returns { date, rest } or null if no date-like prefix is found. */
+function extractDateFromDescription(desc: string): { date: string; rest: string } | null {
+  // Match patterns like "14 novembre 2025 — ..." or "14 novembre 2025 - ..."
+  const match = desc.match(/^(\d{1,2}\s+\w+\s+\d{4})\s*[—–-]\s*/);
+  if (match) {
+    return { date: match[1], rest: desc.slice(match[0].length) };
+  }
+  return null;
+}
+
+/** Safely parse JSON from a section's contentHtml, returning null on failure. */
+function safeJsonParse<T>(html: string | null | undefined): T | null {
+  if (!html) return null;
+  try {
+    return JSON.parse(html) as T;
+  } catch {
+    return null;
+  }
+}
+
 /* ── Props ────────────────────────────────────────────── */
 interface OrientationContentProps {
   documents: DocumentRow[];
+  sections: PageSectionRow[];
+  activities: ActivityItemRow[];
 }
 
 /* ── Component ────────────────────────────────────────── */
-export function OrientationContent({ documents }: OrientationContentProps) {
+export function OrientationContent({ documents, sections, activities }: OrientationContentProps) {
+  /* ── Look up CMS sections by key ── */
+  const parcoursAvenirSection = sections.find((s) => s.sectionKey === "parcours-avenir");
+  const parcoursupSection = sections.find((s) => s.sectionKey === "parcoursup");
+  const admissionsSection = sections.find((s) => s.sectionKey === "admissions");
+  const admissionsImagesSection = sections.find((s) => s.sectionKey === "admissions-images");
+  const universitesSection = sections.find((s) => s.sectionKey === "universites");
+  const ctaSection = sections.find((s) => s.sectionKey === "cta");
+
   /* ── Derive orientation calendars from DB or fall back ── */
   const dbCalendars = documents.filter((d) => d.category === "orientation-calendrier");
   const orientationCalendars = dbCalendars.length > 0
@@ -135,6 +188,31 @@ export function OrientationContent({ documents }: OrientationContentProps) {
       }))
     : defaultParcoursupDocs;
 
+  /* ── Derive activities from CMS ActivityItems or fall back ── */
+  const displayActivities = activities.length > 0
+    ? activities.map((a) => {
+        const parsed = a.description ? extractDateFromDescription(a.description) : null;
+        return {
+          title: a.title,
+          date: parsed?.date ?? "",
+          description: parsed?.rest ?? a.description ?? "",
+          image: a.image ?? "/images/oriantation-activities/November2025/0HnUrhMFu9ReUOd5Dcbs.jpeg",
+        };
+      })
+    : defaultActivities;
+
+  /* ── Derive admission images from CMS or fall back ── */
+  const cmsAdmissionImages = safeJsonParse<string[]>(admissionsImagesSection?.contentHtml);
+  const displayAdmissionImages = cmsAdmissionImages && cmsAdmissionImages.length > 0
+    ? cmsAdmissionImages
+    : defaultAdmissionImages;
+
+  /* ── Derive universities from CMS or fall back ── */
+  const cmsUniversities = safeJsonParse<{ name: string; image: string; url: string }[]>(universitesSection?.contentHtml);
+  const displayUniversities = cmsUniversities && cmsUniversities.length > 0
+    ? cmsUniversities
+    : defaultUniversities;
+
   return (
     <>
       <PageHero title="Orientation" />
@@ -145,22 +223,34 @@ export function OrientationContent({ documents }: OrientationContentProps) {
           <FadeInView>
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div>
-                <SectionHeader title="Parcours avenir" className="text-left" />
-                <p className="mt-6 leading-relaxed text-text-muted">
-                  Des la classe de 6eme, le Lycee Montaigne accompagne chaque eleve dans la construction
-                  de son parcours d&apos;orientation. Une PRIO (personne ressource en information et orientation),
-                  une professeure documentaliste et la CPE travaillent ensemble pour guider les eleves
-                  vers les filieres et les metiers qui correspondent a leurs talents et aspirations.
-                </p>
-                <p className="mt-4 leading-relaxed text-text-muted">
-                  Des forums, des rencontres avec des professionnels, des visites d&apos;universites et
-                  un accompagnement individualise permettent a chaque eleve de faire des choix eclaires.
-                </p>
+                <SectionHeader
+                  title={parcoursAvenirSection?.title || "Parcours avenir"}
+                  className="text-left"
+                />
+                {parcoursAvenirSection?.contentHtml ? (
+                  <div
+                    className="mt-6 leading-relaxed text-text-muted [&>p]:mt-4"
+                    dangerouslySetInnerHTML={{ __html: parcoursAvenirSection.contentHtml }}
+                  />
+                ) : (
+                  <>
+                    <p className="mt-6 leading-relaxed text-text-muted">
+                      Des la classe de 6eme, le Lycee Montaigne accompagne chaque eleve dans la construction
+                      de son parcours d&apos;orientation. Une PRIO (personne ressource en information et orientation),
+                      une professeure documentaliste et la CPE travaillent ensemble pour guider les eleves
+                      vers les filieres et les metiers qui correspondent a leurs talents et aspirations.
+                    </p>
+                    <p className="mt-4 leading-relaxed text-text-muted">
+                      Des forums, des rencontres avec des professionnels, des visites d&apos;universites et
+                      un accompagnement individualise permettent a chaque eleve de faire des choix eclaires.
+                    </p>
+                  </>
+                )}
               </div>
               <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-warm)]">
                 <Image
-                  src="/images/orientation-s1/July2025/4WWbVtfsEoVLlFT5F8AR.png"
-                  alt="Parcours avenir"
+                  src={localImage(parcoursAvenirSection?.image) || "/images/orientation-s1/July2025/4WWbVtfsEoVLlFT5F8AR.png"}
+                  alt={parcoursAvenirSection?.title || "Parcours avenir"}
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -218,8 +308,8 @@ export function OrientationContent({ documents }: OrientationContentProps) {
             subtitle="Forums, rencontres et evenements pour eclairer les choix de nos eleves"
           />
           <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-3">
-            {activities.map((activity) => (
-              <StaggerItem key={activity.date}>
+            {displayActivities.map((activity, i) => (
+              <StaggerItem key={activity.date || `activity-${i}`}>
                 <div className="group overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]">
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <Image
@@ -230,9 +320,11 @@ export function OrientationContent({ documents }: OrientationContentProps) {
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                    <div className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-text backdrop-blur-sm">
-                      {activity.date}
-                    </div>
+                    {activity.date && (
+                      <div className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-text backdrop-blur-sm">
+                        {activity.date}
+                      </div>
+                    )}
                   </div>
                   <div className="p-5">
                     <h3 className="font-heading text-lg font-semibold text-text">{activity.title}</h3>
@@ -253,15 +345,22 @@ export function OrientationContent({ documents }: OrientationContentProps) {
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-secondary to-secondary-dark text-white">
                 <Trophy className="h-7 w-7" />
               </div>
-              <SectionHeader title="Admissions post-bac 2024-2025" />
-              <p className="mt-4 text-text-muted">
-                Nos bacheliers sont admis dans les universites les plus prestigieuses au Liban et a
-                l&apos;international, temoignant de l&apos;excellence academique et de la perseverance de nos eleves.
-              </p>
+              <SectionHeader title={admissionsSection?.title || "Admissions post-bac 2024-2025"} />
+              {admissionsSection?.contentHtml ? (
+                <div
+                  className="mt-4 text-text-muted [&>p]:mt-4"
+                  dangerouslySetInnerHTML={{ __html: admissionsSection.contentHtml }}
+                />
+              ) : (
+                <p className="mt-4 text-text-muted">
+                  Nos bacheliers sont admis dans les universites les plus prestigieuses au Liban et a
+                  l&apos;international, temoignant de l&apos;excellence academique et de la perseverance de nos eleves.
+                </p>
+              )}
             </div>
           </FadeInView>
           <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {admissionImages.map((img, i) => (
+            {displayAdmissionImages.map((img, i) => (
               <StaggerItem key={i}>
                 <div className="group relative aspect-[3/4] overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)]">
                   <Image
@@ -288,8 +387,8 @@ export function OrientationContent({ documents }: OrientationContentProps) {
               <div className="lg:col-span-2">
                 <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-xl">
                   <Image
-                    src="/images/orientation-s4/March2025/85D8l8qy1D3xZHVOrctC.png"
-                    alt="Parcoursup"
+                    src={localImage(parcoursupSection?.image) || "/images/orientation-s4/March2025/85D8l8qy1D3xZHVOrctC.png"}
+                    alt={parcoursupSection?.title || "Parcoursup"}
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 40vw"
@@ -300,13 +399,22 @@ export function OrientationContent({ documents }: OrientationContentProps) {
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm">
                   <Compass className="h-6 w-6" />
                 </div>
-                <h2 className="font-heading text-3xl font-bold md:text-4xl">Parcoursup</h2>
-                <p className="mt-4 leading-relaxed text-white/80">
-                  Parcoursup est la plateforme nationale de preinscription en premiere annee de
-                  l&apos;enseignement superieur en France. Les eleves de terminale du Lycee Montaigne
-                  sont accompagnes tout au long du processus pour formuler leurs voeux et constituer
-                  leurs dossiers.
-                </p>
+                <h2 className="font-heading text-3xl font-bold md:text-4xl">
+                  {parcoursupSection?.title || "Parcoursup"}
+                </h2>
+                {parcoursupSection?.contentHtml ? (
+                  <div
+                    className="mt-4 leading-relaxed text-white/80 [&>p]:mt-4"
+                    dangerouslySetInnerHTML={{ __html: parcoursupSection.contentHtml }}
+                  />
+                ) : (
+                  <p className="mt-4 leading-relaxed text-white/80">
+                    Parcoursup est la plateforme nationale de preinscription en premiere annee de
+                    l&apos;enseignement superieur en France. Les eleves de terminale du Lycee Montaigne
+                    sont accompagnes tout au long du processus pour formuler leurs voeux et constituer
+                    leurs dossiers.
+                  </p>
+                )}
                 <div className="mt-8 grid gap-3 sm:grid-cols-3">
                   {parcoursupDocs.map((doc) => (
                     <a
@@ -345,7 +453,7 @@ export function OrientationContent({ documents }: OrientationContentProps) {
             </div>
           </FadeInView>
           <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-            {universities.map((uni) => (
+            {displayUniversities.map((uni) => (
               <StaggerItem key={uni.name}>
                 <a
                   href={uni.url}
@@ -378,13 +486,26 @@ export function OrientationContent({ documents }: OrientationContentProps) {
         <div className="mx-auto max-w-7xl px-4 text-center">
           <FadeInView>
             <BookOpen className="mx-auto h-10 w-10 text-secondary-light" />
-            <h2 className="mt-4 font-heading text-3xl font-bold text-white md:text-4xl">
-              Besoin de conseils personnalises ?
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-white/80">
-              Notre equipe d&apos;orientation est a votre disposition pour accompagner votre enfant
-              dans ses choix de parcours.
-            </p>
+            {ctaSection?.title ? (
+              <h2 className="mt-4 font-heading text-3xl font-bold text-white md:text-4xl">
+                {ctaSection.title}
+              </h2>
+            ) : (
+              <h2 className="mt-4 font-heading text-3xl font-bold text-white md:text-4xl">
+                Besoin de conseils personnalises ?
+              </h2>
+            )}
+            {ctaSection?.contentHtml ? (
+              <div
+                className="mx-auto mt-4 max-w-xl text-white/80 [&>p]:mt-4"
+                dangerouslySetInnerHTML={{ __html: ctaSection.contentHtml }}
+              />
+            ) : (
+              <p className="mx-auto mt-4 max-w-xl text-white/80">
+                Notre equipe d&apos;orientation est a votre disposition pour accompagner votre enfant
+                dans ses choix de parcours.
+              </p>
+            )}
             <a
               href="/contact"
               className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3 font-semibold text-primary shadow-lg transition-all hover:-translate-y-0.5 hover:bg-background hover:shadow-xl"

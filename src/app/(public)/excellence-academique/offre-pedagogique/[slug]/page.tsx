@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { db } from "@/lib/db";
 import { OffrePedagogiqueContent } from "./offre-pedagogique-content";
 
 /* ── Static Generation ─────────────────────────────────── */
@@ -11,6 +12,14 @@ const titles: Record<string, string> = {
   elementaire: "Ecole Elementaire",
   college: "College",
   lycee: "Lycee",
+};
+
+/** Maps the URL slug to the CMS page slug */
+const slugToPageSlug: Record<string, string> = {
+  maternelle: "offre-maternelle",
+  elementaire: "offre-elementaire",
+  college: "offre-college",
+  lycee: "offre-lycee",
 };
 
 export function generateStaticParams() {
@@ -44,5 +53,15 @@ export default async function OffrePedagogiquePage({
     notFound();
   }
 
-  return <OffrePedagogiqueContent slug={slug} />;
+  const pageSlug = slugToPageSlug[slug];
+  const page = pageSlug
+    ? await db.page.findUnique({
+        where: { slug: pageSlug },
+        include: { sections: { orderBy: { order: "asc" } } },
+      })
+    : null;
+
+  const sections = page?.sections ?? [];
+
+  return <OffrePedagogiqueContent slug={slug} sections={sections} />;
 }

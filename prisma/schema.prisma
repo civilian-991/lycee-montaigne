@@ -195,3 +195,23 @@ model Announcement {
 
   @@map("announcements")
 }
+
+model GovernanceInstance {
+  id                   String   @id @default(cuid())
+  slug                 String   @unique
+  title                String
+  subtitle             String
+  iconName             String   @default("Building2") @map("icon_name")
+  accentColor          String   @default("from-primary to-primary-dark") @map("accent_color")
+  descriptionHtml      String   @map("description_html") @db.Text
+  compositionHtml      String   @map("composition_html") @db.Text
+  membersJson          String?  @map("members_json") @db.Text
+  meetingFrequency     String?  @map("meeting_frequency")
+  presidence           String?
+  responsibilitiesHtml String   @map("responsibilities_html") @db.Text
+  order                Int      @default(0)
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  @@map("governance_instances")
+}

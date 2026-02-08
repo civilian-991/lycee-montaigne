@@ -110,6 +110,21 @@ export const certificationSchema = z.object({
   order: z.number().optional().default(0),
 });
 
+export const governanceInstanceSchema = z.object({
+  slug: z.string().min(1, "Le slug est requis"),
+  title: z.string().min(1, "Le titre est requis"),
+  subtitle: z.string().min(1, "Le sous-titre est requis"),
+  iconName: z.string().default("Building2"),
+  accentColor: z.string().default("from-primary to-primary-dark"),
+  descriptionHtml: z.string().min(1, "La description est requise"),
+  compositionHtml: z.string().min(1, "La composition est requise"),
+  membersJson: z.string().nullable().optional(),
+  meetingFrequency: z.string().nullable().optional(),
+  presidence: z.string().nullable().optional(),
+  responsibilitiesHtml: z.string().min(1, "Les responsabilités sont requises"),
+  order: z.coerce.number().int().default(0),
+});
+
 export const contactSubmissionPatchSchema = z.object({
   read: z.boolean(),
 });

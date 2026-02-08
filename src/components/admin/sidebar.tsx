@@ -21,6 +21,7 @@ import {
   Activity,
   Award,
   FolderOpen,
+  Building2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -41,6 +42,7 @@ const navSections = [
       { label: "Anciens", href: "/admin/alumni-events", icon: GraduationCap },
       { label: "Activités", href: "/admin/activities", icon: Activity },
       { label: "Certifications", href: "/admin/certifications", icon: Award },
+      { label: "Instances", href: "/admin/governance-instances", icon: Building2 },
     ],
   },
   {
