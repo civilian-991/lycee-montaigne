@@ -108,3 +108,45 @@ export const certificationSchema = z.object({
   description: z.string().nullable().optional(),
   order: z.number().optional().default(0),
 });
+
+export const contactSubmissionPatchSchema = z.object({
+  read: z.boolean(),
+});
+
+const ALLOWED_SETTING_KEYS = [
+  "siteName",
+  "siteDescription",
+  "contactEmail",
+  "phone",
+  "address",
+  "facebookUrl",
+  "instagramUrl",
+  "youtubeUrl",
+] as const;
+
+export const settingsSchema = z.record(z.string(), z.string()).refine(
+  (data) => {
+    const keys = Object.keys(data);
+    return keys.every((key) =>
+      (ALLOWED_SETTING_KEYS as readonly string[]).includes(key)
+    );
+  },
+  {
+    message: `Clés autorisées : ${ALLOWED_SETTING_KEYS.join(", ")}`,
+  }
+);
+
+export const uploadDeleteSchema = z.object({
+  url: z.string().min(1, "L'URL est requise"),
+});
+
+export const ALLOWED_UPLOAD_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "image/svg+xml",
+  "application/pdf",
+] as const;
+
+export const MAX_UPLOAD_SIZE = 10 * 1024 * 1024; // 10MB

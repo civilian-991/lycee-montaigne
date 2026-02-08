@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { parsePagination, totalPages } from "@/lib/admin-utils";
@@ -130,7 +131,9 @@ export default async function ContactSubmissionsPage({
         )}
       </div>
 
-      <Pagination totalPages={pages} currentPage={page} />
+      <Suspense fallback={null}>
+        <Pagination totalPages={pages} currentPage={page} />
+      </Suspense>
     </>
   );
 }

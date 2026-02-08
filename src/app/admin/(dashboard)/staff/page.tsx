@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Plus } from "lucide-react";
@@ -64,7 +65,9 @@ export default async function AdminStaffPage({
       </div>
 
       <div className="mb-4 max-w-sm">
-        <SearchInput placeholder="Rechercher un membre..." />
+        <Suspense fallback={null}>
+          <SearchInput placeholder="Rechercher un membre..." />
+        </Suspense>
       </div>
 
       {staff.length === 0 ? (
@@ -100,7 +103,9 @@ export default async function AdminStaffPage({
         ))
       )}
 
-      <Pagination totalPages={totalPages} currentPage={currentPage} />
+      <Suspense fallback={null}>
+        <Pagination totalPages={totalPages} currentPage={currentPage} />
+      </Suspense>
     </>
   );
 }

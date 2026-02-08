@@ -67,9 +67,11 @@ export function MediaGrid() {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchBlobs = useCallback(async () => {
+    setError(null);
     setLoading(true);
     try {
       const res = await fetch("/api/upload/list");
@@ -78,7 +80,7 @@ export function MediaGrid() {
         setBlobs(data);
       }
     } catch {
-      // silently fail — user can retry with refresh
+      setError("Impossible de charger les fichiers.");
     } finally {
       setLoading(false);
     }
@@ -92,6 +94,7 @@ export function MediaGrid() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setError(null);
     setUploading(true);
     try {
       const formData = new FormData();
@@ -101,7 +104,7 @@ export function MediaGrid() {
         await fetchBlobs();
       }
     } catch {
-      // silently fail
+      setError("Erreur lors de l'envoi du fichier.");
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -110,6 +113,7 @@ export function MediaGrid() {
 
   async function confirmDelete() {
     if (!deleteUrl) return;
+    setError(null);
     setDeleteLoading(true);
     try {
       await fetch("/api/upload/delete", {
@@ -119,7 +123,7 @@ export function MediaGrid() {
       });
       setBlobs((prev) => prev.filter((b) => b.url !== deleteUrl));
     } catch {
-      // silently fail
+      setError("Erreur lors de la suppression.");
     } finally {
       setDeleteUrl(null);
       setDeleteLoading(false);
@@ -154,6 +158,13 @@ export function MediaGrid() {
 
   return (
     <div>
+      {error && (
+        <div className="mb-4 flex items-center justify-between rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+          <span>{error}</span>
+          <button onClick={() => setError(null)} className="ml-2 text-red-400 hover:text-red-600">&#x2715;</button>
+        </div>
+      )}
+
       {/* ---- Toolbar ---- */}
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Search */}

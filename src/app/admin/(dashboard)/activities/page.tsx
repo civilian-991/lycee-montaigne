@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Plus } from "lucide-react";
@@ -63,7 +64,9 @@ export default async function AdminActivitiesPage({
       </div>
 
       <div className="mb-4 max-w-sm">
-        <SearchInput placeholder="Rechercher une activité..." />
+        <Suspense fallback={null}>
+          <SearchInput placeholder="Rechercher une activité..." />
+        </Suspense>
       </div>
 
       {items.length === 0 ? (
@@ -102,7 +105,9 @@ export default async function AdminActivitiesPage({
         ))
       )}
 
-      <Pagination totalPages={pages} currentPage={currentPage} />
+      <Suspense fallback={null}>
+        <Pagination totalPages={pages} currentPage={currentPage} />
+      </Suspense>
     </>
   );
 }

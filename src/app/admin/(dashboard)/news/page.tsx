@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Plus } from "lucide-react";
@@ -56,7 +57,9 @@ export default async function AdminNewsPage({
       </div>
 
       <div className="mb-4">
-        <SearchInput placeholder="Rechercher une actualité..." />
+        <Suspense fallback={null}>
+          <SearchInput placeholder="Rechercher une actualité..." />
+        </Suspense>
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-white">
@@ -68,10 +71,10 @@ export default async function AdminNewsPage({
           <table className="w-full text-sm">
             <thead className="border-b border-border bg-background-alt text-left text-xs font-medium uppercase text-text-muted">
               <tr>
-                <th className="px-4 py-3">Titre</th>
-                <th className="px-4 py-3">Catégorie</th>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3 text-right">Actions</th>
+                <th scope="col" className="px-4 py-3">Titre</th>
+                <th scope="col" className="px-4 py-3">Catégorie</th>
+                <th scope="col" className="px-4 py-3">Date</th>
+                <th scope="col" className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -100,7 +103,9 @@ export default async function AdminNewsPage({
         )}
       </div>
 
-      <Pagination totalPages={pages} currentPage={page} />
+      <Suspense fallback={null}>
+        <Pagination totalPages={pages} currentPage={page} />
+      </Suspense>
     </>
   );
 }

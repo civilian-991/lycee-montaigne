@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Plus, FileText, ExternalLink } from "lucide-react";
@@ -63,7 +64,9 @@ export default async function AdminDocumentsPage({
       </div>
 
       <div className="mb-4 max-w-sm">
-        <SearchInput placeholder="Rechercher un document..." />
+        <Suspense fallback={null}>
+          <SearchInput placeholder="Rechercher un document..." />
+        </Suspense>
       </div>
 
       {docs.length === 0 ? (
@@ -116,7 +119,9 @@ export default async function AdminDocumentsPage({
         ))
       )}
 
-      <Pagination totalPages={pages} currentPage={page} />
+      <Suspense fallback={null}>
+        <Pagination totalPages={pages} currentPage={page} />
+      </Suspense>
     </>
   );
 }

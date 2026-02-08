@@ -1,20 +1,30 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { z } from "zod";
+import { carouselSchema } from "@/lib/validations";
 
 export async function POST(req: Request) {
-  const session = await auth();
-  if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+  try {
+    const session = await auth();
+    if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
-  const body = await req.json();
-  const slide = await db.carouselSlide.create({
-    data: {
-      imageUrl: body.imageUrl,
-      altText: body.altText || "",
-      link: body.link,
-      order: body.order ?? 0,
-    },
-  });
+    const body = await req.json();
+    const data = carouselSchema.parse(body);
+    const slide = await db.carouselSlide.create({
+      data: {
+        imageUrl: data.imageUrl,
+        altText: data.altText || "",
+        link: data.link ?? null,
+        order: data.order ?? 0,
+      },
+    });
 
-  return NextResponse.json(slide, { status: 201 });
+    return NextResponse.json(slide, { status: 201 });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: "Données invalides", details: error.issues }, { status: 400 });
+    }
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+  }
 }

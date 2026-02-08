@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import Image from "next/image";
@@ -63,7 +64,9 @@ export default async function AdminCertificationsPage({
       </div>
 
       <div className="mb-4 max-w-sm">
-        <SearchInput placeholder="Rechercher une certification..." />
+        <Suspense fallback={null}>
+          <SearchInput placeholder="Rechercher une certification..." />
+        </Suspense>
       </div>
 
       {certifications.length === 0 ? (
@@ -110,7 +113,9 @@ export default async function AdminCertificationsPage({
         </div>
       )}
 
-      <Pagination totalPages={totalPages} currentPage={currentPage} />
+      <Suspense fallback={null}>
+        <Pagination totalPages={totalPages} currentPage={currentPage} />
+      </Suspense>
     </>
   );
 }

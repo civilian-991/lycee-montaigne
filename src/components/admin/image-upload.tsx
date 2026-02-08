@@ -69,6 +69,9 @@ export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadPro
 
       {mode === "upload" ? (
         <div
+          tabIndex={0}
+          role="button"
+          aria-label="Déposer ou sélectionner un fichier"
           onDragOver={(e) => {
             e.preventDefault();
             setDragOver(true);
@@ -76,6 +79,12 @@ export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadPro
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
           onClick={() => inputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              inputRef.current?.click();
+            }
+          }}
           className={`mt-2 flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
             dragOver ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
           }`}

@@ -23,7 +23,7 @@ import {
   FolderOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const navSections = [
   {
@@ -60,6 +60,18 @@ export function AdminSidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
+  // Escape key handler for mobile sidebar
+  useEffect(() => {
+    if (!open) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [open]);
+
   const nav = (
     <>
       <div className="flex h-16 items-center gap-3 border-b border-border px-4">
@@ -90,6 +102,7 @@ export function AdminSidebar() {
                     <Link
                       href={item.href}
                       onClick={() => setOpen(false)}
+                      aria-current={active ? "page" : undefined}
                       className={cn(
                         "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
                         active

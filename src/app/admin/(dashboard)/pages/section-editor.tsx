@@ -29,6 +29,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
   const [savingId, setSavingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   // New section form state
   const [showNewForm, setShowNewForm] = useState(false);
@@ -36,6 +37,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
   const [newError, setNewError] = useState("");
 
   async function handleSaveSection(sectionId: string, form: FormData) {
+    setSaveError(null);
     setSavingId(sectionId);
     const body = {
       sectionKey: form.get("sectionKey") as string,
@@ -59,7 +61,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
         prev.map((s) => (s.id === sectionId ? updated : s)).sort((a, b) => a.order - b.order)
       );
     } catch {
-      alert("Erreur lors de la sauvegarde.");
+      setSaveError("Erreur lors de la sauvegarde.");
     } finally {
       setSavingId(null);
     }
@@ -76,7 +78,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
       setSections((prev) => prev.filter((s) => s.id !== deleteTarget));
       setDeleteTarget(null);
     } catch {
-      alert("Erreur lors de la suppression.");
+      setSaveError("Erreur lors de la suppression.");
     } finally {
       setDeleteLoading(false);
     }
@@ -130,6 +132,12 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
           Ajouter une section
         </button>
       </div>
+
+      {saveError && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+          {saveError}
+        </div>
+      )}
 
       {/* Add new section form */}
       {showNewForm && (
