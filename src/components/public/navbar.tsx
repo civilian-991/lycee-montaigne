@@ -256,12 +256,15 @@ export function Navbar() {
           "sticky top-0 z-50 transition-all duration-500",
           navStuck
             ? "border-b border-border/50 bg-background/95 shadow-[0_4px_24px_-4px_rgba(28,25,23,0.08)] backdrop-blur-2xl"
-            : "border-b border-border/30 bg-background-alt/80 backdrop-blur-sm"
+            : "border-b border-border/30 bg-background-alt/80 backdrop-blur-sm max-lg:border-transparent"
         )}
         aria-label="Navigation principale"
       >
         <div className="mx-auto max-w-7xl px-6">
-          <div className="flex h-[52px] items-center">
+          <div className={cn(
+              "flex items-center transition-all duration-300",
+              navStuck ? "h-[52px]" : "h-[52px] max-lg:h-0 max-lg:overflow-hidden"
+            )}>
             {/* Compact logo — appears when stuck */}
             <div className={cn(
               "shrink-0 overflow-hidden transition-all duration-600 ease-[cubic-bezier(0.22,1,0.36,1)]",
@@ -396,7 +399,7 @@ export function Navbar() {
 
             {/* Mobile hamburger (in sticky bar) */}
             <button
-              className="ml-auto flex h-9 w-9 items-center justify-center rounded-xl text-text-muted transition-all duration-300 hover:bg-background-dark hover:text-primary lg:hidden"
+              className="ml-auto flex h-11 w-11 items-center justify-center rounded-2xl border border-border/60 text-text transition-all duration-300 hover:border-border hover:bg-background-alt hover:text-primary lg:hidden"
               onClick={() => setMobileOpen(true)}
               aria-label="Ouvrir le menu"
             >
