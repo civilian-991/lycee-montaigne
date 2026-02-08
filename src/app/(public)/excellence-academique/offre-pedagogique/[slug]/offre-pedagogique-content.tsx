@@ -79,6 +79,7 @@ interface ProgramData {
   dnbDescription?: string;
   tracks?: Track[];
   tracksIntro?: string;
+  gallery?: string[];
   additionalSections?: {
     title: string;
     description: string;
@@ -100,11 +101,18 @@ const programs: Record<string, ProgramData> = {
     philosophy:
       "L\u2019ecole maternelle constitue la premiere etape fondamentale pour garantir la reussite des eleves. Elle integre des methodes d\u2019apprentissage diversifiees \u2014 resolution de problemes, exercices pratiques, memorisation \u2014 avec le jeu comme element central de la pedagogie. Chaque enfant apprend a son rythme dans un cadre securisant et adapte.",
     heroImage:
-      "/images/activites-prescolaires/May2025/vjpXai9c7VbVIINjggcN.jpeg",
+      "/images/offre-pedagogiques/September2025/RYKcgYOvU9hKhJWzsKpe.jpeg",
     secondaryImage:
-      "/images/offre-pedagogiques/March2025/FMajMIbeBmTj2pZsVXg2.png",
+      "/images/offre-pedagogiques/September2025/EKkMhqWAkoI1bJlFPWHz.jpeg",
     icon: Baby,
     gradient: "from-secondary to-secondary-dark",
+    gallery: [
+      "/images/offre-pedagogiques/September2025/oIEoavvupzlerr5CcMSB.jpeg",
+      "/images/offre-pedagogiques/September2025/S0xrz6K0KeHsdpg8Lf5d.jpeg",
+      "/images/offre-pedagogiques/September2025/DrXjEoJLUP0UhTAzSdfI.jpeg",
+      "/images/offre-pedagogiques/September2025/xGr2TekFXQInfCueF24P.jpeg",
+      "/images/offre-pedagogiques/September2025/1L4Qqu5svW8SNhI93fis.jpeg",
+    ],
     domains: [
       {
         title: "Mobiliser le langage dans toutes ses dimensions",
@@ -152,7 +160,7 @@ const programs: Record<string, ProgramData> = {
       "A travers deux cycles complementaires, les eleves developpent leur esprit critique, leur curiosite intellectuelle et leur conscience de l\u2019environnement, tout en renforcant progressivement leur autonomie et leurs competences sociales.",
     ],
     heroImage:
-      "/images/offre-pedagogiques/March2025/V5TaePZh3OK30gBE0zGt.png",
+      "/images/offre-pedagogiques/November2024/Y7T7wBDtRqLzZ0v4BIFD.jpg",
     secondaryImage:
       "/images/offre-pedagogiques/March2025/FMajMIbeBmTj2pZsVXg2.png",
     icon: Pencil,
@@ -200,7 +208,7 @@ const programs: Record<string, ProgramData> = {
       "A travers des competitions academiques, des voyages educatifs, des projets collaboratifs et le developpement de la pensee critique, nos eleves acquierent les competences necessaires pour reussir au lycee et au-dela.",
     ],
     heroImage:
-      "/images/offre-pedagogiques/March2025/yBsX8u4ZVOVu4Ki1b9bZ.png",
+      "/images/offre-pedagogiques/November2024/0EbCvhFl2VOnVhsAYtA3.jpeg",
     secondaryImage:
       "/images/offre-pedagogiques/March2025/V5TaePZh3OK30gBE0zGt.png",
     icon: School,
@@ -260,7 +268,7 @@ const programs: Record<string, ProgramData> = {
       "Les eleves explorent d\u2019abord un large eventail de matieres en Seconde avant de se specialiser progressivement. Des programmes de certifications internationales et d\u2019exploration professionnelle completent la formation academique pour preparer chaque eleve a son avenir.",
     ],
     heroImage:
-      "/images/offre-pedagogiques/March2025/ySjFCadTOSWucBhIhl2w.png",
+      "/images/offre-pedagogiques/August2025/KQgmgLL8bIPNctv63kfN.png",
     secondaryImage:
       "/images/offre-pedagogiques/March2025/yBsX8u4ZVOVu4Ki1b9bZ.png",
     icon: GraduationCap,
@@ -436,6 +444,41 @@ export function OffrePedagogiqueContent({ slug }: { slug: string }) {
               })}
             </StaggerChildren>
           </div>
+        </section>
+      )}
+
+      {/* ─── Photo Gallery (Maternelle) ────────────────────────── */}
+      {program.gallery && (
+        <section className="relative overflow-hidden bg-background-alt">
+          <WaveDivider
+            fill="var(--color-background)"
+            flip
+            className="relative z-10"
+          />
+          <div className="py-16 md:py-24">
+            <div className="mx-auto max-w-7xl px-4">
+              <SectionHeader
+                title="La vie en maternelle"
+                subtitle="Nos eleves en action"
+              />
+              <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
+                {program.gallery.map((src, i) => (
+                  <StaggerItem key={src}>
+                    <div className="group relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)] transition-transform duration-300 hover:scale-[1.03]">
+                      <Image
+                        src={src}
+                        alt={`La vie en maternelle ${i + 1}`}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 50vw, 33vw"
+                      />
+                    </div>
+                  </StaggerItem>
+                ))}
+              </StaggerChildren>
+            </div>
+          </div>
+          <WaveDivider fill="var(--color-background)" />
         </section>
       )}
 

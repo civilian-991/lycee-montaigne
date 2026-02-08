@@ -71,6 +71,7 @@ const activities: {
   description: string;
   icon: LucideIcon;
   color: string;
+  photo: string;
 }[] = [
   {
     title: "Decouverte de la litterature",
@@ -78,6 +79,7 @@ const activities: {
       'Explorations litteraires variees comme "Comment j\'ai change ma vie" pour eveiller la curiosite des lecteurs.',
     icon: BookMarked,
     color: "from-primary to-primary-dark",
+    photo: "/images/bcd-ccc-activities/November2025/uJc8mo3uFntTF5807HcA.jpg",
   },
   {
     title: "Commedia dell'arte",
@@ -85,6 +87,7 @@ const activities: {
       "Exploration de la commedia dell'arte avec les CM1, melant lecture, theatre et decouverte culturelle italienne.",
     icon: Theater,
     color: "from-secondary to-secondary-dark",
+    photo: "/images/bcd-ccc-activities/November2025/5aFOcCygmmCCNsJ5i77o.jpg",
   },
   {
     title: "Spectacle de marionnettes",
@@ -92,6 +95,7 @@ const activities: {
       "Spectacles de marionnettes pour les maternelles, alliant narration et art visuel pour les plus jeunes.",
     icon: Baby,
     color: "from-primary-light to-primary",
+    photo: "/images/bcd-ccc-activities/November2025/XUHDsG37R1DsVLDHQTus.jpg",
   },
   {
     title: "Lecture en mouvement",
@@ -99,6 +103,7 @@ const activities: {
       "Activites de lecture en mouvement combinant expression corporelle et decouverte de textes.",
     icon: PersonStanding,
     color: "from-secondary to-secondary-dark",
+    photo: "/images/bcd-ccc-activities/November2025/PF5zFTuWOokRWkUk2sTw.jpg",
   },
   {
     title: "Nuits de la Lecture",
@@ -106,6 +111,7 @@ const activities: {
       "Evenement festif dedie a la lecture, avec animations nocturnes et decouvertes litteraires pour toute la communaute.",
     icon: Moon,
     color: "from-primary-dark to-primary",
+    photo: "/images/bcd-ccc-activities/May2025/A8B44PA9Uf7SSRXFWtiH.jpeg",
   },
   {
     title: "Droits de l'enfant",
@@ -113,6 +119,7 @@ const activities: {
       "Projet sur les droits de l'enfant a travers la litterature jeunesse et les echanges en classe.",
     icon: Scale,
     color: "from-secondary-dark to-secondary",
+    photo: "/images/bcd-ccc-activities/May2025/qHFqUnIkY9Uxb0Xo1x10.jpg",
   },
   {
     title: "Silence, on lit !",
@@ -120,6 +127,7 @@ const activities: {
       "Temps de lecture silencieuse quotidien ou toute la communaute scolaire partage un moment de lecture.",
     icon: VolumeX,
     color: "from-primary to-primary-light",
+    photo: "/images/bcd-ccc-activities/March2025/cpcffW6KpE8O5Sut2wrH.png",
   },
   {
     title: "Cercle de lecture",
@@ -127,6 +135,7 @@ const activities: {
       "Cercles de lecture permettant aux eleves d'echanger, debattre et partager leurs coups de coeur litteraires.",
     icon: CircleDot,
     color: "from-secondary to-secondary-dark",
+    photo: "/images/bcd-ccc-activities/March2025/GclzoDEQpepHmSongJrP.png",
   },
 ];
 
@@ -205,15 +214,29 @@ export default function BCDPage() {
 
             {/* Image side */}
             <FadeInView delay={0.2}>
-              <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)]">
-                <Image
-                  src="/images/excellence-bcd-ccc-extras/November2025/4rQCpvOLwImnO4a1DDyT.jpg"
-                  alt="Bibliotheque Centre Documentaire du Lycee Montaigne"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 rounded-[20px] ring-1 ring-inset ring-black/5" />
+              <div className="relative">
+                {/* Main image */}
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)]">
+                  <Image
+                    src="/images/excellence-bcd-ccc-extras/November2025/4rQCpvOLwImnO4a1DDyT.jpg"
+                    alt="Bibliotheque Centre Documentaire du Lycee Montaigne"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 rounded-[20px] ring-1 ring-inset ring-black/5" />
+                </div>
+                {/* Secondary image - overlapping bottom right */}
+                <div className="absolute -bottom-6 -right-4 hidden aspect-[4/3] w-2/5 overflow-hidden rounded-[16px] border-4 border-background shadow-[var(--shadow-elevated)] md:block">
+                  <Image
+                    src="/images/excellence-bcd-ccc-extras/August2025/qYUWsst9kmNh6VKPS9go.jpg"
+                    alt="Activites a la BCD"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 30vw, 20vw"
+                  />
+                  <div className="absolute inset-0 rounded-[12px] ring-1 ring-inset ring-black/5" />
+                </div>
               </div>
             </FadeInView>
           </div>
@@ -272,12 +295,23 @@ export default function BCDPage() {
               return (
                 <StaggerItem key={activity.title}>
                   <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-elevated)]">
-                    {/* Colored header band */}
-                    <div
-                      className={`flex h-28 items-center justify-center bg-gradient-to-br ${activity.color}`}
-                    >
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                        <Icon className="h-7 w-7 text-white" />
+                    {/* Activity photo */}
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-t-[20px]">
+                      <Image
+                        src={activity.photo}
+                        alt={activity.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      />
+                      {/* Gradient overlay with icon */}
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent`}
+                      />
+                      <div
+                        className={`absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${activity.color} shadow-[var(--shadow-soft)]`}
+                      >
+                        <Icon className="h-5 w-5 text-white" />
                       </div>
                     </div>
                     {/* Content */}

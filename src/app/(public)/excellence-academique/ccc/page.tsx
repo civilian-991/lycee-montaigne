@@ -71,48 +71,63 @@ const activities: {
   title: string;
   description: string;
   icon: LucideIcon;
+  image: string;
 }[] = [
   {
     title: "Rentree litteraire",
     description:
       "Celebration de la rentree litteraire avec decouverte des nouveautes, coups de coeur des documentalistes et mises en avant thematiques.",
     icon: BookOpen,
+    image:
+      "/images/bcd-ccc-activities/October2025/wFv9DxTPfPBBSkAPj5Mg.jpeg",
   },
   {
     title: "Hommage a Henri Zoghaib",
     description:
       "Hommage au poete libanais Henri Zoghaib avec lectures, performances d'eleves et exploration de son oeuvre litteraire.",
     icon: Mic2,
+    image:
+      "/images/bcd-ccc-activities/August2025/AhQJx4qBNekBpGeyjMwR.jpeg",
   },
   {
     title: "Semaine de la presse et des medias",
     description:
       "Semaine dediee a l'education aux medias : analyse de la presse, ateliers d'ecriture journalistique et debats sur l'information.",
     icon: Newspaper,
+    image:
+      "/images/bcd-ccc-activities/August2025/6WkTnG0H4jldI5KagUt0.png",
   },
   {
     title: "Nuits de la Lecture, 9eme edition",
     description:
       "La 9eme edition des Nuits de la Lecture sur le theme du patrimoine : lectures a voix haute, rencontres et ateliers creatifs.",
     icon: Calendar,
+    image:
+      "/images/bcd-ccc-activities/May2025/fmjdjk2fwuGQDkpDyS63.jpeg",
   },
   {
     title: "Journee de la langue arabe",
     description:
       "Celebration de la langue arabe a travers des activites culturelles, des lectures poetiques et des ateliers de calligraphie.",
     icon: Globe,
+    image:
+      "/images/bcd-ccc-activities/May2025/5ud7anyWXrlJ1RhWxD8s.jpeg",
   },
   {
     title: "Semaine des lycees francais du monde",
     description:
       "Participation au reseau AEFE avec des projets collaboratifs, des echanges interculturels et des evenements fedateurs.",
     icon: Users,
+    image:
+      "/images/bcd-ccc-activities/May2025/XVqppxZDQpQf1Xi0ECqQ.jpg",
   },
   {
     title: "Cercle de lecture",
     description:
       "Rencontres regulieres entre lecteurs pour partager, debattre et approfondir la lecture d'oeuvres choisies collectivement.",
     icon: BookMarked,
+    image:
+      "/images/excellence-bcd-ccc-extras/March2025/rH1Pp2VNCmOq42KoG7Rm.jpeg",
   },
 ];
 
@@ -176,14 +191,25 @@ export default function CCCPage() {
           <div className="mx-auto max-w-7xl px-4">
             <div className="grid items-center gap-10 lg:grid-cols-2">
               <FadeInView>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)]">
-                  <Image
-                    src="/images/excellence-bcd-ccc-extras/November2025/4rQCpvOLwImnO4a1DDyT.jpg"
-                    alt="Espace du Centre de Connaissances et de Culture"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                  />
+                <div className="flex flex-col gap-4">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)]">
+                    <Image
+                      src="/images/excellence-bcd-ccc-extras/March2025/rH1Pp2VNCmOq42KoG7Rm.jpeg"
+                      alt="Espace du Centre de Connaissances et de Culture"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  </div>
+                  <div className="relative aspect-[3/2] overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)]">
+                    <Image
+                      src="/images/excellence-bcd-ccc-extras/November2025/4rQCpvOLwImnO4a1DDyT.jpg"
+                      alt="Activites au CCC du Lycee Montaigne"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  </div>
                 </div>
               </FadeInView>
               <FadeInView delay={0.15}>
@@ -333,16 +359,32 @@ export default function CCCPage() {
               const Icon = activity.icon;
               return (
                 <StaggerItem key={activity.title}>
-                  <div className="group flex h-full flex-col rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-elevated)]">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary to-secondary-dark text-white shadow-[var(--shadow-soft)] transition-transform duration-500 group-hover:scale-110">
-                      <Icon className="h-5 w-5" strokeWidth={1.5} />
+                  <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]">
+                    {/* Activity photo */}
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <Image
+                        src={activity.image}
+                        alt={activity.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                     </div>
-                    <h3 className="mt-4 text-base font-bold text-text transition-colors group-hover:text-primary">
-                      {activity.title}
-                    </h3>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-text-muted">
-                      {activity.description}
-                    </p>
+                    {/* Content */}
+                    <div className="flex flex-1 flex-col p-5">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-secondary-dark text-white shadow-[var(--shadow-soft)]">
+                          <Icon className="h-4 w-4" strokeWidth={1.5} />
+                        </div>
+                        <h3 className="text-base font-bold text-text transition-colors group-hover:text-primary">
+                          {activity.title}
+                        </h3>
+                      </div>
+                      <p className="mt-3 flex-1 text-sm leading-relaxed text-text-muted">
+                        {activity.description}
+                      </p>
+                    </div>
                   </div>
                 </StaggerItem>
               );
