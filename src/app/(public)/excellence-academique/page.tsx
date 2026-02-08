@@ -6,16 +6,24 @@ import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { WaveDivider } from "@/components/ui/wave-divider";
-import { BookOpen, GraduationCap, Award, Heart, ArrowRight, CheckCircle2, Compass, Palette } from "lucide-react";
+import { BookOpen, GraduationCap, Award, Heart, ArrowRight, CheckCircle2, Compass, Palette, Baby, Pencil, School, type LucideIcon } from "lucide-react";
 
-const programs = [
+const programs: {
+  title: string;
+  levels: string;
+  href: string;
+  color: string;
+  badge: string;
+  icon: LucideIcon;
+  extra?: string;
+}[] = [
   {
     title: "Ecole Maternelle",
     levels: "PS – MS – GS",
     href: "/excellence-academique/offre-pedagogique/maternelle",
     color: "from-secondary to-secondary-dark",
     badge: "3–5 ans",
-    image: "/images/offre-pedagogiques/March2025/yBsX8u4ZVOVu4Ki1b9bZ.png",
+    icon: Baby,
   },
   {
     title: "Ecole Elementaire",
@@ -23,7 +31,7 @@ const programs = [
     href: "/excellence-academique/offre-pedagogique/elementaire",
     color: "from-secondary to-secondary-dark",
     badge: "6–10 ans",
-    image: "/images/offre-pedagogiques/March2025/FMajMIbeBmTj2pZsVXg2.png",
+    icon: Pencil,
   },
   {
     title: "College",
@@ -32,7 +40,7 @@ const programs = [
     color: "from-primary to-primary-dark",
     badge: "11–14 ans",
     extra: "Brevet Libanais ou Diplome National du Brevet",
-    image: "/images/offre-pedagogiques/March2025/V5TaePZh3OK30gBE0zGt.png",
+    icon: School,
   },
   {
     title: "Lycee",
@@ -41,7 +49,7 @@ const programs = [
     color: "from-primary to-primary-dark",
     badge: "15–17 ans",
     extra: "BFI • Bac General • Bac Libanais",
-    image: "/images/offre-pedagogiques/March2025/ySjFCadTOSWucBhIhl2w.png",
+    icon: GraduationCap,
   },
 ];
 
@@ -134,14 +142,8 @@ export default function ExcellenceAcademiquePage() {
                     <span className="absolute right-3 top-3 rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] font-semibold text-white backdrop-blur-sm">
                       {program.badge}
                     </span>
-                    <div className="relative h-24 w-24 transition-transform duration-500 group-hover:scale-110">
-                      <Image
-                        src={program.image}
-                        alt={program.title}
-                        fill
-                        className="object-contain drop-shadow-lg"
-                        sizes="96px"
-                      />
+                    <div className="flex h-24 w-24 items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                      <program.icon className="h-16 w-16 text-white drop-shadow-lg" strokeWidth={1.5} />
                     </div>
                   </div>
                   {/* Content */}
