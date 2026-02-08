@@ -44,6 +44,7 @@ interface HomeContentProps {
     link: string | null;
     order: number;
   }>;
+  settings: Record<string, string>;
 }
 
 /* ------------------------------------------------------------------ */
@@ -80,12 +81,7 @@ const defaultFeaturedNews = [
 
 const defaultHeroImage = "/images/hp-sliders/February2026/xsOXezH2jzRWmKTDo9zN.jpeg";
 
-const stats = [
-  { value: 1085, label: "Eleves" },
-  { value: 100, suffix: "%", label: "Reussite au bac" },
-  { value: 29, label: "Nationalites" },
-  { value: 3, label: "Langues d'enseignement" },
-];
+/* stats are now computed from settings inside the component */
 
 const reasons = [
   {
@@ -110,7 +106,14 @@ const reasons = [
 /*  Component                                                         */
 /* ------------------------------------------------------------------ */
 
-export function HomeContent({ quickLinks, featuredNews, heroSlides }: HomeContentProps) {
+export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: HomeContentProps) {
+  const stats = [
+    { value: parseInt(settings.stat_eleves || "1085"), label: "Eleves" },
+    { value: parseInt(settings.stat_reussite || "100"), suffix: "%", label: "Reussite au bac" },
+    { value: parseInt(settings.stat_nationalites || "29"), label: "Nationalites" },
+    { value: parseInt(settings.stat_langues || "3"), label: "Langues d'enseignement" },
+  ];
+
   const heroImage =
     heroSlides.length > 0 ? heroSlides[0].imageUrl : defaultHeroImage;
   const heroAlt =

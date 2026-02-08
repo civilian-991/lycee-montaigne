@@ -74,9 +74,35 @@ type StaffMemberRow = {
   order: number;
 };
 
-export function EtablissementContent({ staff }: { staff: StaffMemberRow[] }) {
+type PageSectionRow = {
+  id: string;
+  pageId: string;
+  sectionKey: string;
+  title: string | null;
+  contentHtml: string | null;
+  image: string | null;
+  order: number;
+};
+
+export function EtablissementContent({
+  staff,
+  sections,
+}: {
+  staff: StaffMemberRow[];
+  sections: PageSectionRow[];
+}) {
   // Use DB staff for direction section if available, otherwise fall back to hardcoded
   const directionStaff = staff.filter((s) => s.section === "direction");
+
+  // Use DB staff for comite section if available, otherwise fall back to hardcoded
+  const comiteStaff = staff.filter((s) => s.section === "comite");
+  const displayComite =
+    comiteStaff.length > 0
+      ? comiteStaff.map((s) => ({ role: s.title, name: s.name }))
+      : comiteMembers;
+
+  // Use CMS mission section if available
+  const missionSection = sections.find((s) => s.sectionKey === "mission");
 
   const staffMessages =
     directionStaff.length > 0
@@ -99,18 +125,27 @@ export function EtablissementContent({ staff }: { staff: StaffMemberRow[] }) {
           <FadeInView>
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div>
-                <SectionHeader title="Mission et Vision" className="text-left" />
-                <h3 className="mt-6 text-xl font-semibold text-secondary">Notre projet educatif</h3>
-                <p className="mt-4 leading-relaxed text-text-muted">
-                  Le Lycee Montaigne est une ecole pour toutes les intelligences et tous les talents.
-                  Notre projet educatif repose sur le regard positif porte sur chaque personne,
-                  le refus du determinisme et la confiance dans l&apos;educabilite cognitive, affective et physiologique de chacun.
-                </p>
-                <p className="mt-4 leading-relaxed text-text-muted">
-                  Bienvenue a la communaute du LM, a ses amis et aux visiteurs de notre site web.
-                  Nous vous invitons a decouvrir notre etablissement, nos valeurs et notre engagement
-                  envers l&apos;excellence educative.
-                </p>
+                <SectionHeader title={missionSection?.title || "Mission et Vision"} className="text-left" />
+                {missionSection?.contentHtml ? (
+                  <div
+                    className="mt-6 leading-relaxed text-text-muted [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-secondary [&>p]:mt-4"
+                    dangerouslySetInnerHTML={{ __html: missionSection.contentHtml }}
+                  />
+                ) : (
+                  <>
+                    <h3 className="mt-6 text-xl font-semibold text-secondary">Notre projet educatif</h3>
+                    <p className="mt-4 leading-relaxed text-text-muted">
+                      Le Lycee Montaigne est une ecole pour toutes les intelligences et tous les talents.
+                      Notre projet educatif repose sur le regard positif porte sur chaque personne,
+                      le refus du determinisme et la confiance dans l&apos;educabilite cognitive, affective et physiologique de chacun.
+                    </p>
+                    <p className="mt-4 leading-relaxed text-text-muted">
+                      Bienvenue a la communaute du LM, a ses amis et aux visiteurs de notre site web.
+                      Nous vous invitons a decouvrir notre etablissement, nos valeurs et notre engagement
+                      envers l&apos;excellence educative.
+                    </p>
+                  </>
+                )}
               </div>
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                 <Image
@@ -168,7 +203,7 @@ export function EtablissementContent({ staff }: { staff: StaffMemberRow[] }) {
               <div>
                 <SectionHeader title="Comite des parents" className="text-left" />
                 <StaggerChildren className="mt-8 space-y-4">
-                  {comiteMembers.map((member) => (
+                  {displayComite.map((member) => (
                     <StaggerItem key={member.name}>
                       <div className="flex items-center gap-4 rounded-2xl bg-background p-4 shadow-[var(--shadow-soft)]">
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">

@@ -115,14 +115,19 @@ export const contactSubmissionPatchSchema = z.object({
 });
 
 const ALLOWED_SETTING_KEYS = [
-  "siteName",
-  "siteDescription",
-  "contactEmail",
+  "site_name",
+  "site_subtitle",
+  "email",
   "phone",
+  "fax",
   "address",
-  "facebookUrl",
-  "instagramUrl",
-  "youtubeUrl",
+  "facebook",
+  "instagram",
+  "linkedin",
+  "stat_eleves",
+  "stat_reussite",
+  "stat_nationalites",
+  "stat_langues",
 ] as const;
 
 export const settingsSchema = z.record(z.string(), z.string()).refine(

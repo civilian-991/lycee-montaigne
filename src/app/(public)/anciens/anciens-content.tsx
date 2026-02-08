@@ -147,9 +147,25 @@ function getYear(isoDate: string): string {
   return new Date(isoDate).getFullYear().toString();
 }
 
+type StaffMemberRow = {
+  id: string;
+  name: string;
+  title: string;
+  photo: string | null;
+  messageHtml: string | null;
+  section: string;
+  order: number;
+};
+
 /* -- component -- */
 
-export function AnciensContent({ events: dbEvents }: { events: AlumniEventRow[] }) {
+export function AnciensContent({
+  events: dbEvents,
+  committeeStaff,
+}: {
+  events: AlumniEventRow[];
+  committeeStaff: StaffMemberRow[];
+}) {
   // Use DB events if available, otherwise fall back to hardcoded
   const useDbEvents = dbEvents.length > 0;
 
@@ -162,6 +178,18 @@ export function AnciensContent({ events: dbEvents }: { events: AlumniEventRow[] 
         images: e.photos.map((p) => p.imageUrl),
       }))
     : hardcodedEvents;
+
+  // Use CMS committee staff if available, otherwise fall back to hardcoded
+  const displayCommittee =
+    committeeStaff.length > 0
+      ? committeeStaff.map((s) => ({
+          role: s.title,
+          name: s.name,
+          alternate: s.messageHtml || null,
+          icon: Users,
+          color: "from-primary to-primary-dark",
+        }))
+      : committee;
 
   return (
     <>
@@ -252,7 +280,7 @@ export function AnciensContent({ events: dbEvents }: { events: AlumniEventRow[] 
             subtitle="Elu lors du brunch fondateur du 19 juillet 2024"
           />
           <StaggerChildren className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {committee.map((member, idx) => {
+            {displayCommittee.map((member, idx) => {
               const Icon = member.icon;
               return (
                 <StaggerItem key={member.name}>

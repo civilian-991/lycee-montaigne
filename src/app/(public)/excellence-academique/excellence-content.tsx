@@ -6,6 +6,7 @@ import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { WaveDivider } from "@/components/ui/wave-divider";
+import { useMemo } from "react";
 import { BookOpen, GraduationCap, Award, Heart, ArrowRight, CheckCircle2, Compass, Palette, Baby, Pencil, School, type LucideIcon } from "lucide-react";
 
 const programs: {
@@ -53,7 +54,7 @@ const programs: {
   },
 ];
 
-const diplomas = [
+const defaultDiplomas = [
   { name: "Diplome National du Brevet (DNB)", type: "Francais" },
   { name: "Brevet Libanais", type: "Libanais" },
   { name: "Bac Francais", type: "Francais" },
@@ -70,7 +71,7 @@ const defaultCertifications = [
   { name: "CIMA", image: "/images/certificates/May2025/fD40mxinf2JZXQHf1GYq.webp" },
 ];
 
-const axes = [
+const defaultAxes = [
   {
     title: "Assurer un parcours d'excellence a tous les eleves",
     num: "01",
@@ -110,12 +111,30 @@ const axes = [
   },
 ];
 
-const parcours = [
+const defaultParcours = [
   { title: "Parcours citoyen", description: "Formation du citoyen responsable et engage, participation a la vie democratique de l'etablissement.", icon: Compass },
   { title: "Parcours Avenir", description: "Orientation et decouverte du monde professionnel des la 6eme jusqu'a la terminale.", icon: GraduationCap },
   { title: "Parcours educatif de sante", description: "Education a la sante, prevention et protection des eleves tout au long de leur scolarite.", icon: Heart },
   { title: "Parcours d'education artistique et culturelle", description: "Rencontre avec les oeuvres, pratique artistique et acquisition de connaissances culturelles.", icon: Palette },
 ];
+
+const parcoursIconMap: Record<string, LucideIcon> = {
+  Compass,
+  GraduationCap,
+  Heart,
+  Palette,
+  BookOpen,
+  School,
+};
+
+interface PageSectionData {
+  id: string;
+  sectionKey: string;
+  title: string | null;
+  contentHtml: string | null;
+  image: string | null;
+  order: number;
+}
 
 interface ExcellenceContentProps {
   certifications: Array<{
@@ -125,13 +144,64 @@ interface ExcellenceContentProps {
     description: string | null;
     order: number;
   }>;
+  sections: PageSectionData[];
 }
 
-export function ExcellenceContent({ certifications }: ExcellenceContentProps) {
+export function ExcellenceContent({ certifications, sections }: ExcellenceContentProps) {
   // Use CMS certifications if available, otherwise fall back to hardcoded defaults
   const displayCertifications = certifications.length > 0
     ? certifications.map((c) => ({ name: c.name, image: c.image ?? "" }))
     : defaultCertifications;
+
+  // Parse CMS sections for diplomas, axes, and parcours
+  const diplomasSection = sections.find((s) => s.sectionKey === "diplomas");
+  const axesSection = sections.find((s) => s.sectionKey === "axes");
+  const parcoursSection = sections.find((s) => s.sectionKey === "parcours");
+
+  const diplomas = useMemo(() => {
+    if (diplomasSection?.contentHtml) {
+      try {
+        const parsed = JSON.parse(diplomasSection.contentHtml) as Array<{ name: string; type: string }>;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch { /* fall back */ }
+    }
+    return defaultDiplomas;
+  }, [diplomasSection]);
+
+  const axes = useMemo(() => {
+    if (axesSection?.contentHtml) {
+      try {
+        const parsed = JSON.parse(axesSection.contentHtml) as Array<{
+          title: string;
+          num: string;
+          items: string[];
+          image: string;
+        }>;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch { /* fall back */ }
+    }
+    return defaultAxes;
+  }, [axesSection]);
+
+  const parcours = useMemo(() => {
+    if (parcoursSection?.contentHtml) {
+      try {
+        const parsed = JSON.parse(parcoursSection.contentHtml) as Array<{
+          title: string;
+          description: string;
+          icon?: string;
+        }>;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((p) => ({
+            title: p.title,
+            description: p.description,
+            icon: (p.icon && parcoursIconMap[p.icon]) || Compass,
+          }));
+        }
+      } catch { /* fall back */ }
+    }
+    return defaultParcours;
+  }, [parcoursSection]);
 
   return (
     <>

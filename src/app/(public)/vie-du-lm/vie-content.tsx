@@ -44,6 +44,16 @@ const sustainabilityImages = [
   "/images/development-durables/November2024/bPAc0bMPRxQ50hIGnNA5.png",
 ];
 
+type PageSectionRow = {
+  id: string;
+  pageId: string;
+  sectionKey: string;
+  title: string | null;
+  contentHtml: string | null;
+  image: string | null;
+  order: number;
+};
+
 interface VieContentProps {
   news: Array<{
     id: string;
@@ -52,9 +62,15 @@ interface VieContentProps {
     link: string | null;
     category: string | null;
   }>;
+  sections: PageSectionRow[];
 }
 
-export function VieContent({ news }: VieContentProps) {
+export function VieContent({ news, sections }: VieContentProps) {
+  // Look up CMS sections by key
+  const devDurableSection = sections.find((s) => s.sectionKey === "developpement-durable");
+  const webradioSection = sections.find((s) => s.sectionKey === "webradio");
+  const climatSection = sections.find((s) => s.sectionKey === "climat");
+  const egaliteSection = sections.find((s) => s.sectionKey === "egalite");
   // Use CMS news if available, otherwise fall back to hardcoded defaults
   const displayNews = news.length > 0
     ? news.map((n) => ({
@@ -153,24 +169,33 @@ export function VieContent({ news }: VieContentProps) {
                     </div>
                     <SectionHeader title="Developpement durable" className="mb-0 text-left" />
                   </div>
-                  <p className="mt-6 leading-relaxed text-text-muted">
-                    Depuis sa creation en 2012, le Lycee Montaigne s&apos;engage en faveur du developpement durable
-                    et de l&apos;eco-citoyennete. Notre demarche vise a former des citoyens responsables et
-                    conscients des enjeux environnementaux.
-                  </p>
-                  <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-sm font-semibold text-secondary">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-secondary text-[10px] font-bold text-white">3</span>
-                    Label EFE3D Niveau Expert
-                  </div>
-                  <div className="mt-6 rounded-2xl border border-border bg-background p-5 shadow-[var(--shadow-soft)]">
-                    <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referents</p>
-                    <p className="mt-2 text-sm text-text">
-                      Mme Roula Chalabi <span className="text-text-muted">(1er degre)</span>
-                    </p>
-                    <p className="mt-1 text-sm text-text">
-                      M. Robert Sreih <span className="text-text-muted">(2nd degre)</span>
-                    </p>
-                  </div>
+                  {devDurableSection?.contentHtml ? (
+                    <div
+                      className="mt-6 leading-relaxed text-text-muted [&>p]:mt-4"
+                      dangerouslySetInnerHTML={{ __html: devDurableSection.contentHtml }}
+                    />
+                  ) : (
+                    <>
+                      <p className="mt-6 leading-relaxed text-text-muted">
+                        Depuis sa creation en 2012, le Lycee Montaigne s&apos;engage en faveur du developpement durable
+                        et de l&apos;eco-citoyennete. Notre demarche vise a former des citoyens responsables et
+                        conscients des enjeux environnementaux.
+                      </p>
+                      <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-sm font-semibold text-secondary">
+                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-secondary text-[10px] font-bold text-white">3</span>
+                        Label EFE3D Niveau Expert
+                      </div>
+                      <div className="mt-6 rounded-2xl border border-border bg-background p-5 shadow-[var(--shadow-soft)]">
+                        <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referents</p>
+                        <p className="mt-2 text-sm text-text">
+                          Mme Roula Chalabi <span className="text-text-muted">(1er degre)</span>
+                        </p>
+                        <p className="mt-1 text-sm text-text">
+                          M. Robert Sreih <span className="text-text-muted">(2nd degre)</span>
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
                 <StaggerChildren className="grid grid-cols-2 gap-3">
                   {sustainabilityImages.map((img, i) => (
@@ -202,7 +227,7 @@ export function VieContent({ news }: VieContentProps) {
               <div className="grid items-stretch lg:grid-cols-2">
                 <div className="relative min-h-[280px]">
                   <Image
-                    src="/images/webradios/November2024/amxLKLrgOzIeBoHAVT4x.jpeg"
+                    src={webradioSection?.image || "/images/webradios/November2024/amxLKLrgOzIeBoHAVT4x.jpeg"}
                     alt="Webradio du Lycee Montaigne"
                     fill
                     className="object-cover"
@@ -216,18 +241,29 @@ export function VieContent({ news }: VieContentProps) {
                     </div>
                     <span className="text-xs font-semibold tracking-wide text-red-500 uppercase">On Air</span>
                   </div>
-                  <h3 className="mt-4 font-heading text-2xl font-bold text-primary md:text-3xl">Webradio</h3>
-                  <p className="mt-3 leading-relaxed text-text-muted">
-                    La webradio du Lycee Montaigne est un projet educatif qui permet aux eleves de
-                    developper leurs competences en communication, expression orale et travail d&apos;equipe.
-                    Les eleves produisent des emissions sur des sujets varies.
-                  </p>
-                  <div className="mt-5 rounded-2xl border border-border bg-background-alt p-4">
-                    <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referentes</p>
-                    <p className="mt-1.5 text-sm text-text">
-                      Mme Leila Abboud <span className="text-text-muted">(1er degre)</span> &bull; Mme Joelle Maalouf <span className="text-text-muted">(2nd degre)</span>
-                    </p>
-                  </div>
+                  <h3 className="mt-4 font-heading text-2xl font-bold text-primary md:text-3xl">
+                    {webradioSection?.title || "Webradio"}
+                  </h3>
+                  {webradioSection?.contentHtml ? (
+                    <div
+                      className="mt-3 leading-relaxed text-text-muted [&>p]:mt-3"
+                      dangerouslySetInnerHTML={{ __html: webradioSection.contentHtml }}
+                    />
+                  ) : (
+                    <>
+                      <p className="mt-3 leading-relaxed text-text-muted">
+                        La webradio du Lycee Montaigne est un projet educatif qui permet aux eleves de
+                        developper leurs competences en communication, expression orale et travail d&apos;equipe.
+                        Les eleves produisent des emissions sur des sujets varies.
+                      </p>
+                      <div className="mt-5 rounded-2xl border border-border bg-background-alt p-4">
+                        <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referentes</p>
+                        <p className="mt-1.5 text-sm text-text">
+                          Mme Leila Abboud <span className="text-text-muted">(1er degre)</span> &bull; Mme Joelle Maalouf <span className="text-text-muted">(2nd degre)</span>
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -250,7 +286,7 @@ export function VieContent({ news }: VieContentProps) {
                 <div className="group h-full overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
-                      src="/images/climat-categories/April2025/mNHwl4NOWUZkZgPfyTNi.jpeg"
+                      src={climatSection?.image || "/images/climat-categories/April2025/mNHwl4NOWUZkZgPfyTNi.jpeg"}
                       alt="Democratie scolaire"
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -261,12 +297,21 @@ export function VieContent({ news }: VieContentProps) {
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-lg font-bold text-primary">Democratie scolaire</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-text-muted">
-                      Le Lycee Montaigne favorise la participation active des eleves a travers les instances de
-                      democratie scolaire : conseil de vie collegienne (CVC), conseil de vie lyceenne (CVL),
-                      et elections de delegues.
-                    </p>
+                    <h3 className="text-lg font-bold text-primary">
+                      {climatSection?.title || "Democratie scolaire"}
+                    </h3>
+                    {climatSection?.contentHtml ? (
+                      <div
+                        className="mt-2 text-sm leading-relaxed text-text-muted [&>p]:mt-2"
+                        dangerouslySetInnerHTML={{ __html: climatSection.contentHtml }}
+                      />
+                    ) : (
+                      <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                        Le Lycee Montaigne favorise la participation active des eleves a travers les instances de
+                        democratie scolaire : conseil de vie collegienne (CVC), conseil de vie lyceenne (CVL),
+                        et elections de delegues.
+                      </p>
+                    )}
                   </div>
                 </div>
               </StaggerItem>
@@ -276,7 +321,7 @@ export function VieContent({ news }: VieContentProps) {
                 <div id="egalite" className="group h-full overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
-                      src="/images/egalite-intros/October2024/7QOD9LQ0ZmvqaH1ck4qJ.jpg"
+                      src={egaliteSection?.image || "/images/egalite-intros/October2024/7QOD9LQ0ZmvqaH1ck4qJ.jpg"}
                       alt="Egalite filles-garcons"
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -287,12 +332,21 @@ export function VieContent({ news }: VieContentProps) {
                     </div>
                   </div>
                   <div className="p-6">
-                    <h3 className="text-lg font-bold text-primary">Egalite</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-text-muted">
-                      Conformement a la politique de l&apos;AEFE, le Lycee Montaigne s&apos;inscrit dans une demarche
-                      active de promotion de l&apos;egalite entre les filles et les garcons et de lutte
-                      contre les stereotypes.
-                    </p>
+                    <h3 className="text-lg font-bold text-primary">
+                      {egaliteSection?.title || "Egalite"}
+                    </h3>
+                    {egaliteSection?.contentHtml ? (
+                      <div
+                        className="mt-2 text-sm leading-relaxed text-text-muted [&>p]:mt-2"
+                        dangerouslySetInnerHTML={{ __html: egaliteSection.contentHtml }}
+                      />
+                    ) : (
+                      <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                        Conformement a la politique de l&apos;AEFE, le Lycee Montaigne s&apos;inscrit dans une demarche
+                        active de promotion de l&apos;egalite entre les filles et les garcons et de lutte
+                        contre les stereotypes.
+                      </p>
+                    )}
                   </div>
                 </div>
               </StaggerItem>
