@@ -63,19 +63,25 @@ const defaultFeaturedNews = [
     title: "Inscriptions 2026-2027",
     description: "Les inscriptions pour l'annee scolaire 2026-2027 sont ouvertes. Consultez la procedure et les documents necessaires.",
     href: "/inscriptions",
-    image: "/images/adm-s1/December2025/xbMaFrODRj51WGOcKi4k.png",
+    image: "/images/hp-services-items/December2025/EZgt9SOFhrSnxoEsdD9t.png",
+  },
+  {
+    title: "Calendrier des examens officiels 2025-2026",
+    description: "Consultez le calendrier complet des examens officiels pour l'annee scolaire en cours.",
+    href: "/informations-pratiques#calendrier",
+    image: "/images/hp-services-items/December2025/jB6WorbNeDHehA1SkNHp.png",
   },
   {
     title: "Portes Ouvertes Maternelle",
     description: "Venez decouvrir notre ecole maternelle lors de nos portes ouvertes.",
     href: "/inscriptions#porte-ouvertes",
-    image: "/images/s4-files/January2026/U4IfChjnxOFzmzse6Tme.jpeg",
+    image: "/images/hp-services-items/January2026/T10fTkBuq4F4fN4HaND9.png",
   },
   {
-    title: "Resultats 2024-2025",
-    description: "100% de reussite au baccalaureat. Decouvrez les resultats de nos eleves aux examens nationaux et internationaux.",
-    href: "/excellence-academique#resultats",
-    image: "/images/examens-resultats/January2026/resized_IMG_6942.PNG",
+    title: "Un nouveau batiment, une nouvelle etape",
+    description: "Decouvrez le nouveau batiment du Lycee Montaigne, une etape importante dans le developpement de notre etablissement.",
+    href: "/etablissement",
+    image: "/images/hp-services-items/November2025/n0ITOyY5hysOK9K70ztj.jpeg",
   },
 ];
 
@@ -241,18 +247,31 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
       <section id="pourquoi" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader title="Pourquoi l'enseignement francais ?" />
-          <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {reasons.map((reason) => (
-              <StaggerItem key={reason.title}>
-                <div className="h-full rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:border-secondary hover:shadow-[var(--shadow-elevated)]">
-                  <h3 className="text-lg font-semibold">{reason.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-text-muted">
-                    {reason.description}
-                  </p>
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerChildren>
+          <div className="mt-12 grid items-center gap-10 lg:grid-cols-2">
+            <FadeInView>
+              <div className="space-y-6">
+                {reasons.map((reason) => (
+                  <div key={reason.title} className="rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-0.5 hover:border-secondary hover:shadow-[var(--shadow-elevated)]">
+                    <h3 className="text-lg font-semibold">{reason.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                      {reason.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </FadeInView>
+            <FadeInView delay={0.2}>
+              <div className="relative overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)]">
+                <Image
+                  src="/images/enseignement-francais/November2024/rhXL22oL9pmVlxfzNBB1.png"
+                  alt="Pourquoi l'enseignement francais"
+                  width={600}
+                  height={700}
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+            </FadeInView>
+          </div>
         </div>
       </section>
 
@@ -272,7 +291,7 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader title="Info a la une" />
           {useDbNews ? (
-            <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2">
               {featuredNews.map((item) => (
                 <StaggerItem key={item.id}>
                   <Card
@@ -284,7 +303,7 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
               ))}
             </StaggerChildren>
           ) : (
-            <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2">
               {defaultFeaturedNews.map((item) => (
                 <StaggerItem key={item.title}>
                   <Card
@@ -297,6 +316,23 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
               ))}
             </StaggerChildren>
           )}
+        </div>
+      </section>
+
+      {/* Trait d'union */}
+      <section id="trait-union" className="bg-background-alt py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHeader title="Trait d'union" subtitle="Le journal du Lycee Montaigne" />
+          <FadeInView>
+            <div className="mx-auto mt-12 max-w-2xl">
+              <Card
+                title="Numero 91 - Decembre 2025"
+                description="Decouvrez le dernier numero du Trait d'union, le journal du Lycee Montaigne."
+                image="/images/hp-services-items/January2026/HcSaUtgkncgRCfvVKoV4.jpeg"
+                href="/documents"
+              />
+            </div>
+          </FadeInView>
         </div>
       </section>
 
