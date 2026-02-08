@@ -1054,12 +1054,6 @@ async function main() {
         { label: "Recrutement", url: "/informations-pratiques#recrutement", order: 4 },
       ],
     },
-    {
-      label: "Contact",
-      url: "/contact",
-      order: 8,
-      children: [],
-    },
   ];
 
   for (const nav of navigationData) {

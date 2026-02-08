@@ -105,8 +105,4 @@ export const navigation: NavItem[] = [
       { label: "Recrutement", href: "/informations-pratiques#recrutement" },
     ],
   },
-  {
-    label: "Contact",
-    href: "/contact",
-  },
 ];
