@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { AnciensContent } from "./anciens-content";
+
+export const metadata: Metadata = {
+  title: "Anciens Élèves | Lycée Montaigne",
+  description:
+    "Retrouvez les événements et photos des anciens élèves du Lycée Montaigne.",
+};
 
 export default async function AnciensPage() {
   const [rawEvents, committeeStaff] = await Promise.all([

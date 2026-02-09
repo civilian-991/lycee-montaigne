@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
+import { sanitizeSections } from "@/lib/sanitize";
 import { InscriptionsContent } from "./inscriptions-content";
+
+export const metadata: Metadata = {
+  title: "Inscriptions et Réinscriptions | Lycée Montaigne",
+  description:
+    "Procédures d'inscription, réinscription, portes ouvertes et bourses scolaires au Lycée Montaigne.",
+};
 
 export default async function InscriptionsPage() {
   const [documents, page] = await Promise.all([
@@ -13,7 +21,7 @@ export default async function InscriptionsPage() {
     }),
   ]);
 
-  const sections = page?.sections ?? [];
+  const sections = sanitizeSections(page?.sections ?? []);
 
   return <InscriptionsContent documents={documents} sections={sections} />;
 }

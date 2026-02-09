@@ -2,7 +2,10 @@ import { Navbar } from "@/components/public/navbar";
 import { Footer } from "@/components/public/footer";
 import { AnnouncementBanner } from "@/components/public/announcement-banner";
 import { db } from "@/lib/db";
+import { cleanHtml } from "@/lib/sanitize";
 import type { NavItem } from "@/lib/navigation";
+
+export const revalidate = 60;
 
 export default async function PublicLayout({
   children,
@@ -43,14 +46,16 @@ export default async function PublicLayout({
         })),
       }),
     }));
-  } catch {}
+  } catch (e) {
+    console.error("Layout data fetch error:", e);
+  }
 
   return (
     <>
       {announcement && (
         <AnnouncementBanner
           title={announcement.title}
-          content={announcement.contentHtml}
+          content={cleanHtml(announcement.contentHtml)}
         />
       )}
       <Navbar navigationItems={navigationItems} />

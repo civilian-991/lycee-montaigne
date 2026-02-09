@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { instances, getInstanceById } from "./data";
 import { db } from "@/lib/db";
+import { cleanHtml } from "@/lib/sanitize";
 import { FonctionnementContent } from "./content";
 
 /* ── Static Params ─────────────────────────────────────── */
@@ -85,7 +86,14 @@ export default async function FonctionnementPage({
   }
 
   if (dbInstance) {
-    return <FonctionnementContent instanceId={id} dbData={dbInstance} />;
+    // Sanitize HTML fields before passing to the client component
+    const sanitizedData = {
+      ...dbInstance,
+      descriptionHtml: cleanHtml(dbInstance.descriptionHtml),
+      compositionHtml: cleanHtml(dbInstance.compositionHtml),
+      responsibilitiesHtml: cleanHtml(dbInstance.responsibilitiesHtml),
+    };
+    return <FonctionnementContent instanceId={id} dbData={sanitizedData} />;
   }
 
   // Fallback to hardcoded data

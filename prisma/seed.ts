@@ -35,7 +35,7 @@ async function main() {
     update: {},
     create: {
       email: "admin@lycee-montaigne.edu.lb",
-      password: hashSync("admin123", 12),
+      password: hashSync(process.env.ADMIN_PASSWORD || "admin123", 12),
       name: "Administrateur",
       role: "admin",
     },

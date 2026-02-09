@@ -57,6 +57,8 @@ model NewsItem {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
+  @@index([publishedAt])
+  @@index([category])
   @@map("news_items")
 }
 
@@ -70,6 +72,7 @@ model Document {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
+  @@index([category])
   @@map("documents")
 }
 
@@ -102,6 +105,7 @@ model StaffMember {
   section     String
   order       Int     @default(0)
 
+  @@index([section])
   @@map("staff_members")
 }
 
@@ -147,6 +151,7 @@ model ContactSubmission {
   read      Boolean  @default(false)
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@index([createdAt])
   @@map("contact_submissions")
 }
 
@@ -169,6 +174,7 @@ model MenuItem {
   children MenuItem[] @relation("MenuChildren")
   page     Page?      @relation(fields: [pageId], references: [id])
 
+  @@index([parentId])
   @@map("menu_items")
 }
 
@@ -180,6 +186,7 @@ model ActivityItem {
   category    String
   order       Int     @default(0)
 
+  @@index([category])
   @@map("activity_items")
 }
 
@@ -193,6 +200,7 @@ model Announcement {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
+  @@index([active, startDate, endDate])
   @@map("announcements")
 }
 

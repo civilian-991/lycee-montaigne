@@ -1,5 +1,13 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
+import { sanitizeSections } from "@/lib/sanitize";
 import { OrientationContent } from "./orientation-content";
+
+export const metadata: Metadata = {
+  title: "Orientation | Lycée Montaigne",
+  description:
+    "Parcours avenir, Parcoursup et accompagnement à l'orientation au Lycée Montaigne.",
+};
 
 export default async function OrientationPage() {
   const [documents, page, rawActivities] = await Promise.all([
@@ -17,7 +25,7 @@ export default async function OrientationPage() {
     }),
   ]);
 
-  const sections = page?.sections ?? [];
+  const sections = sanitizeSections(page?.sections ?? []);
   const activities = rawActivities.map((a) => ({
     id: a.id,
     title: a.title,

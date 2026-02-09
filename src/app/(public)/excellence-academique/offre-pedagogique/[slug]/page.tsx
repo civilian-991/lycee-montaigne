@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
+import { sanitizeSections } from "@/lib/sanitize";
 import { OffrePedagogiqueContent } from "./offre-pedagogique-content";
 
 /* ── Static Generation ─────────────────────────────────── */
@@ -61,7 +62,7 @@ export default async function OffrePedagogiquePage({
       })
     : null;
 
-  const sections = page?.sections ?? [];
+  const sections = sanitizeSections(page?.sections ?? []);
 
   return <OffrePedagogiqueContent slug={slug} sections={sections} />;
 }
