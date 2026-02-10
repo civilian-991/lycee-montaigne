@@ -300,7 +300,7 @@ export function InfoPratiquesContent({ documents, healthStaff }: InfoPratiquesCo
             </StaggerItem>
             <StaggerItem>
               <a
-                href={restaurationDocs.find((d) => d.title.toLowerCase().includes("kiosque"))?.fileUrl ?? "/images/restauration-files/September2025/Yi7GGMLiugwxHhD02Xek.pdf"}
+                href={restaurationDocs.find((d) => d.title.toLowerCase().includes("café molière"))?.fileUrl ?? "/images/restauration-files/February2026/vhQNsAH69rrHNHkytBc7.pdf"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative block overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)] transition-all duration-300 hover:-translate-y-1.5"
@@ -308,7 +308,7 @@ export function InfoPratiquesContent({ documents, healthStaff }: InfoPratiquesCo
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src="/images/restauration-files/March2025/Ga6FKNC32Bt3xf28FjPH.jpeg"
-                    alt="Menu Kiosque"
+                    alt="Menu Café Molière"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -318,7 +318,7 @@ export function InfoPratiquesContent({ documents, healthStaff }: InfoPratiquesCo
                     <UtensilsCrossed className="h-5 w-5 text-primary" />
                   </div>
                   <div className="absolute bottom-0 p-6">
-                    <h3 className="text-lg font-bold text-white">Menu Kiosque</h3>
+                    <h3 className="text-lg font-bold text-white">Menu Café Molière</h3>
                     <span className="mt-2 inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors group-hover:text-white">
                       <Download className="h-3.5 w-3.5" /> Telecharger le menu
                     </span>

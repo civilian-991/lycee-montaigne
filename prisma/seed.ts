@@ -190,7 +190,7 @@ async function main() {
     { title: "Examens officiels 2025-2026", fileUrl: "/images/examens-officiels/December2025/N8h4O64ek0R28q9ArxEL.pdf", category: "examens-officiels", academicYear: "2025-2026", order: 1 },
     // Restauration
     { title: "Menu Cantine", fileUrl: "/images/restauration-files/January2026/mpYrj6lfFbbmG89EhsCF.pdf", category: "restauration", academicYear: "2025-2026", order: 1 },
-    { title: "Menu Kiosque", fileUrl: "/images/restauration-files/September2025/Yi7GGMLiugwxHhD02Xek.pdf", category: "restauration", academicYear: "2025-2026", order: 2 },
+    { title: "Menu Café Molière", fileUrl: "/images/restauration-files/February2026/vhQNsAH69rrHNHkytBc7.pdf", category: "restauration", academicYear: "2025-2026", order: 2 },
     // Recrutement
     { title: "Formulaire de recrutement", fileUrl: "https://lycee-montaigne.datarays.co/Employee", category: "recrutement", academicYear: "2025-2026", order: 1 },
     // Inscription documents
