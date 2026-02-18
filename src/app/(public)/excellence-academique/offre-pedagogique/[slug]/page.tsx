@@ -38,6 +38,7 @@ export async function generateMetadata({
   return {
     title: `${title} | Lycee Montaigne`,
     description: `Decouvrez le programme ${title} du Lycee Montaigne — un parcours d'excellence pour chaque eleve.`,
+    alternates: { canonical: `/excellence-academique/offre-pedagogique/${slug}` },
   };
 }
 
@@ -55,12 +56,17 @@ export default async function OffrePedagogiquePage({
   }
 
   const pageSlug = slugToPageSlug[slug];
-  const page = pageSlug
-    ? await db.page.findUnique({
-        where: { slug: pageSlug },
-        include: { sections: { orderBy: { order: "asc" } } },
-      })
-    : null;
+  let page = null;
+  try {
+    page = pageSlug
+      ? await db.page.findUnique({
+          where: { slug: pageSlug },
+          include: { sections: { orderBy: { order: "asc" } } },
+        })
+      : null;
+  } catch {
+    // DB unreachable — continue with empty sections
+  }
 
   const sections = sanitizeSections(page?.sections ?? []);
 

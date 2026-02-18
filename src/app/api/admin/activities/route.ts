@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { z } from "zod";
 import { activitySchema } from "@/lib/validations";
+import { parseBody, checkOrigin } from "@/lib/api-utils";
 
 export async function GET() {
   try {
@@ -21,26 +21,27 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const csrfError = checkOrigin(req);
+    if (csrfError) return csrfError;
+
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
-    const body = await req.json();
-    const data = activitySchema.parse(body);
+    const parsed = await parseBody(req, activitySchema);
+    if (parsed instanceof NextResponse) return parsed;
+
     const item = await db.activityItem.create({
       data: {
-        title: data.title,
-        description: data.description || null,
-        image: data.image || null,
-        category: data.category,
-        order: data.order ?? 0,
+        title: parsed.title,
+        description: parsed.description || null,
+        image: parsed.image || null,
+        category: parsed.category,
+        order: parsed.order ?? 0,
       },
     });
 
     return NextResponse.json(item, { status: 201 });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Données invalides", details: error.issues }, { status: 400 });
-    }
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

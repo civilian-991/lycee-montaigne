@@ -1,19 +1,31 @@
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
+import { PAGE_SLUGS } from "@/lib/page-slugs";
 import { sanitizeSections } from "@/lib/sanitize";
+import { getSettings } from "@/lib/settings";
 import { PoleInclusionContent } from "./pole-inclusion-content";
 
 export const metadata: Metadata = {
-  title: "Pôle Inclusion | Lycée Montaigne",
+  title: "Pole Inclusion | Lycee Montaigne",
   description:
-    "Le pôle inclusion du Lycée Montaigne pour un accompagnement adapté de chaque élève.",
+    "Le pole inclusion du Lycee Montaigne pour un accompagnement adapte de chaque eleve.",
+  alternates: { canonical: "/pole-inclusion" },
 };
 
 export default async function PoleInclusionPage() {
-  const page = await db.page.findUnique({
-    where: { slug: "pole-inclusion" },
+  const settings = await getSettings();
+
+  const findPage = () => db.page.findUnique({
+    where: { slug: PAGE_SLUGS.poleInclusion },
     include: { sections: { orderBy: { order: "asc" } } },
   });
+  let page: Awaited<ReturnType<typeof findPage>> = null;
+  try {
+    page = await findPage();
+  } catch {
+    // DB unreachable
+  }
+
   const sections = sanitizeSections(page?.sections ?? []);
-  return <PoleInclusionContent sections={sections} />;
+  return <PoleInclusionContent sections={sections} pillars={settings.pole_inclusion_pillars} />;
 }

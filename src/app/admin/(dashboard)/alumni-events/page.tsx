@@ -4,7 +4,8 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { DeleteButton } from "./delete-button";
 import { Pagination } from "@/components/admin/pagination";
-import { parsePagination, totalPages } from "@/lib/admin-utils";
+import { SearchInput } from "@/components/admin/search-input";
+import { parsePagination, parseSearch, totalPages } from "@/lib/admin-utils";
 
 export default async function AdminAlumniEventsPage({
   searchParams,
@@ -13,6 +14,11 @@ export default async function AdminAlumniEventsPage({
 }) {
   const sp = await searchParams;
   const { page, skip, take, pageSize } = parsePagination(sp);
+  const q = parseSearch(sp);
+
+  const where = q
+    ? { title: { contains: q, mode: "insensitive" as const } }
+    : {};
 
   let items: {
     id: string;
@@ -25,6 +31,7 @@ export default async function AdminAlumniEventsPage({
   try {
     [items, count] = await Promise.all([
       db.alumniEvent.findMany({
+        where,
         orderBy: { date: "desc" },
         select: {
           id: true,
@@ -35,7 +42,7 @@ export default async function AdminAlumniEventsPage({
         skip,
         take,
       }),
-      db.alumniEvent.count(),
+      db.alumniEvent.count({ where }),
     ]);
   } catch {
     // DB not connected yet
@@ -57,6 +64,12 @@ export default async function AdminAlumniEventsPage({
           <Plus className="h-4 w-4" />
           Ajouter
         </Link>
+      </div>
+
+      <div className="mb-4 max-w-xs">
+        <Suspense fallback={null}>
+          <SearchInput placeholder="Rechercher un événement..." />
+        </Suspense>
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-white">

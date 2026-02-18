@@ -27,9 +27,12 @@ export function truncate(text: string, length: number): string {
   return text.slice(0, length).trimEnd() + "…";
 }
 
+export function getSiteUrl(): string {
+  return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+}
+
 export function absoluteUrl(path: string): string {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  return `${base}${path}`;
+  return `${getSiteUrl()}${path}`;
 }
 
 /**

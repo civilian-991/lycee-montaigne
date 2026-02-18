@@ -1,24 +1,28 @@
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
+import { getSettings } from "@/lib/settings";
 import { AnciensContent } from "./anciens-content";
 
 export const metadata: Metadata = {
-  title: "Anciens Élèves | Lycée Montaigne",
+  title: "Anciens Eleves | Lycee Montaigne",
   description:
-    "Retrouvez les événements et photos des anciens élèves du Lycée Montaigne.",
+    "Retrouvez les evenements et photos des anciens eleves du Lycee Montaigne.",
+  alternates: { canonical: "/anciens" },
 };
 
 export default async function AnciensPage() {
-  const [rawEvents, committeeStaff] = await Promise.all([
-    db.alumniEvent.findMany({
-      include: { photos: { orderBy: { order: "asc" } } },
-      orderBy: { date: "desc" },
-    }),
-    db.staffMember.findMany({
-      where: { section: "alumni" },
-      orderBy: { order: "asc" },
-    }),
-  ]);
+  const settings = await getSettings();
+
+  const findEvents = () => db.alumniEvent.findMany({
+    include: { photos: { orderBy: { order: "asc" } } },
+    orderBy: { date: "desc" },
+  });
+  let rawEvents: Awaited<ReturnType<typeof findEvents>> = [];
+  try {
+    rawEvents = await findEvents();
+  } catch {
+    // DB unreachable
+  }
 
   const events = rawEvents.map((e) => ({
     ...e,
@@ -27,5 +31,11 @@ export default async function AnciensPage() {
     updatedAt: e.updatedAt.toISOString(),
   }));
 
-  return <AnciensContent events={events} committeeStaff={committeeStaff} />;
+  return (
+    <AnciensContent
+      events={events}
+      alumniCommittee={settings.alumni_committee}
+      alumniSubcommittees={settings.alumni_subcommittees}
+    />
+  );
 }

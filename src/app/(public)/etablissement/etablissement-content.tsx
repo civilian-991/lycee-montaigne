@@ -22,48 +22,21 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-const governanceInstances: {
-  id: string;
-  title: string;
-  icon: LucideIcon;
-  color: string;
-}[] = [
-  { id: "conseil-strategique", title: "Conseil Strategique", icon: Building2, color: "from-primary to-primary-dark" },
-  { id: "conseil-etablissement", title: "Conseil d'Etablissement", icon: Scale, color: "from-secondary to-secondary-dark" },
-  { id: "conseil-ecole", title: "Conseil d'Ecole", icon: GraduationCap, color: "from-primary to-primary-dark" },
-  { id: "conseil-pedagogique", title: "Conseil Pedagogique", icon: BookOpen, color: "from-secondary to-secondary-dark" },
-  { id: "conseil-discipline", title: "Conseil de Discipline", icon: Gavel, color: "from-primary to-primary-dark" },
-  { id: "conseil-classe", title: "Conseil de Classe", icon: ClipboardList, color: "from-secondary to-secondary-dark" },
-  { id: "conseil-vie-collegienne", title: "Conseil de Vie Collegienne", icon: Megaphone, color: "from-primary to-primary-dark" },
-  { id: "commission-hygiene-securite", title: "Commission Hygiene et Securite", icon: HeartPulse, color: "from-secondary to-secondary-dark" },
-  { id: "conseil-vie-lyceenne", title: "Conseil de Vie Lyceenne", icon: UserCheck, color: "from-primary to-primary-dark" },
-  { id: "cellule-formation", title: "Cellule de Formation", icon: Globe, color: "from-secondary to-secondary-dark" },
-  { id: "cesce", title: "CESCE", icon: Shield, color: "from-primary to-primary-dark" },
-];
+/* Map governance instance icon names (from DB) to Lucide components */
+const governanceIconMap: Record<string, LucideIcon> = {
+  Building2,
+  Scale,
+  GraduationCap,
+  BookOpen,
+  Gavel,
+  ClipboardList,
+  Megaphone,
+  HeartPulse,
+  UserCheck,
+  Globe,
+  Shield,
+};
 
-const hardcodedStaffMessages = [
-  {
-    id: "chef",
-    title: "Mot de la cheffe d'etablissement",
-    name: "Mme Rachel Atallah",
-    image: "/images/eta-s3/November2024/tN7I8Zm4bodDopvV14Hw.png",
-    text: `Le Lycee Montaigne est un etablissement jeune et dynamique qui accueille pres de 1100 eleves de la maternelle a la terminale. Notre mission est de re-enchanter l'ecole, comme le dit Edgar Morin, en offrant a chaque eleve un parcours d'excellence adapte a ses talents et a ses aspirations. Nous croyons en l'educabilite de tous et en la force du regard positif pour accompagner nos eleves vers la reussite.`,
-  },
-  {
-    id: "delegue",
-    title: "Mot de la proviseure deleguee",
-    name: "",
-    image: "/images/mot-directrices/March2025/rLBOCUkYuoLx7jcdp3LE.jpeg",
-    text: `Au Lycee Montaigne, nous mettons tout en oeuvre pour accompagner chaque eleve dans son parcours scolaire et personnel. Notre equipe pedagogique s'engage au quotidien pour offrir un enseignement de qualite dans un environnement bienveillant et stimulant.`,
-  },
-];
-
-const comiteMembers = [
-  { role: "President", name: "M. Karim Faddoul" },
-  { role: "Vice-president", name: "M. Antoine Nader" },
-  { role: "Secretaire", name: "Mme Maria Nahas" },
-  { role: "Tresorier", name: "M. Amin Rouhana" },
-];
 
 type StaffMemberRow = {
   id: string;
@@ -85,36 +58,41 @@ type PageSectionRow = {
   order: number;
 };
 
+type GovernanceRow = {
+  id: string;
+  slug: string;
+  title: string;
+  iconName: string;
+  accentColor: string;
+};
+
 export function EtablissementContent({
   staff,
   sections,
+  governanceInstances,
 }: {
   staff: StaffMemberRow[];
   sections: PageSectionRow[];
+  governanceInstances: GovernanceRow[];
 }) {
-  // Use DB staff for direction section if available, otherwise fall back to hardcoded
+  // Use DB staff for direction section — no hardcoded fallback
   const directionStaff = staff.filter((s) => s.section === "direction");
 
-  // Use DB staff for comite section if available, otherwise fall back to hardcoded
+  // Use DB staff for comite section — no hardcoded fallback
   const comiteStaff = staff.filter((s) => s.section === "comite");
-  const displayComite =
-    comiteStaff.length > 0
-      ? comiteStaff.map((s) => ({ role: s.title, name: s.name }))
-      : comiteMembers;
+  const displayComite = comiteStaff.map((s) => ({ role: s.title, name: s.name }));
 
   // Use CMS mission section if available
   const missionSection = sections.find((s) => s.sectionKey === "mission");
 
-  const staffMessages =
-    directionStaff.length > 0
-      ? directionStaff.map((s) => ({
-          id: s.id,
-          title: s.title,
-          name: s.name,
-          image: localImage(s.photo) || "/images/eta-s3/November2024/tN7I8Zm4bodDopvV14Hw.png",
-          text: s.messageHtml || "",
-        }))
-      : hardcodedStaffMessages;
+  // Use DB staff for direction messages — no hardcoded fallback
+  const staffMessages = directionStaff.map((s) => ({
+    id: s.id,
+    title: s.title,
+    name: s.name,
+    image: localImage(s.photo) || "",
+    text: s.messageHtml || "",
+  }));
 
   return (
     <>
@@ -203,6 +181,7 @@ export function EtablissementContent({
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div>
                 <SectionHeader title="Comite des parents" className="text-left" />
+                {displayComite.length > 0 && (
                 <StaggerChildren className="mt-8 space-y-4">
                   {displayComite.map((member) => (
                     <StaggerItem key={member.name}>
@@ -218,6 +197,7 @@ export function EtablissementContent({
                     </StaggerItem>
                   ))}
                 </StaggerChildren>
+                )}
                 <p className="mt-6 text-sm text-text-muted">
                   Contact : <a href="mailto:comitedesparents@lycee-montaigne.edu.lb" className="text-secondary hover:underline">comitedesparents@lycee-montaigne.edu.lb</a>
                 </p>
@@ -252,7 +232,8 @@ export function EtablissementContent({
         </div>
       </section>
 
-      {/* Instances de Gouvernance */}
+      {/* Instances de Gouvernance — only show if DB has data */}
+      {governanceInstances.length > 0 && (
       <section id="fonctionnement" className="bg-background-alt py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader
@@ -261,15 +242,15 @@ export function EtablissementContent({
           />
           <StaggerChildren className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {governanceInstances.map((inst) => {
-              const Icon = inst.icon;
+              const Icon = governanceIconMap[inst.iconName] || Building2;
               return (
                 <StaggerItem key={inst.id}>
                   <Link
-                    href={`/etablissement/fonctionnement/${inst.id}`}
+                    href={`/etablissement/fonctionnement/${inst.slug}`}
                     className="group flex items-center gap-4 rounded-[20px] border border-border bg-background p-5 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
                   >
                     <div
-                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${inst.color} transition-transform duration-300 group-hover:scale-110`}
+                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${inst.accentColor} transition-transform duration-300 group-hover:scale-110`}
                     >
                       <Icon className="h-5 w-5 text-white" />
                     </div>
@@ -286,6 +267,7 @@ export function EtablissementContent({
           </StaggerChildren>
         </div>
       </section>
+      )}
     </>
   );
 }

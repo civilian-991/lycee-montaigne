@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ALL_SETTING_KEYS } from "@/lib/settings";
 
 export const contactFormSchema = z.object({
   name: z
@@ -15,9 +16,13 @@ export const contactFormSchema = z.object({
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;
 
+export const passwordSchema = z
+  .string()
+  .min(8, "Le mot de passe doit contenir au moins 8 caractères");
+
 export const loginSchema = z.object({
   email: z.string().email("Adresse email invalide"),
-  password: z.string().min(1, "Le mot de passe est requis"),
+  password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
 });
 
 export type LoginData = z.infer<typeof loginSchema>;
@@ -137,31 +142,15 @@ export const contactSubmissionPatchSchema = z.object({
   read: z.boolean(),
 });
 
-const ALLOWED_SETTING_KEYS = [
-  "site_name",
-  "site_subtitle",
-  "email",
-  "phone",
-  "fax",
-  "address",
-  "facebook",
-  "instagram",
-  "linkedin",
-  "stat_eleves",
-  "stat_reussite",
-  "stat_nationalites",
-  "stat_langues",
-] as const;
-
 export const settingsSchema = z.record(z.string(), z.string()).refine(
   (data) => {
     const keys = Object.keys(data);
     return keys.every((key) =>
-      (ALLOWED_SETTING_KEYS as readonly string[]).includes(key)
+      (ALL_SETTING_KEYS as readonly string[]).includes(key)
     );
   },
   {
-    message: `Clés autorisées : ${ALLOWED_SETTING_KEYS.join(", ")}`,
+    message: `Cle non autorisee`,
   }
 );
 

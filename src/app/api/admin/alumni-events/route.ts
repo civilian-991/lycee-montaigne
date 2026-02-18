@@ -1,15 +1,24 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { z } from "zod";
 import { alumniEventSchema } from "@/lib/validations";
+import { parseBody, checkOrigin } from "@/lib/api-utils";
+import { cleanHtmlNullable } from "@/lib/sanitize";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
+    const { searchParams } = new URL(req.url);
+    const search = (searchParams.get("search") || "").trim();
+
+    const where = search
+      ? { title: { contains: search, mode: "insensitive" as const } }
+      : {};
+
     const events = await db.alumniEvent.findMany({
+      where,
       orderBy: { date: "desc" },
       include: {
         _count: { select: { photos: true } },
@@ -24,24 +33,25 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const csrfError = checkOrigin(req);
+    if (csrfError) return csrfError;
+
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
-    const body = await req.json();
-    const data = alumniEventSchema.parse(body);
+    const parsed = await parseBody(req, alumniEventSchema);
+    if (parsed instanceof NextResponse) return parsed;
+
     const event = await db.alumniEvent.create({
       data: {
-        title: data.title,
-        date: new Date(data.date),
-        descriptionHtml: data.descriptionHtml || null,
+        title: parsed.title,
+        date: new Date(parsed.date),
+        descriptionHtml: cleanHtmlNullable(parsed.descriptionHtml),
       },
     });
 
     return NextResponse.json(event, { status: 201 });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Données invalides", details: error.issues }, { status: 400 });
-    }
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

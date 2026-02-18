@@ -7,32 +7,7 @@ import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion
 import { localImage } from "@/lib/utils";
 import { Heart, Users, BookOpen, Shield } from "lucide-react";
 
-const pillars = [
-  {
-    key: "accompagnement",
-    title: "Accompagnement personnalise",
-    description: "Chaque eleve beneficie d'un suivi adapte a ses besoins specifiques, avec des dispositifs pedagogiques individualises.",
-    icon: Heart,
-  },
-  {
-    key: "equipe",
-    title: "Equipe pluridisciplinaire",
-    description: "Enseignants, psychologue, orthophoniste et educateurs travaillent ensemble pour le bien-etre de l'eleve.",
-    icon: Users,
-  },
-  {
-    key: "amenagements",
-    title: "Amenagements pedagogiques",
-    description: "PAP, PPS, PAI : des plans adaptes pour garantir l'acces aux apprentissages de tous les eleves.",
-    icon: BookOpen,
-  },
-  {
-    key: "bienveillance",
-    title: "Bienveillance et respect",
-    description: "Un cadre inclusif ou chaque difference est accueillie comme une richesse pour la communaute scolaire.",
-    icon: Shield,
-  },
-];
+const pillarIcons = [Heart, Users, BookOpen, Shield];
 
 type PageSectionRow = {
   id: string;
@@ -44,20 +19,13 @@ type PageSectionRow = {
   order: number;
 };
 
-export function PoleInclusionContent({ sections }: { sections: PageSectionRow[] }) {
-  // Use CMS section for intro if available
-  const introSection = sections.find((s) => s.sectionKey === "intro");
+interface PillarData {
+  title: string;
+  description: string;
+}
 
-  // Build pillars: if CMS sections exist for pillar keys, use their content; otherwise fall back to hardcoded
-  const displayPillars = pillars.map((p) => {
-    const cmsSection = sections.find((s) => s.sectionKey === p.key);
-    return {
-      ...p,
-      title: cmsSection?.title || p.title,
-      description: cmsSection?.contentHtml || p.description,
-      isHtml: !!cmsSection?.contentHtml,
-    };
-  });
+export function PoleInclusionContent({ sections, pillars }: { sections: PageSectionRow[]; pillars: PillarData[] }) {
+  const introSection = sections.find((s) => s.sectionKey === "intro");
 
   return (
     <>
@@ -105,34 +73,29 @@ export function PoleInclusionContent({ sections }: { sections: PageSectionRow[] 
         </div>
       </section>
 
-      <section className="bg-background-alt py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader title="Nos piliers" />
-          <StaggerChildren className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {displayPillars.map((pillar) => {
-              const Icon = pillar.icon;
-              return (
-                <StaggerItem key={pillar.key}>
-                  <div className="rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)]">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary/10 text-secondary">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <h3 className="mt-4 font-semibold">{pillar.title}</h3>
-                    {pillar.isHtml ? (
-                      <div
-                        className="mt-2 text-sm text-text-muted [&>p]:mt-2"
-                        dangerouslySetInnerHTML={{ __html: pillar.description }}
-                      />
-                    ) : (
+      {pillars.length > 0 && (
+        <section className="bg-background-alt py-16 md:py-24">
+          <div className="mx-auto max-w-7xl px-4">
+            <SectionHeader title="Nos piliers" />
+            <StaggerChildren className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {pillars.map((pillar, i) => {
+                const Icon = pillarIcons[i % pillarIcons.length];
+                return (
+                  <StaggerItem key={pillar.title}>
+                    <div className="rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary/10 text-secondary">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <h3 className="mt-4 font-semibold">{pillar.title}</h3>
                       <p className="mt-2 text-sm text-text-muted">{pillar.description}</p>
-                    )}
-                  </div>
-                </StaggerItem>
-              );
-            })}
-          </StaggerChildren>
-        </div>
-      </section>
+                    </div>
+                  </StaggerItem>
+                );
+              })}
+            </StaggerChildren>
+          </div>
+        </section>
+      )}
     </>
   );
 }

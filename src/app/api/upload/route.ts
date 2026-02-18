@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { put } from "@vercel/blob";
 import { ALLOWED_UPLOAD_TYPES, MAX_UPLOAD_SIZE } from "@/lib/validations";
+import { checkOrigin } from "@/lib/api-utils";
 
 function sanitizeFilename(name: string): string {
   return name
@@ -12,8 +13,52 @@ function sanitizeFilename(name: string): string {
     .replace(/^_+|_+$/g, "");
 }
 
+/** Validate file magic bytes against the claimed MIME type. */
+function validateMagicBytes(buffer: ArrayBuffer, mime: string): boolean {
+  const bytes = new Uint8Array(buffer);
+  switch (mime) {
+    case "image/jpeg":
+      return bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+    case "image/png":
+      return (
+        bytes[0] === 0x89 &&
+        bytes[1] === 0x50 &&
+        bytes[2] === 0x4e &&
+        bytes[3] === 0x47
+      );
+    case "image/gif":
+      return bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46;
+    case "application/pdf":
+      return (
+        bytes[0] === 0x25 &&
+        bytes[1] === 0x50 &&
+        bytes[2] === 0x44 &&
+        bytes[3] === 0x46
+      );
+    case "image/webp":
+      return (
+        bytes[0] === 0x52 &&
+        bytes[1] === 0x49 &&
+        bytes[2] === 0x46 &&
+        bytes[3] === 0x46 &&
+        bytes[8] === 0x57 &&
+        bytes[9] === 0x45 &&
+        bytes[10] === 0x42 &&
+        bytes[11] === 0x50
+      );
+    case "image/svg+xml":
+      // SVG starts with '<' (0x3C) or '<?xml' (0x3C 0x3F)
+      return bytes[0] === 0x3c;
+    default:
+      return false;
+  }
+}
+
 export async function POST(req: Request) {
   try {
+    const csrfError = checkOrigin(req);
+    if (csrfError) return csrfError;
+
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
@@ -31,6 +76,14 @@ export async function POST(req: Request) {
     if (file.size > MAX_UPLOAD_SIZE) {
       return NextResponse.json(
         { error: "Le fichier dépasse la taille maximale de 10 Mo" },
+        { status: 400 }
+      );
+    }
+
+    const buffer = await file.arrayBuffer();
+    if (!validateMagicBytes(buffer, file.type)) {
+      return NextResponse.json(
+        { error: "Le contenu du fichier ne correspond pas au type MIME déclaré" },
         { status: 400 }
       );
     }

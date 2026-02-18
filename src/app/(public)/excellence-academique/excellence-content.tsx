@@ -1,5 +1,6 @@
 "use client";
 import { localImage } from "@/lib/utils";
+import type { Program, Diploma, StrategicAxis, EducationalPath } from "@/lib/settings";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -7,135 +8,35 @@ import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { WaveDivider } from "@/components/ui/wave-divider";
-import { useMemo } from "react";
 import { BookOpen, GraduationCap, Award, Heart, ArrowRight, CheckCircle2, Compass, Palette, Baby, Pencil, School, type LucideIcon } from "lucide-react";
 
-const programs: {
-  title: string;
-  levels: string;
-  href: string;
-  color: string;
-  badge: string;
-  icon: LucideIcon;
-  extra?: string;
-}[] = [
-  {
-    title: "Ecole Maternelle",
-    levels: "PS – MS – GS",
-    href: "/excellence-academique/offre-pedagogique/maternelle",
-    color: "from-secondary to-secondary-dark",
-    badge: "3–5 ans",
-    icon: Baby,
-  },
-  {
-    title: "Ecole Elementaire",
-    levels: "CP – CE1 – CE2 – CM1 – CM2",
-    href: "/excellence-academique/offre-pedagogique/elementaire",
-    color: "from-secondary to-secondary-dark",
-    badge: "6–10 ans",
-    icon: Pencil,
-  },
-  {
-    title: "College",
-    levels: "6eme – 5eme – 4eme – 3eme",
-    href: "/excellence-academique/offre-pedagogique/college",
-    color: "from-primary to-primary-dark",
-    badge: "11–14 ans",
-    extra: "Brevet Libanais ou Diplome National du Brevet",
-    icon: School,
-  },
-  {
-    title: "Lycee",
-    levels: "2nde – 1ere – Terminale",
-    href: "/excellence-academique/offre-pedagogique/lycee",
-    color: "from-primary to-primary-dark",
-    badge: "15–17 ans",
-    extra: "BFI • Bac General • Bac Libanais",
-    icon: GraduationCap,
-  },
-];
-
-const defaultDiplomas = [
-  { name: "Diplome National du Brevet (DNB)", type: "Francais" },
-  { name: "Brevet Libanais", type: "Libanais" },
-  { name: "Bac Francais", type: "Francais" },
-  { name: "Bac Libanais", type: "Libanais" },
-  { name: "Bac Francais International (BFI)", type: "International" },
-];
-
-const defaultCertifications = [
-  { name: "Cambridge English Certificate", image: "/images/certificates/November2024/YutiYtDi0zuxMBPliMh3.jpeg" },
-  { name: "IELTS", image: "/images/certificates/November2024/efSpqghzlYYijlgfFavw.png" },
-  { name: "DELE", image: "/images/certificates/November2024/ViDy8mEJXK3IcwBFsWR8.png" },
-  { name: "PIX", image: "/images/certificates/November2024/Pg3enjuqnTHgxraxiYwT.png" },
-  { name: "SAT", image: "/images/certificates/November2024/XyKeUu4XU8MRwE5EwY4z.png" },
-  { name: "CIMA", image: "/images/certificates/May2025/fD40mxinf2JZXQHf1GYq.webp" },
-];
-
-const defaultAxes = [
-  {
-    title: "Assurer un parcours d'excellence a tous les eleves",
-    num: "01",
-    items: [
-      "Renforcer la maitrise de la langue francaise",
-      "Developper les competences en langues vivantes",
-      "Promouvoir les sciences et la culture numerique",
-      "Favoriser les parcours artistiques et culturels",
-      "Accompagner chaque eleve vers sa reussite",
-      "Renforcer l'evaluation formative",
-    ],
-    image: "/images/axes/April2024/Fn1kk4j4j4fhc0yTmXkP.png",
-  },
-  {
-    title: "Accompagner la montee en puissance du Lycee Montaigne",
-    num: "02",
-    items: [
-      "Developper une politique d'attractivite",
-      "Renforcer la communication interne et externe",
-      "Moderniser les pratiques pedagogiques",
-      "Optimiser la gestion des ressources",
-      "Developper les partenariats",
-    ],
-    image: "/images/axes/April2024/hqG7U0znrO7cPD9llXWC.png",
-  },
-  {
-    title: "Cultiver l'identite humaniste de l'etablissement",
-    num: "03",
-    items: [
-      "Promouvoir les valeurs de tolerance et de respect",
-      "Developper l'eco-citoyennete",
-      "Renforcer l'egalite filles-garcons",
-      "Favoriser l'inclusion et la diversite",
-      "Developper le sentiment d'appartenance",
-    ],
-    image: "/images/axes/April2024/03oaImjGLsLUMIf7Ydtb.png",
-  },
-];
-
-const defaultParcours = [
-  { title: "Parcours citoyen", description: "Formation du citoyen responsable et engage, participation a la vie democratique de l'etablissement.", icon: Compass },
-  { title: "Parcours Avenir", description: "Orientation et decouverte du monde professionnel des la 6eme jusqu'a la terminale.", icon: GraduationCap },
-  { title: "Parcours educatif de sante", description: "Education a la sante, prevention et protection des eleves tout au long de leur scolarite.", icon: Heart },
-  { title: "Parcours d'education artistique et culturelle", description: "Rencontre avec les oeuvres, pratique artistique et acquisition de connaissances culturelles.", icon: Palette },
-];
-
-const parcoursIconMap: Record<string, LucideIcon> = {
-  Compass,
-  GraduationCap,
-  Heart,
-  Palette,
-  BookOpen,
-  School,
+/* Icon + color maps for rendering programs from CMS data */
+const programIconMap: Record<string, LucideIcon> = {
+  maternelle: Baby,
+  elementaire: Pencil,
+  college: School,
+  lycee: GraduationCap,
 };
 
-interface PageSectionData {
-  id: string;
-  sectionKey: string;
-  title: string | null;
-  contentHtml: string | null;
-  image: string | null;
-  order: number;
-}
+const programColorMap: Record<string, string> = {
+  maternelle: "from-secondary to-secondary-dark",
+  elementaire: "from-secondary to-secondary-dark",
+  college: "from-primary to-primary-dark",
+  lycee: "from-primary to-primary-dark",
+};
+
+/* Map icon name strings (from CMS) to Lucide components for educational paths */
+const parcoursIconMap: Record<string, LucideIcon> = {
+  compass: Compass,
+  "graduation-cap": GraduationCap,
+  heart: Heart,
+  palette: Palette,
+  "book-open": BookOpen,
+  school: School,
+  baby: Baby,
+  pencil: Pencil,
+  award: Award,
+};
 
 interface ExcellenceContentProps {
   certifications: Array<{
@@ -145,64 +46,47 @@ interface ExcellenceContentProps {
     description: string | null;
     order: number;
   }>;
-  sections: PageSectionData[];
+  programs: Program[];
+  diplomas: Diploma[];
+  strategicAxes: StrategicAxis[];
+  educationalPaths: EducationalPath[];
 }
 
-export function ExcellenceContent({ certifications, sections }: ExcellenceContentProps) {
-  // Use CMS certifications if available, otherwise fall back to hardcoded defaults
-  const displayCertifications = certifications.length > 0
-    ? certifications.map((c) => ({ name: c.name, image: localImage(c.image) ?? "" }))
-    : defaultCertifications;
+export function ExcellenceContent({
+  certifications,
+  programs,
+  diplomas,
+  strategicAxes,
+  educationalPaths,
+}: ExcellenceContentProps) {
+  // Only use DB certifications — no hardcoded fallback
+  const displayCertifications = certifications.map((c) => ({
+    name: c.name,
+    image: localImage(c.image) ?? "",
+  }));
 
-  // Parse CMS sections for diplomas, axes, and parcours
-  const diplomasSection = sections.find((s) => s.sectionKey === "diplomas");
-  const axesSection = sections.find((s) => s.sectionKey === "axes");
-  const parcoursSection = sections.find((s) => s.sectionKey === "parcours");
+  // Map settings data to display format
+  const displayPrograms = programs.map((p) => ({
+    title: p.name,
+    levels: p.levels,
+    href: `/excellence-academique/offre-pedagogique/${p.slug}`,
+    color: programColorMap[p.slug] || "from-primary to-primary-dark",
+    badge: p.ages,
+    icon: programIconMap[p.slug] || GraduationCap,
+  }));
 
-  const diplomas = useMemo(() => {
-    if (diplomasSection?.contentHtml) {
-      try {
-        const parsed = JSON.parse(diplomasSection.contentHtml) as Array<{ name: string; type: string }>;
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      } catch { /* fall back */ }
-    }
-    return defaultDiplomas;
-  }, [diplomasSection]);
+  const displayAxes = strategicAxes.map((a, i) => ({
+    title: a.title,
+    num: String(i + 1).padStart(2, "0"),
+    items: a.items,
+    image: a.image || null,
+  }));
 
-  const axes = useMemo(() => {
-    if (axesSection?.contentHtml) {
-      try {
-        const parsed = JSON.parse(axesSection.contentHtml) as Array<{
-          title: string;
-          num: string;
-          items: string[];
-          image: string;
-        }>;
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      } catch { /* fall back */ }
-    }
-    return defaultAxes;
-  }, [axesSection]);
-
-  const parcours = useMemo(() => {
-    if (parcoursSection?.contentHtml) {
-      try {
-        const parsed = JSON.parse(parcoursSection.contentHtml) as Array<{
-          title: string;
-          description: string;
-          icon?: string;
-        }>;
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed.map((p) => ({
-            title: p.title,
-            description: p.description,
-            icon: (p.icon && parcoursIconMap[p.icon]) || Compass,
-          }));
-        }
-      } catch { /* fall back */ }
-    }
-    return defaultParcours;
-  }, [parcoursSection]);
+  const displayParcours = educationalPaths.map((p) => ({
+    title: p.name,
+    description: p.description,
+    icon: (p.icon && parcoursIconMap[p.icon]) || Compass,
+  }));
 
   return (
     <>
@@ -216,7 +100,7 @@ export function ExcellenceContent({ certifications, sections }: ExcellenceConten
             subtitle="De la maternelle au baccalaureat, un parcours d'excellence continu"
           />
           <StaggerChildren className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {programs.map((program) => (
+            {displayPrograms.map((program) => (
               <StaggerItem key={program.title}>
                 <Link
                   href={program.href}
@@ -238,11 +122,6 @@ export function ExcellenceContent({ certifications, sections }: ExcellenceConten
                       {program.title}
                     </h3>
                     <p className="mt-1 text-sm text-text-muted">{program.levels}</p>
-                    {program.extra && (
-                      <p className="mt-3 rounded-lg bg-secondary/8 px-3 py-1.5 text-xs font-medium text-secondary">
-                        {program.extra}
-                      </p>
-                    )}
                     <div className="mt-auto flex items-center gap-1 pt-4 text-xs font-semibold text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                       Decouvrir <ArrowRight className="h-3 w-3" />
                     </div>
@@ -296,7 +175,7 @@ export function ExcellenceContent({ certifications, sections }: ExcellenceConten
                           <p className="text-sm font-semibold text-text">{d.name}</p>
                         </div>
                         <span className="shrink-0 rounded-full bg-primary/8 px-2.5 py-0.5 text-[11px] font-medium text-primary">
-                          {d.type}
+                          {d.description}
                         </span>
                       </div>
                     ))}
@@ -305,7 +184,8 @@ export function ExcellenceContent({ certifications, sections }: ExcellenceConten
               </div>
             </FadeInView>
 
-            {/* Certifications */}
+            {/* Certifications — only shown if DB data exists */}
+            {displayCertifications.length > 0 && (
             <div className="mt-16">
               <FadeInView>
                 <h3 className="text-center font-heading text-2xl font-bold text-primary">Certifications internationales</h3>
@@ -332,6 +212,7 @@ export function ExcellenceContent({ certifications, sections }: ExcellenceConten
                 ))}
               </StaggerChildren>
             </div>
+            )}
           </div>
         </div>
         <WaveDivider fill="var(--color-background)" />
@@ -345,19 +226,23 @@ export function ExcellenceContent({ certifications, sections }: ExcellenceConten
             subtitle="Trois axes strategiques pour accompagner chaque eleve vers la reussite"
           />
           <div className="mt-14 space-y-8">
-            {axes.map((axe, i) => (
+            {displayAxes.map((axe, i) => (
               <FadeInView key={axe.num}>
                 <div className="overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)]">
                   <div className={`grid items-stretch lg:grid-cols-5 ${i % 2 !== 0 ? "lg:grid-flow-dense" : ""}`}>
                     {/* Image side */}
                     <div className={`relative min-h-[240px] lg:col-span-2 ${i % 2 !== 0 ? "lg:col-start-4" : ""}`}>
-                      <Image
-                        src={localImage(axe.image) ?? axe.image}
-                        alt={axe.title}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 1024px) 100vw, 40vw"
-                      />
+                      {axe.image ? (
+                        <Image
+                          src={localImage(axe.image) ?? axe.image}
+                          alt={axe.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 1024px) 100vw, 40vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary to-primary-dark" />
+                      )}
                       {/* Axis number overlay */}
                       <div className="absolute bottom-4 left-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/90 shadow-[var(--shadow-warm)] backdrop-blur-sm">
                         <span className="font-heading text-lg font-bold text-primary">{axe.num}</span>
@@ -390,7 +275,7 @@ export function ExcellenceContent({ certifications, sections }: ExcellenceConten
           <div className="mx-auto max-w-7xl px-4">
             <SectionHeader title="Parcours educatifs" />
             <StaggerChildren className="mt-12 grid gap-5 sm:grid-cols-2">
-              {parcours.map((p) => {
+              {displayParcours.map((p) => {
                 const Icon = p.icon;
                 return (
                   <StaggerItem key={p.title}>

@@ -1,27 +1,37 @@
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
+import { PAGE_SLUGS } from "@/lib/page-slugs";
 import { sanitizeSections } from "@/lib/sanitize";
+import { getSettings } from "@/lib/settings";
 import { InscriptionsContent } from "./inscriptions-content";
 
 export const metadata: Metadata = {
-  title: "Inscriptions et Réinscriptions | Lycée Montaigne",
+  title: "Inscriptions et Reinscriptions | Lycee Montaigne",
   description:
-    "Procédures d'inscription, réinscription, portes ouvertes et bourses scolaires au Lycée Montaigne.",
+    "Procedures d'inscription, reinscription, portes ouvertes et bourses scolaires au Lycee Montaigne.",
+  alternates: { canonical: "/inscriptions" },
 };
 
 export default async function InscriptionsPage() {
-  const [documents, page] = await Promise.all([
-    db.document.findMany({
-      where: { category: { startsWith: "inscription" } },
-      orderBy: { order: "asc" },
-    }),
-    db.page.findUnique({
-      where: { slug: "inscriptions" },
-      include: { sections: { orderBy: { order: "asc" } } },
-    }),
-  ]);
+  const settings = await getSettings();
+
+  const findPage = () => db.page.findUnique({
+    where: { slug: PAGE_SLUGS.inscriptions },
+    include: { sections: { orderBy: { order: "asc" } } },
+  });
+  let page: Awaited<ReturnType<typeof findPage>> = null;
+  try {
+    page = await findPage();
+  } catch {
+    // DB unreachable
+  }
 
   const sections = sanitizeSections(page?.sections ?? []);
 
-  return <InscriptionsContent documents={documents} sections={sections} />;
+  return (
+    <InscriptionsContent
+      sections={sections}
+      inscriptionDocuments={settings.inscription_documents}
+    />
+  );
 }

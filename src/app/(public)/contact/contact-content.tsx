@@ -5,47 +5,44 @@ import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion
 import { MapPin, Phone, Mail, Printer } from "lucide-react";
 import { ContactForm } from "./contact-form";
 
-const defaultContactInfo = [
-  {
-    icon: MapPin,
-    label: "Adresse",
-    value: "Beit Chabab, Quartier Baydar Chouar, Metn, Liban",
-    href: "https://maps.app.goo.gl/n8oJmjd1FfVNT2cp9",
-  },
-  {
-    icon: Mail,
-    label: "Email",
-    value: "info@lycee-montaigne.edu.lb",
-    href: "mailto:info@lycee-montaigne.edu.lb",
-  },
-  {
-    icon: Phone,
-    label: "Telephone",
-    value: "+961 4 982 082 / 983 845 / 985 256",
-    href: "tel:+9614982082",
-  },
-  {
-    icon: Printer,
-    label: "Fax",
-    value: "+961 4 985 256",
-    href: "tel:+9614985256",
-  },
-];
+interface ContactContentProps {
+  address: string;
+  email: string;
+  phone: string;
+  fax: string;
+  googleMapsUrl: string;
+  googleMapsEmbed: string;
+}
 
-export function ContactContent({ settings }: { settings: Record<string, string> }) {
-  // Build contact info using DB settings when available, falling back to hardcoded defaults
-  const contactInfo = defaultContactInfo.map((item) => {
-    if (item.label === "Adresse" && settings.address) {
-      return { ...item, value: settings.address };
-    }
-    if (item.label === "Email" && settings.contactEmail) {
-      return { ...item, value: settings.contactEmail, href: `mailto:${settings.contactEmail}` };
-    }
-    if (item.label === "Telephone" && settings.phone) {
-      return { ...item, value: settings.phone };
-    }
-    return item;
-  });
+export function ContactContent({ address, email, phone, fax, googleMapsUrl, googleMapsEmbed }: ContactContentProps) {
+  const contactInfo = [
+    {
+      icon: MapPin,
+      label: "Adresse",
+      value: address,
+      href: googleMapsUrl || "https://maps.app.goo.gl/n8oJmjd1FfVNT2cp9",
+    },
+    {
+      icon: Mail,
+      label: "Email",
+      value: email,
+      href: `mailto:${email}`,
+    },
+    {
+      icon: Phone,
+      label: "Telephone",
+      value: phone,
+      href: "tel:+9614982082",
+    },
+    {
+      icon: Printer,
+      label: "Fax",
+      value: fax,
+      href: `tel:${fax.replace(/\s/g, "")}`,
+    },
+  ];
+
+  const mapSrc = googleMapsEmbed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3312.5!2d35.6636834!3d33.923034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDU1JzIyLjkiTiAzNcKwMzknNDkuMyJF!5e0!3m2!1sfr!2slb!4v1";
 
   return (
     <>
@@ -96,7 +93,7 @@ export function ContactContent({ settings }: { settings: Record<string, string> 
                 {/* Map */}
                 <div className="mt-8 overflow-hidden rounded-2xl border border-border">
                   <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3312.5!2d35.6636834!3d33.923034!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzPCsDU1JzIyLjkiTiAzNcKwMzknNDkuMyJF!5e0!3m2!1sfr!2slb!4v1"
+                    src={mapSrc}
                     width="100%"
                     height="300"
                     style={{ border: 0 }}

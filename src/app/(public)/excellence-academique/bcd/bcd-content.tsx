@@ -11,22 +11,13 @@ import {
 } from "@/components/ui/motion";
 import { WaveDivider } from "@/components/ui/wave-divider";
 import { localImage } from "@/lib/utils";
+import type { BcdFunction } from "@/lib/settings";
 import {
   BookOpen,
   Users,
   Languages,
   BookMarked,
-  Search,
-  Mic2,
-  Theater,
-  Baby,
-  PersonStanding,
-  Moon,
-  Scale,
-  VolumeX,
-  CircleDot,
   ArrowLeft,
-  type LucideIcon,
 } from "lucide-react";
 
 /* ---- Types ---- */
@@ -50,117 +41,6 @@ interface StaffMemberData {
   order: number;
 }
 
-/* ---- Hardcoded fallback data ---- */
-
-const defaultTeam = [
-  { name: "Jennifer Bou Zeid", role: "Documentaliste arabe" },
-  { name: "Leila Abboud", role: "Documentaliste francaise" },
-];
-
-const coreFunctions: {
-  title: string;
-  description: string;
-  icon: LucideIcon;
-}[] = [
-  {
-    title: "Activites pedagogiques",
-    description:
-      "Organiser des activites pedagogiques autour du livre et de la lecture pour developper le gout de lire chez les eleves.",
-    icon: BookOpen,
-  },
-  {
-    title: "Recherche documentaire",
-    description:
-      "Proposer un enseignement de la recherche documentaire a travers la classification Dewey et les outils de reference.",
-    icon: Search,
-  },
-  {
-    title: "Rencontres culturelles",
-    description:
-      "Accueillir auteurs, illustrateurs et conteurs pour enrichir l'univers litteraire des eleves et les inspirer.",
-    icon: Mic2,
-  },
-  {
-    title: "Pret multilingue",
-    description:
-      "Offrir un service de pret dans les trois langues : francais, anglais et arabe, pour encourager la lecture plurilingue.",
-    icon: Languages,
-  },
-];
-
-const defaultActivities: {
-  title: string;
-  description: string;
-  icon: LucideIcon;
-  color: string;
-  photo: string;
-}[] = [
-  {
-    title: "Decouverte de la litterature",
-    description:
-      'Explorations litteraires variees comme "Comment j\'ai change ma vie" pour eveiller la curiosite des lecteurs.',
-    icon: BookMarked,
-    color: "from-primary to-primary-dark",
-    photo: "/images/bcd-ccc-activities/November2025/uJc8mo3uFntTF5807HcA.jpg",
-  },
-  {
-    title: "Commedia dell'arte",
-    description:
-      "Exploration de la commedia dell'arte avec les CM1, melant lecture, theatre et decouverte culturelle italienne.",
-    icon: Theater,
-    color: "from-secondary to-secondary-dark",
-    photo: "/images/bcd-ccc-activities/November2025/5aFOcCygmmCCNsJ5i77o.jpg",
-  },
-  {
-    title: "Spectacle de marionnettes",
-    description:
-      "Spectacles de marionnettes pour les maternelles, alliant narration et art visuel pour les plus jeunes.",
-    icon: Baby,
-    color: "from-primary-light to-primary",
-    photo: "/images/bcd-ccc-activities/November2025/XUHDsG37R1DsVLDHQTus.jpg",
-  },
-  {
-    title: "Lecture en mouvement",
-    description:
-      "Activites de lecture en mouvement combinant expression corporelle et decouverte de textes.",
-    icon: PersonStanding,
-    color: "from-secondary to-secondary-dark",
-    photo: "/images/bcd-ccc-activities/November2025/PF5zFTuWOokRWkUk2sTw.jpg",
-  },
-  {
-    title: "Nuits de la Lecture",
-    description:
-      "Evenement festif dedie a la lecture, avec animations nocturnes et decouvertes litteraires pour toute la communaute.",
-    icon: Moon,
-    color: "from-primary-dark to-primary",
-    photo: "/images/bcd-ccc-activities/May2025/A8B44PA9Uf7SSRXFWtiH.jpeg",
-  },
-  {
-    title: "Droits de l'enfant",
-    description:
-      "Projet sur les droits de l'enfant a travers la litterature jeunesse et les echanges en classe.",
-    icon: Scale,
-    color: "from-secondary-dark to-secondary",
-    photo: "/images/bcd-ccc-activities/May2025/qHFqUnIkY9Uxb0Xo1x10.jpg",
-  },
-  {
-    title: "Silence, on lit !",
-    description:
-      "Temps de lecture silencieuse quotidien ou toute la communaute scolaire partage un moment de lecture.",
-    icon: VolumeX,
-    color: "from-primary to-primary-light",
-    photo: "/images/bcd-ccc-activities/March2025/cpcffW6KpE8O5Sut2wrH.png",
-  },
-  {
-    title: "Cercle de lecture",
-    description:
-      "Cercles de lecture permettant aux eleves d'echanger, debattre et partager leurs coups de coeur litteraires.",
-    icon: CircleDot,
-    color: "from-secondary to-secondary-dark",
-    photo: "/images/bcd-ccc-activities/March2025/GclzoDEQpepHmSongJrP.png",
-  },
-];
-
 const gradientColors = [
   "from-primary to-primary-dark",
   "from-secondary to-secondary-dark",
@@ -177,16 +57,12 @@ const gradientColors = [
 interface BcdContentProps {
   activities: ActivityItemData[];
   team: StaffMemberData[];
+  bcdFunctions: BcdFunction[];
 }
 
-export function BcdContent({ activities, team }: BcdContentProps) {
-  // Build team display
-  const teamDisplay = team.length > 0
-    ? team.map((m) => ({ name: m.name, role: m.title }))
-    : defaultTeam;
-
-  // Build activities display - use DB data if available, else hardcoded
-  const useDbActivities = activities.length > 0;
+export function BcdContent({ activities, team, bcdFunctions }: BcdContentProps) {
+  // Use DB staff only — no hardcoded fallback
+  const teamDisplay = team.map((m) => ({ name: m.name, role: m.title }));
 
   return (
     <>
@@ -218,7 +94,8 @@ export function BcdContent({ activities, team }: BcdContentProps) {
                 livres.
               </p>
 
-              {/* Team */}
+              {/* Team — only shown if DB data exists */}
+              {teamDisplay.length > 0 && (
               <div className="mt-8">
                 <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-primary">
                   <Users className="h-4 w-4" />
@@ -243,6 +120,7 @@ export function BcdContent({ activities, team }: BcdContentProps) {
                   ))}
                 </div>
               </div>
+              )}
 
               {/* Languages badge row */}
               <div className="mt-6 flex flex-wrap gap-2">
@@ -303,13 +181,11 @@ export function BcdContent({ activities, team }: BcdContentProps) {
               subtitle="Quatre missions essentielles au service de la lecture et de la culture"
             />
             <StaggerChildren className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {coreFunctions.map((fn) => {
-                const Icon = fn.icon;
-                return (
+              {bcdFunctions.map((fn) => (
                   <StaggerItem key={fn.title}>
                     <div className="group flex h-full flex-col rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-warm)]">
                       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary-light text-white shadow-[var(--shadow-soft)] transition-transform duration-300 group-hover:scale-110">
-                        <Icon className="h-5 w-5" />
+                        <BookOpen className="h-5 w-5" />
                       </div>
                       <h3 className="mt-5 text-lg font-bold text-text">
                         {fn.title}
@@ -319,8 +195,7 @@ export function BcdContent({ activities, team }: BcdContentProps) {
                       </p>
                     </div>
                   </StaggerItem>
-                );
-              })}
+              ))}
             </StaggerChildren>
           </div>
         </div>
@@ -336,80 +211,42 @@ export function BcdContent({ activities, team }: BcdContentProps) {
           />
 
           <StaggerChildren className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {useDbActivities
-              ? activities.map((activity, index) => (
-                  <StaggerItem key={activity.id}>
-                    <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-elevated)]">
-                      {/* Activity photo */}
-                      {localImage(activity.image) && (
-                        <div className="relative aspect-[4/3] overflow-hidden rounded-t-[20px]">
-                          <Image
-                            src={localImage(activity.image)!}
-                            alt={activity.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                          />
-                          {/* Gradient overlay with icon */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                          <div
-                            className={`absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${gradientColors[index % gradientColors.length]} shadow-[var(--shadow-soft)]`}
-                          >
-                            <BookMarked className="h-5 w-5 text-white" />
-                          </div>
-                        </div>
-                      )}
-                      {/* Content */}
-                      <div className="flex flex-1 flex-col p-5">
-                        <h3 className="text-base font-bold text-text transition-colors group-hover:text-primary">
-                          {activity.title}
-                        </h3>
-                        {activity.description && (
-                          <p className="mt-2 flex-1 text-sm leading-relaxed text-text-muted">
-                            {activity.description}
-                          </p>
-                        )}
+            {activities.map((activity, index) => (
+              <StaggerItem key={activity.id}>
+                <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-elevated)]">
+                  {/* Activity photo */}
+                  {localImage(activity.image) && (
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-t-[20px]">
+                      <Image
+                        src={localImage(activity.image)!}
+                        alt={activity.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      />
+                      {/* Gradient overlay with icon */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                      <div
+                        className={`absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${gradientColors[index % gradientColors.length]} shadow-[var(--shadow-soft)]`}
+                      >
+                        <BookMarked className="h-5 w-5 text-white" />
                       </div>
                     </div>
-                  </StaggerItem>
-                ))
-              : defaultActivities.map((activity) => {
-                  const Icon = activity.icon;
-                  return (
-                    <StaggerItem key={activity.title}>
-                      <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-elevated)]">
-                        {/* Activity photo */}
-                        <div className="relative aspect-[4/3] overflow-hidden rounded-t-[20px]">
-                          <Image
-                            src={activity.photo}
-                            alt={activity.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                          />
-                          {/* Gradient overlay with icon */}
-                          <div
-                            className={`absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent`}
-                          />
-                          <div
-                            className={`absolute bottom-3 left-3 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${activity.color} shadow-[var(--shadow-soft)]`}
-                          >
-                            <Icon className="h-5 w-5 text-white" />
-                          </div>
-                        </div>
-                        {/* Content */}
-                        <div className="flex flex-1 flex-col p-5">
-                          <h3 className="text-base font-bold text-text transition-colors group-hover:text-primary">
-                            {activity.title}
-                          </h3>
-                          <p className="mt-2 flex-1 text-sm leading-relaxed text-text-muted">
-                            {activity.description}
-                          </p>
-                        </div>
-                      </div>
-                    </StaggerItem>
-                  );
-                })}
+                  )}
+                  {/* Content */}
+                  <div className="flex flex-1 flex-col p-5">
+                    <h3 className="text-base font-bold text-text transition-colors group-hover:text-primary">
+                      {activity.title}
+                    </h3>
+                    {activity.description && (
+                      <p className="mt-2 flex-1 text-sm leading-relaxed text-text-muted">
+                        {activity.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </StaggerItem>
+            ))}
           </StaggerChildren>
         </div>
       </section>

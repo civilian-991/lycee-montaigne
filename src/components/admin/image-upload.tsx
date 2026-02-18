@@ -12,6 +12,7 @@ interface ImageUploadProps {
 export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<"upload" | "url">(value ? "url" : "upload");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -19,15 +20,19 @@ export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadPro
     async (file: File) => {
       if (!file.type.startsWith("image/") && !file.type.startsWith("application/pdf")) return;
       setUploading(true);
+      setError(null);
       try {
         const formData = new FormData();
         formData.append("file", file);
         const res = await fetch("/api/upload", { method: "POST", body: formData });
-        if (!res.ok) throw new Error("Upload failed");
+        if (!res.ok) {
+          const data = await res.json().catch(() => null);
+          throw new Error(data?.error || "Echec de l'envoi du fichier");
+        }
         const data = await res.json();
         onChange(data.url);
-      } catch {
-        // silently fail — user can retry
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Echec de l'envoi du fichier");
       } finally {
         setUploading(false);
       }
@@ -68,39 +73,44 @@ export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadPro
       </div>
 
       {mode === "upload" ? (
-        <div
-          tabIndex={0}
-          role="button"
-          aria-label="Déposer ou sélectionner un fichier"
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragOver(true);
-          }}
-          onDragLeave={() => setDragOver(false)}
-          onDrop={handleDrop}
-          onClick={() => inputRef.current?.click()}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
+        <>
+          <div
+            tabIndex={0}
+            role="button"
+            aria-label="Déposer ou sélectionner un fichier"
+            onDragOver={(e) => {
               e.preventDefault();
-              inputRef.current?.click();
-            }
-          }}
-          className={`mt-2 flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
-            dragOver ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
-          }`}
-        >
-          {uploading ? (
-            <p className="text-sm text-text-muted">Envoi en cours...</p>
-          ) : (
-            <>
-              <Upload className="h-6 w-6 text-text-muted" />
-              <p className="text-sm text-text-muted">
-                Glisser une image ici ou <span className="font-medium text-primary">parcourir</span>
-              </p>
-            </>
+              setDragOver(true);
+            }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={handleDrop}
+            onClick={() => inputRef.current?.click()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                inputRef.current?.click();
+              }
+            }}
+            className={`mt-2 flex cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
+              dragOver ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+            }`}
+          >
+            {uploading ? (
+              <p className="text-sm text-text-muted">Envoi en cours...</p>
+            ) : (
+              <>
+                <Upload className="h-6 w-6 text-text-muted" />
+                <p className="text-sm text-text-muted">
+                  Glisser une image ici ou <span className="font-medium text-primary">parcourir</span>
+                </p>
+              </>
+            )}
+            <input ref={inputRef} type="file" accept="image/*,.pdf" onChange={handleFileInput} className="hidden" />
+          </div>
+          {error && (
+            <p className="mt-1 text-sm text-red-600">{error}</p>
           )}
-          <input ref={inputRef} type="file" accept="image/*,.pdf" onChange={handleFileInput} className="hidden" />
-        </div>
+        </>
       ) : (
         <input
           type="url"

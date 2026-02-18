@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, BookOpen, Users, Award, Globe } from "lucide-react";
+import { ArrowRight, Globe } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -48,46 +48,6 @@ interface HomeContentProps {
   settings: Record<string, string>;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Hardcoded fallbacks (used when the DB tables are empty)           */
-/* ------------------------------------------------------------------ */
-
-const defaultQuickLinks = [
-  { label: "Inscriptions 2026-2027", href: "/inscriptions", icon: BookOpen },
-  { label: "Calendrier scolaire", href: "/informations-pratiques#calendrier", icon: Globe },
-  { label: "Menu Cantine", href: "/informations-pratiques#restauration", icon: Users },
-  { label: "Pronote", href: "https://2050048n.index-education.net/pronote/", icon: Award, external: true },
-];
-
-const defaultFeaturedNews = [
-  {
-    title: "Inscriptions 2026-2027",
-    description: "Les inscriptions pour l'annee scolaire 2026-2027 sont ouvertes. Consultez la procedure et les documents necessaires.",
-    href: "/inscriptions",
-    image: "/images/hp-services-items/December2025/EZgt9SOFhrSnxoEsdD9t.png",
-  },
-  {
-    title: "Calendrier des examens officiels 2025-2026",
-    description: "Consultez le calendrier complet des examens officiels pour l'annee scolaire en cours.",
-    href: "/informations-pratiques#calendrier",
-    image: "/images/hp-services-items/December2025/jB6WorbNeDHehA1SkNHp.png",
-  },
-  {
-    title: "Portes Ouvertes Maternelle",
-    description: "Venez decouvrir notre ecole maternelle lors de nos portes ouvertes.",
-    href: "/inscriptions#porte-ouvertes",
-    image: "/images/hp-services-items/January2026/T10fTkBuq4F4fN4HaND9.png",
-  },
-  {
-    title: "Un nouveau batiment, une nouvelle etape",
-    description: "Decouvrez le nouveau batiment du Lycee Montaigne, une etape importante dans le developpement de notre etablissement.",
-    href: "/etablissement",
-    image: "/images/hp-services-items/November2025/n0ITOyY5hysOK9K70ztj.jpeg",
-  },
-];
-
-const defaultHeroImage = "/images/hp-sliders/February2026/xsOXezH2jzRWmKTDo9zN.jpeg";
-
 /* stats are now computed from settings inside the component */
 
 const reasons = [
@@ -121,36 +81,38 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
     { value: parseInt(settings.stat_langues || "3"), label: "Langues d'enseignement" },
   ];
 
+  const siteName = settings.site_name || "Lycee Montaigne";
+  const siteSubtitle = settings.site_subtitle || "Beit Chabab";
+
   const heroImage =
-    heroSlides.length > 0 ? (localImage(heroSlides[0].imageUrl) ?? defaultHeroImage) : defaultHeroImage;
+    heroSlides.length > 0 ? (localImage(heroSlides[0].imageUrl) ?? null) : null;
   const heroAlt =
     heroSlides.length > 0
       ? heroSlides[0].altText
-      : "Lycee Montaigne - Beit Chabab";
-
-  const useDbQuickLinks = quickLinks.length > 0;
-  const useDbNews = featuredNews.length > 0;
+      : `${siteName} - ${siteSubtitle}`;
 
   return (
     <>
       {/* Hero Section */}
       <section className="relative flex min-h-[600px] items-center overflow-hidden bg-primary md:min-h-[90vh]">
-        <Image
-          src={heroImage}
-          alt={heroAlt}
-          fill
-          className="object-cover"
-          priority
-        />
+        {heroImage && (
+          <Image
+            src={heroImage}
+            alt={heroAlt}
+            fill
+            className="object-cover"
+            priority
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/60 to-primary/40" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-20">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
-              <TextReveal text="Lycee Montaigne" />
+              <TextReveal text={siteName} />
             </h1>
             <FadeInView delay={0.4}>
               <p className="mt-2 text-xl font-medium text-secondary-light md:text-2xl">
-                Beit Chabab
+                {siteSubtitle}
               </p>
             </FadeInView>
             <FadeInView delay={0.6}>
@@ -181,68 +143,40 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
         </div>
       </section>
 
-      {/* Quick Links */}
+      {/* Quick Links — only shown if DB has data */}
+      {quickLinks.length > 0 && (
       <section id="liens-utiles" className="relative -mt-2 bg-background-alt pb-8">
         <div className="mx-auto max-w-7xl px-4">
-          {useDbQuickLinks ? (
-            <StaggerChildren className="grid grid-cols-2 gap-3 md:grid-cols-4">
-              {quickLinks.map((link) => {
-                const isExternal = link.target === "_blank";
-                const content = (
-                  <StaggerItem key={link.id}>
-                    <div className="flex items-center gap-3 rounded-2xl border border-border bg-background p-4 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-warm)]">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                        <Globe className="h-5 w-5" />
-                      </div>
-                      <span className="text-sm font-medium text-text">{link.label}</span>
+          <StaggerChildren className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {quickLinks.map((link) => {
+              const isExternal = link.target === "_blank";
+              const content = (
+                <StaggerItem key={link.id}>
+                  <div className="flex items-center gap-3 rounded-2xl border border-border bg-background p-4 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-warm)]">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      <Globe className="h-5 w-5" />
                     </div>
-                  </StaggerItem>
-                );
-                if (isExternal) {
-                  return (
-                    <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer">
-                      {content}
-                    </a>
-                  );
-                }
+                    <span className="text-sm font-medium text-text">{link.label}</span>
+                  </div>
+                </StaggerItem>
+              );
+              if (isExternal) {
                 return (
-                  <Link key={link.id} href={link.url}>
+                  <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer">
                     {content}
-                  </Link>
+                  </a>
                 );
-              })}
-            </StaggerChildren>
-          ) : (
-            <StaggerChildren className="grid grid-cols-2 gap-3 md:grid-cols-4">
-              {defaultQuickLinks.map((link) => {
-                const Icon = link.icon;
-                const content = (
-                  <StaggerItem key={link.label}>
-                    <div className="flex items-center gap-3 rounded-2xl border border-border bg-background p-4 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-warm)]">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                        <Icon className="h-5 w-5" />
-                      </div>
-                      <span className="text-sm font-medium text-text">{link.label}</span>
-                    </div>
-                  </StaggerItem>
-                );
-                if (link.external) {
-                  return (
-                    <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer">
-                      {content}
-                    </a>
-                  );
-                }
-                return (
-                  <Link key={link.label} href={link.href}>
-                    {content}
-                  </Link>
-                );
-              })}
-            </StaggerChildren>
-          )}
+              }
+              return (
+                <Link key={link.id} href={link.url}>
+                  {content}
+                </Link>
+              );
+            })}
+          </StaggerChildren>
         </div>
       </section>
+      )}
 
       {/* Pourquoi l'enseignement francais */}
       <section id="pourquoi" className="py-16 md:py-24">
@@ -287,38 +221,25 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
         <WaveDivider fill="var(--color-primary)" flip />
       </div>
 
-      {/* Info a la une */}
+      {/* Info a la une — only shown if DB has news */}
+      {featuredNews.length > 0 && (
       <section id="info-une" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader title="Info a la une" />
-          {useDbNews ? (
-            <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2">
-              {featuredNews.map((item) => (
-                <StaggerItem key={item.id}>
-                  <Card
-                    title={item.title}
-                    image={item.image ?? undefined}
-                    href={item.link ?? undefined}
-                  />
-                </StaggerItem>
-              ))}
-            </StaggerChildren>
-          ) : (
-            <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2">
-              {defaultFeaturedNews.map((item) => (
-                <StaggerItem key={item.title}>
-                  <Card
-                    title={item.title}
-                    description={item.description}
-                    href={item.href}
-                    image={item.image}
-                  />
-                </StaggerItem>
-              ))}
-            </StaggerChildren>
-          )}
+          <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2">
+            {featuredNews.map((item) => (
+              <StaggerItem key={item.id}>
+                <Card
+                  title={item.title}
+                  image={item.image ?? undefined}
+                  href={item.link ?? undefined}
+                />
+              </StaggerItem>
+            ))}
+          </StaggerChildren>
         </div>
       </section>
+      )}
 
       {/* Trait d'union */}
       <section id="trait-union" className="bg-background-alt py-16 md:py-24">

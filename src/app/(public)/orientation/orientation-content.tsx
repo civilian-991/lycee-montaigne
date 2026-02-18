@@ -37,87 +37,10 @@ type ActivityItemRow = {
   order: number;
 };
 
-/* ── Hardcoded fallback data ─────────────────────────── */
-
-const defaultOrientationCalendars = [
-  {
-    level: "Terminale",
-    label: "Calendrier d'orientation annuel des eleves de Terminale",
-    href: "/images/calenders/October2025/Lx0wFEvWtizsi6yOH2q1.pdf",
-    color: "from-primary to-primary-dark",
-  },
-  {
-    level: "1ere",
-    label: "Calendrier d'orientation annuel des eleves de 1ere",
-    href: "/images/calenders/September2025/KwWpmr2QDmyQQPjalcUG.pdf",
-    color: "from-secondary-dark to-secondary",
-  },
-  {
-    level: "2de",
-    label: "Calendrier d'orientation annuel des eleves de 2de",
-    href: "/images/calenders/October2025/lXqdceNiOj3Pz9DpwBO7.pdf",
-    color: "from-[#8B6914] to-[#C4961A]",
-  },
-];
-
-const defaultParcoursupDocs = [
-  {
-    title: "Brochure Salon AGORA Monde AEFE",
-    description: "Presentation du salon virtuel d'orientation AEFE",
-    href: "/images/orientation-s4-files/December2025/xxgQMty00QT31a5oJWY1.pdf",
-  },
-  {
-    title: "Programme",
-    description: "Programme detaille du salon d'orientation",
-    href: "/images/orientation-s4-files/November2025/9ZYRV7SE9LloT6ZtYA5J.pdf",
-  },
-  {
-    title: "Calendrier Parcoursup 2025-2026",
-    description: "Dates cles et echeances de la procedure Parcoursup",
-    href: "/images/orientation-s4-files/November2025/sii8vo2EC7jjb93vkb6h.pdf",
-  },
-];
-
-const defaultUniversities = [
-  { name: "USJ", image: "/images/inscriptions-universites/April2024/IKh5ECmCosO0wEXbHJfE.png", url: "https://usj.edu.lb/e-doors/" },
-  { name: "AUB", image: "/images/inscriptions-universites/April2024/mNyKwjEsKTILxE3Drypm.png", url: "https://www.aub.edu.lb/admissions/Pages/default.aspx" },
-  { name: "NDU", image: "/images/inscriptions-universites/April2024/rRdze9NpnGrIp1CoPCfh.png", url: "https://www.ndu.edu.lb/apply" },
-  { name: "LAU", image: "/images/inscriptions-universites/April2024/ElIddwesq0I3p3yO7Ppy.png", url: "https://www.lau.edu.lb/apply/first-time-applicant.php" },
-  { name: "Balamand", image: "/images/inscriptions-universites/April2024/S6u02K7LW9Efb3cW531z.png", url: "https://www.balamand.edu.lb/ProspectiveStudents/Pages/UndergraduateAdmissions.aspx" },
-  { name: "ALBA", image: "/images/inscriptions-universites/April2024/w9Jj9IYMat0esXyFAhkV.png", url: "https://alba.edu.lb/sites/ALBA1/InsAdm/Pages/default.aspx" },
-  { name: "ESA", image: "/images/inscriptions-universites/September2025/bLasgg76UCYQgBL3mWiI.png", url: "https://www.esa.edu.lb/french/formation-diplomante/bachelor-in-business-administration" },
-  { name: "USEK", image: "/images/inscriptions-universites/September2025/lZIXpZMUVtKqPWMmtWRZ.jpg", url: "https://www.usek.edu.lb/en/admission/online-admission-requirements" },
-  { name: "UCAS", image: "/images/inscriptions-universites/September2025/OgIG56RFszFpJXrX2ayB.png", url: "https://www.ucas.com/applying" },
-  { name: "Common App", image: "/images/inscriptions-universites/September2025/IOb6uT1ImkYMoE7MKong.png", url: "https://www.commonapp.org/" },
-];
-
-const defaultActivities = [
-  {
-    title: "Forum des universites",
-    date: "14 novembre 2025",
-    description: "18 universites et 12 grandes ecoles ont participe a cette journee, offrant 30 sources d'inspiration a nos eleves.",
-    image: "/images/oriantation-activities/November2025/0HnUrhMFu9ReUOd5Dcbs.jpeg",
-  },
-  {
-    title: "Forum des Metiers",
-    date: "22 mars 2025",
-    description: "Medecine, ingenierie, droit, communication, entrepreneuriat — des professionnels ont partage leurs parcours et conseils.",
-    image: "/images/oriantation-activities/July2025/xKaDU1qKXJrvkFI8kJc3.jpeg",
-  },
-  {
-    title: "Forum des universites",
-    date: "20 decembre 2024",
-    description: "Journee d'echanges avec les representants des universites locales et internationales.",
-    image: "/images/oriantation-activities/July2025/E74I8wu2UsLKK4EImXJU.jpeg",
-  },
-];
-
-const defaultAdmissionImages = [
-  "/images/oriantation-activities/August2025/jGcBleXqGThjKsghZXBQ.jpeg",
-  "/images/oriantation-activities/August2025/cZJX6xPO7h3xZDULgEXn.jpeg",
-  "/images/oriantation-activities/August2025/Vuu9x02s0E1dfDfps58b.jpeg",
-  "/images/oriantation-activities/August2025/XMhQO1k8tKpQaRhCt5AY.jpeg",
-];
+interface UniversityData {
+  name: string;
+  url: string;
+}
 
 /* Color cycle for calendars built from DB */
 const calendarColors = [
@@ -128,11 +51,7 @@ const calendarColors = [
 
 /* ── Helpers ─────────────────────────────────────────── */
 
-/** Try to parse a date prefix from the beginning of a description string.
- *  Expected format: "14 novembre 2025 — rest of description..."
- *  Returns { date, rest } or null if no date-like prefix is found. */
 function extractDateFromDescription(desc: string): { date: string; rest: string } | null {
-  // Match patterns like "14 novembre 2025 — ..." or "14 novembre 2025 - ..."
   const match = desc.match(/^(\d{1,2}\s+\w+\s+\d{4})\s*[—–-]\s*/);
   if (match) {
     return { date: match[1], rest: desc.slice(match[0].length) };
@@ -140,7 +59,6 @@ function extractDateFromDescription(desc: string): { date: string; rest: string 
   return null;
 }
 
-/** Safely parse JSON from a section's contentHtml, returning null on failure. */
 function safeJsonParse<T>(html: string | null | undefined): T | null {
   if (!html) return null;
   try {
@@ -155,10 +73,11 @@ interface OrientationContentProps {
   documents: DocumentRow[];
   sections: PageSectionRow[];
   activities: ActivityItemRow[];
+  universities: UniversityData[];
 }
 
 /* ── Component ────────────────────────────────────────── */
-export function OrientationContent({ documents, sections, activities }: OrientationContentProps) {
+export function OrientationContent({ documents, sections, activities, universities }: OrientationContentProps) {
   /* ── Look up CMS sections by key ── */
   const parcoursAvenirSection = sections.find((s) => s.sectionKey === "parcours-avenir");
   const parcoursupSection = sections.find((s) => s.sectionKey === "parcoursup");
@@ -167,51 +86,45 @@ export function OrientationContent({ documents, sections, activities }: Orientat
   const universitesSection = sections.find((s) => s.sectionKey === "universites");
   const ctaSection = sections.find((s) => s.sectionKey === "cta");
 
-  /* ── Derive orientation calendars from DB or fall back ── */
+  /* ── Derive orientation calendars from DB documents ── */
   const dbCalendars = documents.filter((d) => d.category === "orientation-calendrier");
-  const orientationCalendars = dbCalendars.length > 0
-    ? dbCalendars.map((d, i) => ({
-        level: d.title,
-        label: d.title,
-        href: d.fileUrl,
-        color: calendarColors[i % calendarColors.length],
-      }))
-    : defaultOrientationCalendars;
+  const orientationCalendars = dbCalendars.map((d, i) => ({
+    level: d.title,
+    label: d.title,
+    href: d.fileUrl,
+    color: calendarColors[i % calendarColors.length],
+  }));
 
-  /* ── Derive parcoursup docs from DB or fall back ── */
+  /* ── Derive parcoursup docs from DB documents ── */
   const dbParcoursup = documents.filter((d) => d.category === "orientation-parcoursup");
-  const parcoursupDocs = dbParcoursup.length > 0
-    ? dbParcoursup.map((d) => ({
-        title: d.title,
-        description: d.academicYear ?? "",
-        href: d.fileUrl,
-      }))
-    : defaultParcoursupDocs;
+  const parcoursupDocs = dbParcoursup.map((d) => ({
+    title: d.title,
+    description: d.academicYear ?? "",
+    href: d.fileUrl,
+  }));
 
-  /* ── Derive activities from CMS ActivityItems or fall back ── */
-  const displayActivities = activities.length > 0
-    ? activities.map((a) => {
-        const parsed = a.description ? extractDateFromDescription(a.description) : null;
-        return {
-          title: a.title,
-          date: parsed?.date ?? "",
-          description: parsed?.rest ?? a.description ?? "",
-          image: a.image ?? "/images/oriantation-activities/November2025/0HnUrhMFu9ReUOd5Dcbs.jpeg",
-        };
-      })
-    : defaultActivities;
+  /* ── Derive activities from CMS ActivityItems ── */
+  const displayActivities = activities.map((a) => {
+    const parsed = a.description ? extractDateFromDescription(a.description) : null;
+    return {
+      title: a.title,
+      date: parsed?.date ?? "",
+      description: parsed?.rest ?? a.description ?? "",
+      image: a.image ?? "/images/oriantation-activities/November2025/0HnUrhMFu9ReUOd5Dcbs.jpeg",
+    };
+  });
 
-  /* ── Derive admission images from CMS or fall back ── */
+  /* ── Derive admission images from CMS ── */
   const cmsAdmissionImages = safeJsonParse<string[]>(admissionsImagesSection?.contentHtml);
   const displayAdmissionImages = cmsAdmissionImages && cmsAdmissionImages.length > 0
     ? cmsAdmissionImages
-    : defaultAdmissionImages;
+    : [];
 
-  /* ── Derive universities from CMS or fall back ── */
+  /* ── Derive universities from settings, with CMS image data if available ── */
   const cmsUniversities = safeJsonParse<{ name: string; image: string; url: string }[]>(universitesSection?.contentHtml);
   const displayUniversities = cmsUniversities && cmsUniversities.length > 0
     ? cmsUniversities
-    : defaultUniversities;
+    : universities.map((u) => ({ name: u.name, image: "", url: u.url }));
 
   return (
     <>
@@ -262,80 +175,84 @@ export function OrientationContent({ documents, sections, activities }: Orientat
       </section>
 
       {/* ─── Calendriers d'orientation ─── */}
-      <section className="bg-background-alt py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader
-            title="Calendriers d'orientation"
-            subtitle="Planifiez l'annee de votre enfant avec les echeances cles"
-          />
-          <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-3">
-            {orientationCalendars.map((cal) => (
-              <StaggerItem key={cal.level}>
-                <a
-                  href={cal.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
-                >
-                  <div className={`bg-gradient-to-br ${cal.color} p-6 text-white`}>
-                    <div className="flex items-center justify-between">
-                      <Calendar className="h-8 w-8 opacity-80" />
-                      <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
-                        PDF
-                      </span>
+      {orientationCalendars.length > 0 && (
+        <section className="bg-background-alt py-16 md:py-24">
+          <div className="mx-auto max-w-7xl px-4">
+            <SectionHeader
+              title="Calendriers d'orientation"
+              subtitle="Planifiez l'annee de votre enfant avec les echeances cles"
+            />
+            <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-3">
+              {orientationCalendars.map((cal) => (
+                <StaggerItem key={cal.level}>
+                  <a
+                    href={cal.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
+                  >
+                    <div className={`bg-gradient-to-br ${cal.color} p-6 text-white`}>
+                      <div className="flex items-center justify-between">
+                        <Calendar className="h-8 w-8 opacity-80" />
+                        <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
+                          PDF
+                        </span>
+                      </div>
+                      <h3 className="mt-4 font-heading text-xl font-bold">{cal.level}</h3>
                     </div>
-                    <h3 className="mt-4 font-heading text-xl font-bold">{cal.level}</h3>
-                  </div>
-                  <div className="p-5">
-                    <p className="text-sm leading-relaxed text-text-muted">{cal.label}</p>
-                    <div className="mt-4 flex items-center gap-2 text-sm font-medium text-primary transition-colors group-hover:text-secondary">
-                      <FileDown className="h-4 w-4" />
-                      Telecharger le calendrier
+                    <div className="p-5">
+                      <p className="text-sm leading-relaxed text-text-muted">{cal.label}</p>
+                      <div className="mt-4 flex items-center gap-2 text-sm font-medium text-primary transition-colors group-hover:text-secondary">
+                        <FileDown className="h-4 w-4" />
+                        Telecharger le calendrier
+                      </div>
                     </div>
-                  </div>
-                </a>
-              </StaggerItem>
-            ))}
-          </StaggerChildren>
-        </div>
-      </section>
+                  </a>
+                </StaggerItem>
+              ))}
+            </StaggerChildren>
+          </div>
+        </section>
+      )}
 
       {/* ─── Activites d'orientation ─── */}
-      <section id="activites" className="py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader
-            title="Activites d'orientation"
-            subtitle="Forums, rencontres et evenements pour eclairer les choix de nos eleves"
-          />
-          <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-3">
-            {displayActivities.map((activity, i) => (
-              <StaggerItem key={activity.date || `activity-${i}`}>
-                <div className="group overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
-                      src={localImage(activity.image) || activity.image}
-                      alt={activity.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                    {activity.date && (
-                      <div className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-text backdrop-blur-sm">
-                        {activity.date}
-                      </div>
-                    )}
+      {displayActivities.length > 0 && (
+        <section id="activites" className="py-16 md:py-24">
+          <div className="mx-auto max-w-7xl px-4">
+            <SectionHeader
+              title="Activites d'orientation"
+              subtitle="Forums, rencontres et evenements pour eclairer les choix de nos eleves"
+            />
+            <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-3">
+              {displayActivities.map((activity, i) => (
+                <StaggerItem key={activity.date || `activity-${i}`}>
+                  <div className="group overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]">
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <Image
+                        src={localImage(activity.image) || activity.image}
+                        alt={activity.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                      {activity.date && (
+                        <div className="absolute bottom-3 left-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-text backdrop-blur-sm">
+                          {activity.date}
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-5">
+                      <h3 className="font-heading text-lg font-semibold text-text">{activity.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-text-muted">{activity.description}</p>
+                    </div>
                   </div>
-                  <div className="p-5">
-                    <h3 className="font-heading text-lg font-semibold text-text">{activity.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-text-muted">{activity.description}</p>
-                  </div>
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerChildren>
-        </div>
-      </section>
+                </StaggerItem>
+              ))}
+            </StaggerChildren>
+          </div>
+        </section>
+      )}
 
       {/* ─── Resultats admissions ─── */}
       <section id="admissions" className="bg-background-alt py-16 md:py-24">
@@ -359,21 +276,23 @@ export function OrientationContent({ documents, sections, activities }: Orientat
               )}
             </div>
           </FadeInView>
-          <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
-            {displayAdmissionImages.map((img, i) => (
-              <StaggerItem key={i}>
-                <div className="group relative aspect-[3/4] overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)]">
-                  <Image
-                    src={img}
-                    alt={`Resultats d'admission ${i + 1}`}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </div>
-              </StaggerItem>
-            ))}
-          </StaggerChildren>
+          {displayAdmissionImages.length > 0 && (
+            <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
+              {displayAdmissionImages.map((img, i) => (
+                <StaggerItem key={i}>
+                  <div className="group relative aspect-[3/4] overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)]">
+                    <Image
+                      src={img}
+                      alt={`Resultats d'admission ${i + 1}`}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                  </div>
+                </StaggerItem>
+              ))}
+            </StaggerChildren>
+          )}
         </div>
       </section>
 
@@ -415,21 +334,23 @@ export function OrientationContent({ documents, sections, activities }: Orientat
                     leurs dossiers.
                   </p>
                 )}
-                <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                  {parcoursupDocs.map((doc) => (
-                    <a
-                      key={doc.title}
-                      href={doc.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex flex-col rounded-2xl bg-white/10 p-4 backdrop-blur-sm transition-all hover:bg-white/20"
-                    >
-                      <FileDown className="mb-2 h-5 w-5 text-secondary-light" />
-                      <span className="text-sm font-semibold">{doc.title}</span>
-                      <span className="mt-1 text-xs text-white/60">{doc.description}</span>
-                    </a>
-                  ))}
-                </div>
+                {parcoursupDocs.length > 0 && (
+                  <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                    {parcoursupDocs.map((doc) => (
+                      <a
+                        key={doc.title}
+                        href={doc.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex flex-col rounded-2xl bg-white/10 p-4 backdrop-blur-sm transition-all hover:bg-white/20"
+                      >
+                        <FileDown className="mb-2 h-5 w-5 text-secondary-light" />
+                        <span className="text-sm font-semibold">{doc.title}</span>
+                        <span className="mt-1 text-xs text-white/60">{doc.description}</span>
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </FadeInView>
@@ -439,47 +360,55 @@ export function OrientationContent({ documents, sections, activities }: Orientat
       <WaveDivider fill="var(--color-background)" className="relative -mt-px rotate-180" />
 
       {/* ─── Inscriptions universites ─── */}
-      <section id="uni" className="py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <FadeInView>
-            <div className="mx-auto max-w-3xl text-center">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-white">
-                <GraduationCap className="h-7 w-7" />
+      {displayUniversities.length > 0 && (
+        <section id="uni" className="py-16 md:py-24">
+          <div className="mx-auto max-w-7xl px-4">
+            <FadeInView>
+              <div className="mx-auto max-w-3xl text-center">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-white">
+                  <GraduationCap className="h-7 w-7" />
+                </div>
+                <SectionHeader title="Inscriptions universites" />
+                <p className="mt-4 text-text-muted">
+                  Accedez directement aux portails d&apos;admission des universites partenaires au Liban et a l&apos;international.
+                </p>
               </div>
-              <SectionHeader title="Inscriptions universites" />
-              <p className="mt-4 text-text-muted">
-                Accedez directement aux portails d&apos;admission des universites partenaires au Liban et a l&apos;international.
-              </p>
-            </div>
-          </FadeInView>
-          <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-            {displayUniversities.map((uni) => (
-              <StaggerItem key={uni.name}>
-                <a
-                  href={uni.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex flex-col items-center rounded-[20px] border border-border bg-background p-5 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
-                >
-                  <div className="relative h-16 w-full">
-                    <Image
-                      src={localImage(uni.image) || uni.image}
-                      alt={uni.name}
-                      fill
-                      className="object-contain transition-transform duration-300 group-hover:scale-110"
-                      sizes="120px"
-                    />
-                  </div>
-                  <div className="mt-3 flex items-center gap-1.5 text-xs font-medium text-primary transition-colors group-hover:text-secondary">
-                    {uni.name}
-                    <ExternalLink className="h-3 w-3" />
-                  </div>
-                </a>
-              </StaggerItem>
-            ))}
-          </StaggerChildren>
-        </div>
-      </section>
+            </FadeInView>
+            <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+              {displayUniversities.map((uni) => (
+                <StaggerItem key={uni.name}>
+                  <a
+                    href={uni.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex flex-col items-center rounded-[20px] border border-border bg-background p-5 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
+                  >
+                    {uni.image ? (
+                      <div className="relative h-16 w-full">
+                        <Image
+                          src={localImage(uni.image) || uni.image}
+                          alt={uni.name}
+                          fill
+                          className="object-contain transition-transform duration-300 group-hover:scale-110"
+                          sizes="120px"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex h-16 w-full items-center justify-center">
+                        <GraduationCap className="h-8 w-8 text-primary/40" />
+                      </div>
+                    )}
+                    <div className="mt-3 flex items-center gap-1.5 text-xs font-medium text-primary transition-colors group-hover:text-secondary">
+                      {uni.name}
+                      <ExternalLink className="h-3 w-3" />
+                    </div>
+                  </a>
+                </StaggerItem>
+              ))}
+            </StaggerChildren>
+          </div>
+        </section>
+      )}
 
       {/* ─── CTA ─── */}
       <section className="bg-gradient-to-br from-primary to-primary-dark py-16 md:py-20">

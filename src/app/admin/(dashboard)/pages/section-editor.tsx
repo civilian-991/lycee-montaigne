@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronDown, ChevronUp, Plus, Save, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, Plus, Save, Trash2 } from "lucide-react";
 import { DeleteModal } from "@/components/admin/delete-modal";
 
 interface Section {
@@ -30,6 +30,8 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  const [movingId, setMovingId] = useState<string | null>(null);
 
   // New section form state
   const [showNewForm, setShowNewForm] = useState(false);
@@ -117,6 +119,42 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
       setNewError("Erreur lors de la création. Vérifiez que la clé de section est unique.");
     } finally {
       setNewLoading(false);
+    }
+  }
+
+  async function handleMove(index: number, direction: "up" | "down") {
+    const swapIndex = direction === "up" ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= sections.length) return;
+
+    const current = sections[index];
+    const neighbor = sections[swapIndex];
+    setMovingId(current.id);
+    setSaveError(null);
+
+    try {
+      await Promise.all([
+        fetch(`/api/admin/pages/${pageId}/sections/${current.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sectionKey: current.sectionKey, title: current.title, contentHtml: current.contentHtml, image: current.image, order: neighbor.order }),
+        }),
+        fetch(`/api/admin/pages/${pageId}/sections/${neighbor.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sectionKey: neighbor.sectionKey, title: neighbor.title, contentHtml: neighbor.contentHtml, image: neighbor.image, order: current.order }),
+        }),
+      ]);
+      setSections((prev) => {
+        const next = [...prev];
+        const tempOrder = next[index].order;
+        next[index] = { ...next[index], order: next[swapIndex].order };
+        next[swapIndex] = { ...next[swapIndex], order: tempOrder };
+        return next.sort((a, b) => a.order - b.order);
+      });
+    } catch {
+      setSaveError("Erreur lors du déplacement.");
+    } finally {
+      setMovingId(null);
     }
   }
 
@@ -236,12 +274,12 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
                 className="rounded-xl border border-border bg-white"
               >
                 {/* Card header */}
-                <button
-                  type="button"
-                  onClick={() => setExpandedId(isExpanded ? null : section.id)}
-                  className="flex w-full items-center justify-between px-5 py-4 text-left"
-                >
-                  <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between px-5 py-4">
+                  <button
+                    type="button"
+                    onClick={() => setExpandedId(isExpanded ? null : section.id)}
+                    className="flex flex-1 items-center gap-3 text-left"
+                  >
                     <span className="flex h-7 w-7 items-center justify-center rounded-md bg-background-alt text-xs font-semibold text-text-muted">
                       {section.order}
                     </span>
@@ -251,13 +289,42 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
                         <span className="ml-2 text-sm text-text">{section.title}</span>
                       )}
                     </div>
+                  </button>
+                  <div className="flex items-center gap-1">
+                    {/* Move Up */}
+                    <button
+                      type="button"
+                      disabled={movingId !== null || sections.indexOf(section) === 0}
+                      onClick={(e) => { e.stopPropagation(); handleMove(sections.indexOf(section), "up"); }}
+                      title="Monter"
+                      className="rounded p-1.5 text-text-muted transition-colors hover:bg-background-alt hover:text-text disabled:opacity-30 disabled:hover:bg-transparent"
+                    >
+                      <ArrowUp className="h-3.5 w-3.5" />
+                    </button>
+                    {/* Move Down */}
+                    <button
+                      type="button"
+                      disabled={movingId !== null || sections.indexOf(section) === sections.length - 1}
+                      onClick={(e) => { e.stopPropagation(); handleMove(sections.indexOf(section), "down"); }}
+                      title="Descendre"
+                      className="rounded p-1.5 text-text-muted transition-colors hover:bg-background-alt hover:text-text disabled:opacity-30 disabled:hover:bg-transparent"
+                    >
+                      <ArrowDown className="h-3.5 w-3.5" />
+                    </button>
+                    {/* Expand/Collapse */}
+                    <button
+                      type="button"
+                      onClick={() => setExpandedId(isExpanded ? null : section.id)}
+                      className="rounded p-1.5 text-text-muted transition-colors hover:bg-background-alt hover:text-text"
+                    >
+                      {isExpanded ? (
+                        <ChevronUp className="h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4" />
+                      )}
+                    </button>
                   </div>
-                  {isExpanded ? (
-                    <ChevronUp className="h-4 w-4 text-text-muted" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 text-text-muted" />
-                  )}
-                </button>
+                </div>
 
                 {/* Card body (expanded) */}
                 {isExpanded && (

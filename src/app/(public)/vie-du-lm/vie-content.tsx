@@ -11,40 +11,6 @@ import { localImage } from "@/lib/utils";
 
 const INSTAGRAM_URL = "https://www.instagram.com/lyceemontaigne.liban/";
 
-const defaultNews = [
-  {
-    title: "Nuits de la lecture – A la decouverte de la BD avec Tintin",
-    image: "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
-  },
-  {
-    title: "Nuits de la lecture – Contes et radiocassette en CM1 et CM2",
-    image: "/images/actualites/January2026/hjohJyJ8Yz3P14BGKWCk.jpeg",
-  },
-  {
-    title: "2025 MUN Conference Recap",
-    image: "/images/actualites/January2026/Yjx2dWMAEQgjzmlB9hcy.jpeg",
-  },
-  {
-    title: "Visite de Mme Isabelle Picault, conseillere adjointe et d'action culturelle",
-    image: "/images/actualites/January2026/UnkBO3aNJBHYDaqui4nt.jpeg",
-  },
-  {
-    title: "Explorer le role des enzymes en specialite SVT",
-    image: "/images/actualites/January2026/dcdN3CWKF92prbbgkGCc.jpeg",
-  },
-  {
-    title: "Dissection du coeur du mouton en 3eme SVT",
-    image: "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
-  },
-];
-
-const sustainabilityImages = [
-  "/images/development-durables/November2024/IXjTyiAwx79KnYFRYWvR.jpg",
-  "/images/development-durables/November2024/uhlbgzGIhcHxPIM03Upx.jpg",
-  "/images/development-durables/November2024/OypqboJndmfFo5oDOEdN.jpg",
-  "/images/development-durables/November2024/bPAc0bMPRxQ50hIGnNA5.png",
-];
-
 type PageSectionRow = {
   id: string;
   pageId: string;
@@ -64,22 +30,28 @@ interface VieContentProps {
     category: string | null;
   }>;
   sections: PageSectionRow[];
+  webradioReferents: string;
 }
 
-export function VieContent({ news, sections }: VieContentProps) {
+export function VieContent({ news, sections, webradioReferents }: VieContentProps) {
   // Look up CMS sections by key
   const devDurableSection = sections.find((s) => s.sectionKey === "developpement-durable");
   const webradioSection = sections.find((s) => s.sectionKey === "webradio");
   const climatSection = sections.find((s) => s.sectionKey === "climat");
   const egaliteSection = sections.find((s) => s.sectionKey === "egalite");
-  // Use CMS news if available, otherwise fall back to hardcoded defaults
-  const displayNews = news.length > 0
-    ? news.map((n) => ({
-        title: n.title,
-        image: localImage(n.image) ?? "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
-        link: n.link,
-      }))
-    : defaultNews.map((n) => ({ ...n, link: null as string | null }));
+
+  // Sustainability images from PageSection
+  const sustainabilitySections = sections.filter((s) => s.sectionKey === "developpement-durable-images");
+  const sustainabilityImages = sustainabilitySections.length > 0
+    ? sustainabilitySections.map((s) => s.image).filter(Boolean) as string[]
+    : [];
+
+  // Build news display items from DB only
+  const displayNews = news.map((n) => ({
+    title: n.title,
+    image: localImage(n.image) ?? "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
+    link: n.link,
+  }));
 
   return (
     <>
@@ -101,58 +73,63 @@ export function VieContent({ news, sections }: VieContentProps) {
             </a>
           </div>
 
-          {/* Featured post + grid */}
-          <div className="mt-4 grid gap-5 lg:grid-cols-5">
-            {/* Featured — large */}
-            <a
-              href={displayNews[0]?.link ?? INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)] lg:col-span-3 lg:row-span-2"
-            >
-              <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full">
-                <Image
-                  src={displayNews[0]?.image ?? ""}
-                  alt={displayNews[0]?.title ?? ""}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 1024px) 100vw, 60vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                <div className="absolute bottom-0 p-6 md:p-8">
-                  <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
-                    A la une
-                  </span>
-                  <h3 className="mt-3 text-xl font-bold text-white md:text-2xl">{displayNews[0]?.title}</h3>
-                </div>
-              </div>
-            </a>
-
-            {/* Smaller posts */}
-            {displayNews.slice(1, 5).map((item) => (
+          {displayNews.length > 0 ? (
+            <div className="mt-4 grid gap-5 lg:grid-cols-5">
+              {/* Featured — large */}
               <a
-                key={item.title}
-                href={item.link ?? INSTAGRAM_URL}
+                href={displayNews[0]?.link ?? INSTAGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)] lg:col-span-1"
+                className="group relative overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)] lg:col-span-3 lg:row-span-2"
               >
-                <div className="relative aspect-square">
+                <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full">
                   <Image
-                    src={item.image}
-                    alt={item.title}
+                    src={displayNews[0]?.image ?? ""}
+                    alt={displayNews[0]?.title ?? ""}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 1024px) 100vw, 60vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  <div className="absolute bottom-0 p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <p className="text-xs font-medium text-white line-clamp-2">{item.title}</p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                  <div className="absolute bottom-0 p-6 md:p-8">
+                    <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+                      A la une
+                    </span>
+                    <h3 className="mt-3 text-xl font-bold text-white md:text-2xl">{displayNews[0]?.title}</h3>
                   </div>
                 </div>
               </a>
-            ))}
-          </div>
+
+              {/* Smaller posts */}
+              {displayNews.slice(1, 5).map((item) => (
+                <a
+                  key={item.title}
+                  href={item.link ?? INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)] lg:col-span-1"
+                >
+                  <div className="relative aspect-square">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="absolute bottom-0 p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <p className="text-xs font-medium text-white line-clamp-2">{item.title}</p>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-8 text-center text-text-muted">
+              Aucune actualite pour le moment. Suivez-nous sur Instagram pour les dernieres nouvelles.
+            </p>
+          )}
         </div>
       </section>
 
@@ -198,21 +175,33 @@ export function VieContent({ news, sections }: VieContentProps) {
                     </>
                   )}
                 </div>
-                <StaggerChildren className="grid grid-cols-2 gap-3">
-                  {sustainabilityImages.map((img, i) => (
-                    <StaggerItem key={i}>
-                      <div className="relative aspect-square overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
-                        <Image
-                          src={img}
-                          alt={`Developpement durable ${i + 1}`}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 1024px) 50vw, 25vw"
-                        />
-                      </div>
-                    </StaggerItem>
-                  ))}
-                </StaggerChildren>
+                {sustainabilityImages.length > 0 ? (
+                  <StaggerChildren className="grid grid-cols-2 gap-3">
+                    {sustainabilityImages.map((img, i) => (
+                      <StaggerItem key={i}>
+                        <div className="relative aspect-square overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
+                          <Image
+                            src={localImage(img) ?? img}
+                            alt={`Developpement durable ${i + 1}`}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 1024px) 50vw, 25vw"
+                          />
+                        </div>
+                      </StaggerItem>
+                    ))}
+                  </StaggerChildren>
+                ) : (
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
+                    <Image
+                      src={localImage(devDurableSection?.image) || "/images/development-durables/November2024/IXjTyiAwx79KnYFRYWvR.jpg"}
+                      alt="Developpement durable"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  </div>
+                )}
               </div>
             </FadeInView>
           </div>
@@ -251,19 +240,17 @@ export function VieContent({ news, sections }: VieContentProps) {
                       dangerouslySetInnerHTML={{ __html: webradioSection.contentHtml }}
                     />
                   ) : (
-                    <>
-                      <p className="mt-3 leading-relaxed text-text-muted">
-                        La webradio du Lycee Montaigne est un projet educatif qui permet aux eleves de
-                        developper leurs competences en communication, expression orale et travail d&apos;equipe.
-                        Les eleves produisent des emissions sur des sujets varies.
-                      </p>
-                      <div className="mt-5 rounded-2xl border border-border bg-background-alt p-4">
-                        <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referentes</p>
-                        <p className="mt-1.5 text-sm text-text">
-                          Mme Leila Abboud <span className="text-text-muted">(1er degre)</span> &bull; Mme Joelle Maalouf <span className="text-text-muted">(2nd degre)</span>
-                        </p>
-                      </div>
-                    </>
+                    <p className="mt-3 leading-relaxed text-text-muted">
+                      La webradio du Lycee Montaigne est un projet educatif qui permet aux eleves de
+                      developper leurs competences en communication, expression orale et travail d&apos;equipe.
+                      Les eleves produisent des emissions sur des sujets varies.
+                    </p>
+                  )}
+                  {webradioReferents && (
+                    <div className="mt-5 rounded-2xl border border-border bg-background-alt p-4">
+                      <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referentes</p>
+                      <p className="mt-1.5 text-sm text-text">{webradioReferents}</p>
+                    </div>
                   )}
                 </div>
               </div>

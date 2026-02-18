@@ -27,78 +27,17 @@ type StaffRow = {
   order: number;
 };
 
-/* ── Hardcoded fallback data ─────────────────────────── */
-const supplyGroups = [
-  {
-    label: "Maternelle",
-    color: "bg-secondary",
-    category: "fournitures-maternelle",
-    lists: [
-      { title: "PS", href: "/images/list-files/August2025/LkbuRXzAEWZu6MgGs8ey.pdf" },
-      { title: "MS", href: "/images/list-files/August2025/Nnn53vPsziSf7k51md1j.pdf" },
-      { title: "GS", href: "/images/list-files/August2025/jFfpUNum1erRXyh4i7v5.pdf" },
-    ],
-  },
-  {
-    label: "Elementaire",
-    color: "bg-secondary",
-    category: "fournitures-elementaire",
-    lists: [
-      { title: "CP", href: "/images/list-files/August2025/xWLw8YK0awBY1hP5Pley.pdf" },
-      { title: "CE1", href: "/images/list-files/August2025/YV5psty1jxoal41T9eUh.pdf" },
-      { title: "CE2", href: "/images/list-files/August2025/NcpBMIHwSncNlGTjx0Fn.pdf" },
-      { title: "CM1", href: "/images/list-files/August2025/RhX3VyydytAzxBma6xLI.pdf" },
-      { title: "CM2", href: "/images/list-files/August2025/zqrlyg2PfGa0tSOQEAFL.pdf" },
-    ],
-  },
-  {
-    label: "College",
-    color: "bg-primary",
-    category: "fournitures-college",
-    lists: [
-      { title: "6eme", href: "/images/list-files/August2025/vbyAAnbd1ZHIwr5oP2f9.pdf" },
-      { title: "5eme", href: "/images/list-files/August2025/Ymu02aBD7P1r9kKc8p1i.pdf" },
-      { title: "4eme", href: "/images/list-files/August2025/H6LXNQFNdH66zsHeZ9um.pdf" },
-      { title: "3eme", href: "/images/list-files/August2025/4YbiS8nrl2hX5ODfohLG.pdf" },
-    ],
-  },
-  {
-    label: "Lycee",
-    color: "bg-primary",
-    category: "fournitures-lycee",
-    lists: [
-      { title: "Seconde", href: "/images/list-files/August2025/r7Nnhm43huO61dv6Ih9L.pdf" },
-      { title: "Premiere", href: "/images/list-files/August2025/j51nEsAzVsi257npEwZg.pdf" },
-      { title: "Terminale", href: "/images/list-files/September2025/l6PgNMwCKnEgx4pF25kO.pdf" },
-    ],
-  },
-];
+interface SupplyListLevel {
+  level: string;
+  items: { name: string; pdfUrl: string }[];
+}
 
-const defaultHealthStaff = [
-  {
-    title: "Infirmiere",
-    name: "Mme Jeanine Gharby",
-    description: "Soins quotidiens, suivi medical et education a la sante.",
-    icon: Heart,
-  },
-  {
-    title: "Medecin",
-    name: "",
-    description: "Examen medical annuel pour tous les eleves.",
-    icon: Stethoscope,
-  },
-  {
-    title: "Optometriste",
-    name: "",
-    description: "Examen visuel annuel de depistage.",
-    icon: Eye,
-  },
-  {
-    title: "Dentiste",
-    name: "Dr Harbouk",
-    description: "Education a l'hygiene bucco-dentaire et depistage.",
-    icon: Smile,
-  },
+/* ── Hardcoded supply group structure for DB document mapping ── */
+const supplyGroupCategories = [
+  { label: "Maternelle", color: "bg-secondary", category: "fournitures-maternelle" },
+  { label: "Elementaire", color: "bg-secondary", category: "fournitures-elementaire" },
+  { label: "College", color: "bg-primary", category: "fournitures-college" },
+  { label: "Lycee", color: "bg-primary", category: "fournitures-lycee" },
 ];
 
 const healthIconMap: Record<string, typeof Heart> = {
@@ -112,41 +51,43 @@ const healthIconMap: Record<string, typeof Heart> = {
 interface InfoPratiquesContentProps {
   documents: DocumentRow[];
   healthStaff: StaffRow[];
+  supplyLists: SupplyListLevel[];
+  healthReferents: string;
 }
 
 /* ── Component ────────────────────────────────────────── */
-export function InfoPratiquesContent({ documents, healthStaff }: InfoPratiquesContentProps) {
-  /* ── Derive supply groups from DB documents or fall back to hardcoded ── */
-  const resolvedSupplyGroups = supplyGroups.map((group) => {
-    const dbDocs = documents.filter((d) => d.category === group.category);
-    if (dbDocs.length > 0) {
-      return {
-        ...group,
-        lists: dbDocs.map((d) => ({ title: d.title, href: d.fileUrl })),
-      };
-    }
-    return group;
-  });
+export function InfoPratiquesContent({ documents, healthStaff, supplyLists, healthReferents }: InfoPratiquesContentProps) {
+  /* ── Build supply groups: prefer settings, then DB documents ── */
+  const resolvedSupplyGroups = supplyLists.length > 0
+    ? supplyLists.map((sl, i) => ({
+        label: sl.level,
+        color: i < 2 ? "bg-secondary" : "bg-primary",
+        lists: sl.items.map((item) => ({ title: item.name, href: item.pdfUrl })),
+      }))
+    : supplyGroupCategories.map((group) => {
+        const dbDocs = documents.filter((d) => d.category === group.category);
+        if (dbDocs.length > 0) {
+          return {
+            label: group.label,
+            color: group.color,
+            lists: dbDocs.map((d) => ({ title: d.title, href: d.fileUrl })),
+          };
+        }
+        return { label: group.label, color: group.color, lists: [] as { title: string; href: string }[] };
+      }).filter((g) => g.lists.length > 0);
 
-  /* ── Derive calendrier/examens docs from DB or fall back ── */
+  /* ── Derive calendrier/examens docs from DB ── */
   const calendrierDoc = documents.find((d) => d.category === "calendrier-scolaire");
   const examensDoc = documents.find((d) => d.category === "examens-officiels");
 
-  /* ── Derive restauration docs from DB or fall back ── */
+  /* ── Derive restauration docs from DB ── */
   const restaurationDocs = documents.filter((d) => d.category === "restauration");
 
-  /* ── Derive recrutement link from DB or fall back ── */
+  /* ── Derive recrutement link from DB ── */
   const recrutementDoc = documents.find((d) => d.category === "recrutement");
 
-  /* ── Resolve health staff ── */
-  const resolvedHealthStaff = healthStaff.length > 0
-    ? healthStaff.map((s) => ({
-        title: s.title,
-        name: s.name,
-        description: s.messageHtml ?? "",
-        icon: healthIconMap[s.title.toLowerCase()] ?? Heart,
-      }))
-    : defaultHealthStaff;
+  /* ── Resolve health staff from DB ── */
+  const hasHealthStaff = healthStaff.length > 0;
 
   return (
     <>
@@ -222,48 +163,48 @@ export function InfoPratiquesContent({ documents, healthStaff }: InfoPratiquesCo
       </section>
 
       {/* ─── Listes de manuels et fournitures ──────────────────── */}
-      <section id="liste" className="relative overflow-hidden bg-background-alt">
-        <WaveDivider fill="var(--color-background)" flip className="relative z-10" />
-        <div className="py-16 md:py-24">
-          <div className="mx-auto max-w-7xl px-4">
-            <SectionHeader
-              title="Listes de manuels et fournitures"
-              subtitle="Annee scolaire 2025-2026"
-            />
-            <div className="mt-12 space-y-8">
-              {resolvedSupplyGroups.map((group) => (
-                <FadeInView key={group.label}>
-                  <div className="overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)]">
-                    {/* Group header */}
-                    <div className={`${group.color} px-6 py-3`}>
-                      <h3 className="text-sm font-bold tracking-wide text-white uppercase">{group.label}</h3>
+      {resolvedSupplyGroups.length > 0 && (
+        <section id="liste" className="relative overflow-hidden bg-background-alt">
+          <WaveDivider fill="var(--color-background)" flip className="relative z-10" />
+          <div className="py-16 md:py-24">
+            <div className="mx-auto max-w-7xl px-4">
+              <SectionHeader
+                title="Listes de manuels et fournitures"
+                subtitle="Annee scolaire 2025-2026"
+              />
+              <div className="mt-12 space-y-8">
+                {resolvedSupplyGroups.map((group) => (
+                  <FadeInView key={group.label}>
+                    <div className="overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)]">
+                      <div className={`${group.color} px-6 py-3`}>
+                        <h3 className="text-sm font-bold tracking-wide text-white uppercase">{group.label}</h3>
+                      </div>
+                      <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
+                        {group.lists.map((list) => (
+                          <a
+                            key={list.title}
+                            href={list.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group flex items-center gap-3 bg-background p-4 transition-colors hover:bg-background-alt"
+                          >
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary transition-colors group-hover:bg-secondary group-hover:text-white">
+                              <FileText className="h-4 w-4" />
+                            </div>
+                            <span className="flex-1 text-sm font-medium text-text">{list.title}</span>
+                            <Download className="h-3.5 w-3.5 text-text-muted opacity-0 transition-all group-hover:text-secondary group-hover:opacity-100" />
+                          </a>
+                        ))}
+                      </div>
                     </div>
-                    {/* List items */}
-                    <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
-                      {group.lists.map((list) => (
-                        <a
-                          key={list.title}
-                          href={list.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group flex items-center gap-3 bg-background p-4 transition-colors hover:bg-background-alt"
-                        >
-                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary transition-colors group-hover:bg-secondary group-hover:text-white">
-                            <FileText className="h-4 w-4" />
-                          </div>
-                          <span className="flex-1 text-sm font-medium text-text">{list.title}</span>
-                          <Download className="h-3.5 w-3.5 text-text-muted opacity-0 transition-all group-hover:text-secondary group-hover:opacity-100" />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </FadeInView>
-              ))}
+                  </FadeInView>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-        <WaveDivider fill="var(--color-background)" />
-      </section>
+          <WaveDivider fill="var(--color-background)" />
+        </section>
+      )}
 
       {/* ─── Restauration ──────────────────────────────────────── */}
       <section id="restauration" className="py-16 md:py-24">
@@ -300,7 +241,7 @@ export function InfoPratiquesContent({ documents, healthStaff }: InfoPratiquesCo
             </StaggerItem>
             <StaggerItem>
               <a
-                href={restaurationDocs.find((d) => d.title.toLowerCase().includes("café molière"))?.fileUrl ?? "/images/restauration-files/February2026/vhQNsAH69rrHNHkytBc7.pdf"}
+                href={restaurationDocs.find((d) => d.title.toLowerCase().includes("cafe moliere") || d.title.toLowerCase().includes("café molière"))?.fileUrl ?? "/images/restauration-files/February2026/vhQNsAH69rrHNHkytBc7.pdf"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative block overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)] transition-all duration-300 hover:-translate-y-1.5"
@@ -308,7 +249,7 @@ export function InfoPratiquesContent({ documents, healthStaff }: InfoPratiquesCo
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src="/images/restauration-files/March2025/Ga6FKNC32Bt3xf28FjPH.jpeg"
-                    alt="Menu Café Molière"
+                    alt="Menu Cafe Moliere"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -318,7 +259,7 @@ export function InfoPratiquesContent({ documents, healthStaff }: InfoPratiquesCo
                     <UtensilsCrossed className="h-5 w-5 text-primary" />
                   </div>
                   <div className="absolute bottom-0 p-6">
-                    <h3 className="text-lg font-bold text-white">Menu Café Molière</h3>
+                    <h3 className="text-lg font-bold text-white">Menu Cafe Moliere</h3>
                     <span className="mt-2 inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors group-hover:text-white">
                       <Download className="h-3.5 w-3.5" /> Telecharger le menu
                     </span>
@@ -336,25 +277,39 @@ export function InfoPratiquesContent({ documents, healthStaff }: InfoPratiquesCo
         <div className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">
             <SectionHeader title="Sante" subtitle="Une equipe medicale au service du bien-etre des eleves" />
-            <StaggerChildren className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {resolvedHealthStaff.map((staff) => {
-                const Icon = staff.icon;
-                return (
-                  <StaggerItem key={staff.title}>
-                    <div className="flex h-full flex-col rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary to-secondary-dark text-white shadow-[var(--shadow-soft)]">
-                        <Icon className="h-5 w-5" />
+            {hasHealthStaff ? (
+              <StaggerChildren className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                {healthStaff.map((staff) => {
+                  const Icon = healthIconMap[staff.title.toLowerCase()] ?? Heart;
+                  return (
+                    <StaggerItem key={staff.id}>
+                      <div className="flex h-full flex-col rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary to-secondary-dark text-white shadow-[var(--shadow-soft)]">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <h3 className="mt-4 text-lg font-bold text-text">{staff.title}</h3>
+                        {staff.name && (
+                          <p className="mt-1 text-sm font-medium text-secondary">{staff.name}</p>
+                        )}
+                        {staff.messageHtml && (
+                          <p className="mt-2 text-sm leading-relaxed text-text-muted">{staff.messageHtml}</p>
+                        )}
                       </div>
-                      <h3 className="mt-4 text-lg font-bold text-text">{staff.title}</h3>
-                      {staff.name && (
-                        <p className="mt-1 text-sm font-medium text-secondary">{staff.name}</p>
-                      )}
-                      <p className="mt-2 text-sm leading-relaxed text-text-muted">{staff.description}</p>
-                    </div>
-                  </StaggerItem>
-                );
-              })}
-            </StaggerChildren>
+                    </StaggerItem>
+                  );
+                })}
+              </StaggerChildren>
+            ) : (
+              <p className="mt-8 text-center text-text-muted">
+                Informations sur l&apos;equipe medicale a venir.
+              </p>
+            )}
+            {healthReferents && (
+              <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-border bg-background p-5 shadow-[var(--shadow-soft)]">
+                <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referents sante</p>
+                <p className="mt-2 text-sm text-text">{healthReferents}</p>
+              </div>
+            )}
           </div>
         </div>
         <WaveDivider fill="var(--color-background)" />

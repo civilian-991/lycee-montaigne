@@ -83,6 +83,7 @@ model CarouselSlide {
   link     String?
   order    Int     @default(0)
 
+  @@index([order])
   @@map("carousel_slides")
 }
 
@@ -93,6 +94,7 @@ model QuickLink {
   target String @default("_self")
   order  Int    @default(0)
 
+  @@index([order])
   @@map("quick_links")
 }
 
@@ -116,6 +118,7 @@ model Certification {
   description String?
   order       Int     @default(0)
 
+  @@index([order])
   @@map("certifications")
 }
 
@@ -170,9 +173,9 @@ model MenuItem {
   parentId String?    @map("parent_id")
   order    Int        @default(0)
   pageId   String?    @map("page_id")
-  parent   MenuItem?  @relation("MenuChildren", fields: [parentId], references: [id])
+  parent   MenuItem?  @relation("MenuChildren", fields: [parentId], references: [id], onDelete: Cascade)
   children MenuItem[] @relation("MenuChildren")
-  page     Page?      @relation(fields: [pageId], references: [id])
+  page     Page?      @relation(fields: [pageId], references: [id], onDelete: SetNull)
 
   @@index([parentId])
   @@map("menu_items")
@@ -222,4 +225,19 @@ model GovernanceInstance {
   updatedAt            DateTime @updatedAt @map("updated_at")
 
   @@map("governance_instances")
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  action     String
+  resource   String
+  resourceId String   @map("resource_id")
+  details    String?  @db.Text
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([createdAt])
+  @@index([resource])
+  @@map("audit_logs")
 }

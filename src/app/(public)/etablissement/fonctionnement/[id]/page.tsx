@@ -51,6 +51,7 @@ export async function generateMetadata({
       return {
         title: dbInstance.title,
         description: dbInstance.subtitle,
+        alternates: { canonical: `/etablissement/fonctionnement/${id}` },
       };
     }
   } catch {
@@ -63,6 +64,7 @@ export async function generateMetadata({
   return {
     title: instance.title,
     description: instance.subtitle,
+    alternates: { canonical: `/etablissement/fonctionnement/${id}` },
   };
 }
 

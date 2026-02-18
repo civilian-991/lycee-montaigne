@@ -1,22 +1,32 @@
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
+import { getSettings } from "@/lib/settings";
 import { ExcellenceContent } from "./excellence-content";
 
 export const metadata: Metadata = {
   title: "Excellence Académique | Lycée Montaigne",
   description:
     "Offre pédagogique, examens, certificats et parcours éducatifs au Lycée Montaigne.",
+  alternates: { canonical: "/excellence-academique" },
 };
 
 export default async function ExcellenceAcademiquePage() {
-  const [certifications, page] = await Promise.all([
-    db.certification.findMany({ orderBy: { order: "asc" } }),
-    db.page.findUnique({
-      where: { slug: "excellence-academique" },
-      include: { sections: { orderBy: { order: "asc" } } },
-    }),
-  ]);
+  const settings = await getSettings();
 
-  const sections = page?.sections ?? [];
-  return <ExcellenceContent certifications={certifications} sections={sections} />;
+  let certifications: Awaited<ReturnType<typeof db.certification.findMany>> = [];
+  try {
+    certifications = await db.certification.findMany({ orderBy: { order: "asc" } });
+  } catch {
+    // DB unreachable
+  }
+
+  return (
+    <ExcellenceContent
+      certifications={certifications}
+      programs={settings.programs}
+      diplomas={settings.diplomas}
+      strategicAxes={settings.strategic_axes}
+      educationalPaths={settings.educational_paths}
+    />
+  );
 }

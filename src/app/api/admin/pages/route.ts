@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { z } from "zod";
 import { pageSchema } from "@/lib/validations";
+import { parseBody, checkOrigin } from "@/lib/api-utils";
 
 export async function GET() {
   try {
@@ -22,24 +23,28 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const csrfError = checkOrigin(req);
+    if (csrfError) return csrfError;
+
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
-    const body = await req.json();
-    const data = pageSchema.parse(body);
+    const parsed = await parseBody(req, pageSchema);
+    if (parsed instanceof NextResponse) return parsed;
+
     const page = await db.page.create({
       data: {
-        slug: data.slug,
-        title: data.title,
-        metaDescription: data.metaDescription || null,
-        ogImage: data.ogImage || null,
+        slug: parsed.slug,
+        title: parsed.title,
+        metaDescription: parsed.metaDescription || null,
+        ogImage: parsed.ogImage || null,
       },
     });
 
     return NextResponse.json(page, { status: 201 });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Données invalides", details: error.issues }, { status: 400 });
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+      return NextResponse.json({ error: "Une page avec ce slug existe deja" }, { status: 409 });
     }
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }

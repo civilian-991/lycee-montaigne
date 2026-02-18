@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Source_Sans_3 } from "next/font/google";
+import { getSiteUrl } from "@/lib/utils";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -21,13 +22,18 @@ export const metadata: Metadata = {
   },
   description:
     "Le Lycee Montaigne de Beit Chabab est un etablissement scolaire francophone au Liban, de la maternelle a la terminale.",
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-  ),
+  metadataBase: new URL(getSiteUrl()),
   openGraph: {
     type: "website",
     locale: "fr_FR",
     siteName: "Lycee Montaigne",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lycee Montaigne -- Beit Chabab",
+    description:
+      "Le Lycee Montaigne de Beit Chabab est un etablissement scolaire francophone au Liban, de la maternelle a la terminale.",
+    site: "@lyceemontaigne",
   },
 };
 

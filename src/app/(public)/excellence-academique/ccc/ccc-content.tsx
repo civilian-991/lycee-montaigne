@@ -11,18 +11,14 @@ import {
 } from "@/components/ui/motion";
 import { WaveDivider } from "@/components/ui/wave-divider";
 import { localImage } from "@/lib/utils";
+import type { CccFunction, CccResource } from "@/lib/settings";
 import {
   Library,
   Monitor,
   Theater,
   BrainCircuit,
   BookOpen,
-  Newspaper,
-  Calendar,
-  Globe,
-  Mic2,
   BookMarked,
-  Users,
   ArrowLeft,
   ExternalLink,
   Mail,
@@ -41,133 +37,27 @@ interface ActivityItemData {
   order: number;
 }
 
-/* ---- Hardcoded fallback data ---- */
-
-const functions: {
-  title: string;
-  description: string;
-  icon: LucideIcon;
-  color: string;
-}[] = [
-  {
-    title: "Espace de travail",
-    description:
-      "Des espaces modulables pour le travail individuel et en groupe : zones de silence, coins lecture, tables collaboratives et mobilier flexible adapte aux besoins des eleves.",
-    icon: Library,
-    color: "from-primary to-primary-dark",
-  },
-  {
-    title: "Acces numerique",
-    description:
-      "Ordinateurs, tablettes et ressources numeriques en libre acces. Un environnement connecte pour la recherche documentaire, les projets multimedia et l'apprentissage autonome.",
-    icon: Monitor,
-    color: "from-[#0891B2] to-[#0E7490]",
-  },
-  {
-    title: "Pole culturel",
-    description:
-      "Un lieu vivant d'expositions, d'evenements culturels, de rencontres avec des auteurs et d'animations litteraires qui enrichissent le parcours artistique et culturel des eleves.",
-    icon: Theater,
-    color: "from-secondary to-secondary-dark",
-  },
-  {
-    title: "Developpement des competences",
-    description:
-      "Formation a la recherche documentaire, education aux medias et a l'information, developpement de l'esprit critique et de l'autonomie intellectuelle.",
-    icon: BrainCircuit,
-    color: "from-[#7C3AED] to-[#6D28D9]",
-  },
-];
-
-const defaultActivities: {
-  title: string;
-  description: string;
-  icon: LucideIcon;
-  image: string;
-}[] = [
-  {
-    title: "Rentree litteraire",
-    description:
-      "Celebration de la rentree litteraire avec decouverte des nouveautes, coups de coeur des documentalistes et mises en avant thematiques.",
-    icon: BookOpen,
-    image:
-      "/images/bcd-ccc-activities/October2025/wFv9DxTPfPBBSkAPj5Mg.jpeg",
-  },
-  {
-    title: "Hommage a Henri Zoghaib",
-    description:
-      "Hommage au poete libanais Henri Zoghaib avec lectures, performances d'eleves et exploration de son oeuvre litteraire.",
-    icon: Mic2,
-    image:
-      "/images/bcd-ccc-activities/August2025/AhQJx4qBNekBpGeyjMwR.jpeg",
-  },
-  {
-    title: "Semaine de la presse et des medias",
-    description:
-      "Semaine dediee a l'education aux medias : analyse de la presse, ateliers d'ecriture journalistique et debats sur l'information.",
-    icon: Newspaper,
-    image:
-      "/images/bcd-ccc-activities/August2025/6WkTnG0H4jldI5KagUt0.png",
-  },
-  {
-    title: "Nuits de la Lecture, 9eme edition",
-    description:
-      "La 9eme edition des Nuits de la Lecture sur le theme du patrimoine : lectures a voix haute, rencontres et ateliers creatifs.",
-    icon: Calendar,
-    image:
-      "/images/bcd-ccc-activities/May2025/fmjdjk2fwuGQDkpDyS63.jpeg",
-  },
-  {
-    title: "Journee de la langue arabe",
-    description:
-      "Celebration de la langue arabe a travers des activites culturelles, des lectures poetiques et des ateliers de calligraphie.",
-    icon: Globe,
-    image:
-      "/images/bcd-ccc-activities/May2025/5ud7anyWXrlJ1RhWxD8s.jpeg",
-  },
-  {
-    title: "Semaine des lycees francais du monde",
-    description:
-      "Participation au reseau AEFE avec des projets collaboratifs, des echanges interculturels et des evenements fedateurs.",
-    icon: Users,
-    image:
-      "/images/bcd-ccc-activities/May2025/XVqppxZDQpQf1Xi0ECqQ.jpg",
-  },
-  {
-    title: "Cercle de lecture",
-    description:
-      "Rencontres regulieres entre lecteurs pour partager, debattre et approfondir la lecture d'oeuvres choisies collectivement.",
-    icon: BookMarked,
-    image:
-      "/images/excellence-bcd-ccc-extras/March2025/rH1Pp2VNCmOq42KoG7Rm.jpeg",
-  },
-];
-
-const resources = [
-  {
-    title: "E-sidoc",
-    description:
-      "Portail documentaire du CCC : catalogue en ligne, ressources numeriques, nouveautes et suggestions de lecture.",
-    href: "https://2050048n.esidoc.fr/",
-    icon: Search,
-  },
-  {
-    title: "Datarays",
-    description:
-      "Systeme de gestion des ressources en langue arabe : ouvrages, periodiques et documents de reference.",
-    href: "#",
-    icon: BookOpen,
-  },
-];
-
 /* ---- Component ---- */
+
+/* Color cycling for CCC function cards */
+const functionColors = [
+  "from-primary to-primary-dark",
+  "from-[#0891B2] to-[#0E7490]",
+  "from-secondary to-secondary-dark",
+  "from-[#7C3AED] to-[#6D28D9]",
+];
+
+/* Icon cycling for CCC function cards */
+const functionIcons = [Library, Monitor, Theater, BrainCircuit];
 
 interface CccContentProps {
   activities: ActivityItemData[];
+  cccFunctions: CccFunction[];
+  cccResources: CccResource[];
+  cccEmail: string;
 }
 
-export function CccContent({ activities }: CccContentProps) {
-  const useDbActivities = activities.length > 0;
+export function CccContent({ activities, cccFunctions, cccResources, cccEmail }: CccContentProps) {
 
   return (
     <>
@@ -267,13 +157,14 @@ export function CccContent({ activities }: CccContentProps) {
             subtitle="Le CCC s'articule autour de quatre fonctions complementaires"
           />
           <StaggerChildren className="mt-12 grid gap-6 sm:grid-cols-2">
-            {functions.map((fn) => {
-              const Icon = fn.icon;
+            {cccFunctions.map((fn, i) => {
+              const Icon = functionIcons[i % functionIcons.length];
+              const color = functionColors[i % functionColors.length];
               return (
                 <StaggerItem key={fn.title}>
                   <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-elevated)]">
                     <div
-                      className={`flex items-center gap-4 bg-gradient-to-r ${fn.color} p-6`}
+                      className={`flex items-center gap-4 bg-gradient-to-r ${color} p-6`}
                     >
                       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-sm transition-transform duration-500 group-hover:scale-110">
                         <Icon
@@ -312,36 +203,33 @@ export function CccContent({ activities }: CccContentProps) {
               subtitle="Des outils numeriques pour explorer, rechercher et apprendre"
             />
 
+            {cccResources.length > 0 && (
             <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2">
-              {resources.map((res) => {
-                const Icon = res.icon;
-                return (
-                  <StaggerItem key={res.title}>
+              {cccResources.map((res) => (
+                  <StaggerItem key={res.name}>
                     <a
-                      href={res.href}
+                      href={res.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="group flex h-full items-start gap-5 rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]"
                     >
                       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary-light text-white shadow-[var(--shadow-soft)]">
-                        <Icon className="h-6 w-6" />
+                        <Search className="h-6 w-6" />
                       </div>
                       <div className="flex-1">
                         <h3 className="flex items-center gap-2 text-lg font-bold text-text transition-colors group-hover:text-primary">
-                          {res.title}
+                          {res.name}
                           <ExternalLink className="h-4 w-4 text-text-muted transition-colors group-hover:text-primary" />
                         </h3>
-                        <p className="mt-1.5 text-sm leading-relaxed text-text-muted">
-                          {res.description}
-                        </p>
                       </div>
                     </a>
                   </StaggerItem>
-                );
-              })}
+              ))}
             </StaggerChildren>
+            )}
 
-            {/* Contact */}
+            {/* Contact — only shown if email is set */}
+            {cccEmail && (
             <FadeInView>
               <div className="mt-10 flex flex-col items-center justify-center gap-3 rounded-[20px] border border-border bg-background p-6 text-center shadow-[var(--shadow-soft)] sm:flex-row sm:text-left">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary/10">
@@ -352,14 +240,15 @@ export function CccContent({ activities }: CccContentProps) {
                     Contactez le CCC
                   </p>
                   <a
-                    href="mailto:ccc@lycee-montaigne.edu.lb"
+                    href={`mailto:${cccEmail}`}
                     className="text-sm text-primary underline-offset-2 transition-colors hover:underline"
                   >
-                    ccc@lycee-montaigne.edu.lb
+                    {cccEmail}
                   </a>
                 </div>
               </div>
             </FadeInView>
+            )}
           </div>
         </div>
         <WaveDivider fill="var(--color-background)" />
@@ -373,76 +262,41 @@ export function CccContent({ activities }: CccContentProps) {
             subtitle="Un programme riche d'animations culturelles tout au long de l'annee"
           />
           <StaggerChildren className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {useDbActivities
-              ? activities.map((activity) => (
-                  <StaggerItem key={activity.id}>
-                    <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]">
-                      {/* Activity photo */}
-                      {localImage(activity.image) && (
-                        <div className="relative aspect-[4/3] overflow-hidden">
-                          <Image
-                            src={localImage(activity.image)!}
-                            alt={activity.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-                        </div>
-                      )}
-                      {/* Content */}
-                      <div className="flex flex-1 flex-col p-5">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-secondary-dark text-white shadow-[var(--shadow-soft)]">
-                            <BookMarked className="h-4 w-4" strokeWidth={1.5} />
-                          </div>
-                          <h3 className="text-base font-bold text-text transition-colors group-hover:text-primary">
-                            {activity.title}
-                          </h3>
-                        </div>
-                        {activity.description && (
-                          <p className="mt-3 flex-1 text-sm leading-relaxed text-text-muted">
-                            {activity.description}
-                          </p>
-                        )}
-                      </div>
+            {activities.map((activity) => (
+              <StaggerItem key={activity.id}>
+                <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]">
+                  {/* Activity photo */}
+                  {localImage(activity.image) && (
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <Image
+                        src={localImage(activity.image)!}
+                        alt={activity.title}
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                     </div>
-                  </StaggerItem>
-                ))
-              : defaultActivities.map((activity) => {
-                  const Icon = activity.icon;
-                  return (
-                    <StaggerItem key={activity.title}>
-                      <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]">
-                        {/* Activity photo */}
-                        <div className="relative aspect-[4/3] overflow-hidden">
-                          <Image
-                            src={activity.image}
-                            alt={activity.title}
-                            fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-                        </div>
-                        {/* Content */}
-                        <div className="flex flex-1 flex-col p-5">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-secondary-dark text-white shadow-[var(--shadow-soft)]">
-                              <Icon className="h-4 w-4" strokeWidth={1.5} />
-                            </div>
-                            <h3 className="text-base font-bold text-text transition-colors group-hover:text-primary">
-                              {activity.title}
-                            </h3>
-                          </div>
-                          <p className="mt-3 flex-1 text-sm leading-relaxed text-text-muted">
-                            {activity.description}
-                          </p>
-                        </div>
+                  )}
+                  {/* Content */}
+                  <div className="flex flex-1 flex-col p-5">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-secondary-dark text-white shadow-[var(--shadow-soft)]">
+                        <BookMarked className="h-4 w-4" strokeWidth={1.5} />
                       </div>
-                    </StaggerItem>
-                  );
-                })}
+                      <h3 className="text-base font-bold text-text transition-colors group-hover:text-primary">
+                        {activity.title}
+                      </h3>
+                    </div>
+                    {activity.description && (
+                      <p className="mt-3 flex-1 text-sm leading-relaxed text-text-muted">
+                        {activity.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </StaggerItem>
+            ))}
           </StaggerChildren>
         </div>
       </section>

@@ -8,15 +8,6 @@ import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion
 import { CheckCircle } from "lucide-react";
 
 /* ── Types ────────────────────────────────────────────── */
-type DocumentRow = {
-  id: string;
-  title: string;
-  fileUrl: string;
-  category: string;
-  academicYear: string | null;
-  order: number;
-};
-
 type PageSectionRow = {
   id: string;
   pageId: string;
@@ -27,32 +18,19 @@ type PageSectionRow = {
   order: number;
 };
 
-/* ── Hardcoded fallback data ─────────────────────────── */
-const defaultRequiredDocs = [
-  "Carnet de vaccination et fiche medicale",
-  "Deux photos d'identite",
-  "Pieces d'identite (libanaises, binationales ou etrangeres)",
-  "Attestation scolaire de l'etablissement actuel",
-  "Bulletins scolaires de l'annee en cours et de l'annee precedente",
-  "Pour le secondaire : copie du Brevet Libanais",
-  "Dispense d'arabe le cas echeant",
-  "Jugement de divorce avec garde le cas echeant",
-];
+interface InscriptionDocumentData {
+  title: string;
+  description: string;
+}
 
 /* ── Props ────────────────────────────────────────────── */
 interface InscriptionsContentProps {
-  documents: DocumentRow[];
   sections: PageSectionRow[];
+  inscriptionDocuments: InscriptionDocumentData[];
 }
 
 /* ── Component ────────────────────────────────────────── */
-export function InscriptionsContent({ documents, sections }: InscriptionsContentProps) {
-  /* ── Derive required docs from DB or fall back ── */
-  const dbInscriptionDocs = documents.filter((d) => d.category === "inscription-documents");
-  const requiredDocs = dbInscriptionDocs.length > 0
-    ? dbInscriptionDocs.map((d) => d.title)
-    : defaultRequiredDocs;
-
+export function InscriptionsContent({ sections, inscriptionDocuments }: InscriptionsContentProps) {
   /* ── Look up CMS sections by key ── */
   const procedureSection = sections.find((s) => s.sectionKey === "procedure");
   const portesOuvertesSection = sections.find((s) => s.sectionKey === "portes-ouvertes");
@@ -74,22 +52,26 @@ export function InscriptionsContent({ documents, sections }: InscriptionsContent
                     className="mt-6 text-text-muted [&>p]:mt-4"
                     dangerouslySetInnerHTML={{ __html: procedureSection.contentHtml }}
                   />
-                ) : (
+                ) : inscriptionDocuments.length > 0 ? (
                   <>
                     <p className="mt-6 text-text-muted">
                       Pour inscrire votre enfant au Lycee Montaigne, veuillez preparer les documents suivants :
                     </p>
                     <StaggerChildren className="mt-6 space-y-3">
-                      {requiredDocs.map((doc) => (
-                        <StaggerItem key={doc}>
+                      {inscriptionDocuments.map((doc) => (
+                        <StaggerItem key={doc.title}>
                           <div className="flex items-start gap-3">
                             <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-secondary" />
-                            <span className="text-sm text-text">{doc}</span>
+                            <span className="text-sm text-text">{doc.title}</span>
                           </div>
                         </StaggerItem>
                       ))}
                     </StaggerChildren>
                   </>
+                ) : (
+                  <p className="mt-6 text-text-muted">
+                    Pour inscrire votre enfant au Lycee Montaigne, veuillez nous contacter pour obtenir la liste des documents requis.
+                  </p>
                 )}
               </div>
               <div className="relative aspect-[3/4] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
