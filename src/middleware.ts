@@ -3,12 +3,9 @@ import { NextResponse } from "next/server";
 import { canAccess, type Role } from "@/lib/permissions";
 
 export default auth((req) => {
-  // Generate a per-request nonce for CSP
-  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
-
   const csp = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}'`,
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://lycee-montaigne.edu.lb https://*.public.blob.vercel-storage.com",
     "font-src 'self' data:",
@@ -65,13 +62,7 @@ export default auth((req) => {
     return response;
   }
 
-  // Pass nonce to Next.js via request header so it auto-applies to injected scripts
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set("x-nonce", nonce);
-
-  const response = NextResponse.next({
-    request: { headers: requestHeaders },
-  });
+  const response = NextResponse.next();
   response.headers.set("Content-Security-Policy", csp);
 
   return response;
