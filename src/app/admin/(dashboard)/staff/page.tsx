@@ -2,9 +2,9 @@ import { Suspense } from "react";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Plus } from "lucide-react";
-import { StaffDeleteButton } from "./delete-button";
 import { SearchInput } from "@/components/admin/search-input";
 import { Pagination } from "@/components/admin/pagination";
+import { StaffSortableList } from "./staff-sortable-list";
 
 const PAGE_SIZE = 20;
 
@@ -52,7 +52,7 @@ export default async function AdminStaffPage({
     <>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-text">Équipe</h1>
+          <h1 className="text-2xl font-bold text-text">Equipe</h1>
           <p className="mt-1 text-sm text-text-muted">{totalCount} membre(s)</p>
         </div>
         <Link
@@ -72,34 +72,15 @@ export default async function AdminStaffPage({
 
       {staff.length === 0 ? (
         <div className="rounded-xl border border-border bg-white p-8 text-center text-sm text-text-muted">
-          {search ? "Aucun résultat pour cette recherche." : "Aucun membre d\u2019équipe pour le moment."}
+          {search ? "Aucun resultat pour cette recherche." : "Aucun membre d\u2019equipe pour le moment."}
         </div>
       ) : (
         sections.map((section) => (
-          <div key={section} className="mb-6">
-            <h2 className="mb-3 text-sm font-semibold uppercase text-text-muted">{section}</h2>
-            <div className="space-y-2">
-              {staff
-                .filter((s) => s.section === section)
-                .map((member) => (
-                  <div key={member.id} className="flex items-center justify-between rounded-xl border border-border bg-white p-4">
-                    <div>
-                      <p className="font-medium text-text">{member.name}</p>
-                      <p className="text-sm text-text-muted">{member.title}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Link
-                        href={`/admin/staff/${member.id}`}
-                        className="rounded px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10"
-                      >
-                        Modifier
-                      </Link>
-                      <StaffDeleteButton id={member.id} />
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </div>
+          <StaffSortableList
+            key={section}
+            section={section}
+            initialStaff={staff.filter((s) => s.section === section)}
+          />
         ))
       )}
 

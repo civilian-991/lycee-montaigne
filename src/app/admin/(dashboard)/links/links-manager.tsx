@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, ExternalLink, Pencil } from "lucide-react";
+import { Plus, Trash2, ExternalLink, Pencil, Loader2 } from "lucide-react";
 import { DeleteModal } from "@/components/admin/delete-modal";
+import { SortableList } from "@/components/admin/sortable-list";
+import { useReorder } from "@/hooks/use-reorder";
 
 interface QuickLink {
   id: string;
@@ -15,6 +17,7 @@ interface QuickLink {
 
 export function LinksManager({ initialLinks }: { initialLinks: QuickLink[] }) {
   const router = useRouter();
+  const [links, setLinks] = useState(initialLinks);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -25,6 +28,7 @@ export function LinksManager({ initialLinks }: { initialLinks: QuickLink[] }) {
   });
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const { saveOrder, saving } = useReorder("links");
 
   function startEdit(link: QuickLink) {
     setEditingId(link.id);
@@ -64,7 +68,7 @@ export function LinksManager({ initialLinks }: { initialLinks: QuickLink[] }) {
       label: form.get("label") as string,
       url: form.get("url") as string,
       target: form.get("target") as string,
-      order: initialLinks.length,
+      order: links.length,
     };
 
     await fetch("/api/admin/links", {
@@ -87,90 +91,106 @@ export function LinksManager({ initialLinks }: { initialLinks: QuickLink[] }) {
     router.refresh();
   }
 
+  function handleReorder(reordered: QuickLink[]) {
+    setLinks(reordered);
+    saveOrder(reordered.map((l, i) => ({ id: l.id, order: i })));
+  }
+
   const inputClass =
     "mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary";
 
   return (
     <div>
+      {saving && (
+        <div className="mb-4 flex items-center gap-2 rounded-lg bg-primary/10 px-3 py-2 text-sm text-primary">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Enregistrement de l&apos;ordre...
+        </div>
+      )}
+
       <div className="space-y-2">
-        {initialLinks.map((link) => (
-          <div key={link.id} className="rounded-xl border border-border bg-white p-4">
-            {editingId === link.id ? (
-              <div className="space-y-3">
-                <div>
-                  <label className="block text-sm font-medium text-text">Libelle *</label>
-                  <input
-                    required
-                    value={editData.label}
-                    onChange={(e) => setEditData({ ...editData, label: e.target.value })}
-                    className={inputClass}
-                  />
+        <SortableList
+          items={links}
+          onReorder={handleReorder}
+          renderItem={(link) => (
+            <div className="rounded-r-xl border border-l-0 border-border bg-white p-4">
+              {editingId === link.id ? (
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-text">Libelle *</label>
+                    <input
+                      required
+                      value={editData.label}
+                      onChange={(e) => setEditData({ ...editData, label: e.target.value })}
+                      className={inputClass}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-text">URL *</label>
+                    <input
+                      required
+                      value={editData.url}
+                      onChange={(e) => setEditData({ ...editData, url: e.target.value })}
+                      className={inputClass}
+                      placeholder="https://... ou /page"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-text">Ouverture</label>
+                    <select
+                      value={editData.target}
+                      onChange={(e) => setEditData({ ...editData, target: e.target.value })}
+                      className={inputClass}
+                    >
+                      <option value="_self">Meme fenetre</option>
+                      <option value="_blank">Nouvel onglet</option>
+                    </select>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => handleUpdate(link.id)}
+                      disabled={loading || !editData.label || !editData.url}
+                      className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-light disabled:opacity-50"
+                    >
+                      {loading ? "Enregistrement..." : "Enregistrer"}
+                    </button>
+                    <button
+                      onClick={cancelEdit}
+                      className="rounded-lg border border-border px-4 py-2 text-sm text-text-muted hover:bg-background-alt"
+                    >
+                      Annuler
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-text">URL *</label>
-                  <input
-                    required
-                    value={editData.url}
-                    onChange={(e) => setEditData({ ...editData, url: e.target.value })}
-                    className={inputClass}
-                    placeholder="https://... ou /page"
-                  />
+              ) : (
+                <div className="flex items-center justify-between">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium text-text">{link.label}</p>
+                    <p className="truncate text-sm text-text-muted">{link.url}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {link.target === "_blank" && <ExternalLink className="h-3.5 w-3.5 text-text-muted" />}
+                    <button
+                      onClick={() => startEdit(link)}
+                      className="rounded p-1.5 text-primary hover:bg-primary/10"
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => setDeleteId(link.id)}
+                      className="rounded p-1.5 text-red-500 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-text">Ouverture</label>
-                  <select
-                    value={editData.target}
-                    onChange={(e) => setEditData({ ...editData, target: e.target.value })}
-                    className={inputClass}
-                  >
-                    <option value="_self">Meme fenetre</option>
-                    <option value="_blank">Nouvel onglet</option>
-                  </select>
-                </div>
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => handleUpdate(link.id)}
-                    disabled={loading || !editData.label || !editData.url}
-                    className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-light disabled:opacity-50"
-                  >
-                    {loading ? "Enregistrement..." : "Enregistrer"}
-                  </button>
-                  <button
-                    onClick={cancelEdit}
-                    className="rounded-lg border border-border px-4 py-2 text-sm text-text-muted hover:bg-background-alt"
-                  >
-                    Annuler
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center justify-between">
-                <div className="min-w-0 flex-1">
-                  <p className="font-medium text-text">{link.label}</p>
-                  <p className="truncate text-sm text-text-muted">{link.url}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  {link.target === "_blank" && <ExternalLink className="h-3.5 w-3.5 text-text-muted" />}
-                  <button
-                    onClick={() => startEdit(link)}
-                    className="rounded p-1.5 text-primary hover:bg-primary/10"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => setDeleteId(link.id)}
-                    className="rounded p-1.5 text-red-500 hover:bg-red-50"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
+              )}
+            </div>
+          )}
+        />
       </div>
 
-      {initialLinks.length === 0 && !showForm && (
+      {links.length === 0 && !showForm && (
         <div className="rounded-xl border border-border bg-white p-8 text-center text-sm text-text-muted">
           Aucun lien rapide pour le moment.
         </div>

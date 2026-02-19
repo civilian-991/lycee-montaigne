@@ -4,11 +4,18 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { menuItemSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
+import { logAudit } from "@/lib/audit";
+import { canAccess, type Role } from "@/lib/permissions";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+
+    const userRole = session.user?.role as Role;
+    if (!canAccess(userRole, "menu-items")) {
+      return NextResponse.json({ error: "Accès non autorisé" }, { status: 403 });
+    }
 
     const { id } = await params;
     const item = await db.menuItem.findUnique({
@@ -31,6 +38,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
+    const userRole = session.user?.role as Role;
+    if (!canAccess(userRole, "menu-items")) {
+      return NextResponse.json({ error: "Accès non autorisé" }, { status: 403 });
+    }
+
     const { id } = await params;
     const parsed = await parseBody(req, menuItemSchema.partial());
     if (parsed instanceof NextResponse) return parsed;
@@ -46,6 +58,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       },
     });
 
+    await logAudit(session.user!.id!, "UPDATE", "menuItem", updated.id, { label: updated.label });
     return NextResponse.json(updated);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
@@ -63,11 +76,17 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
+    const userRole = session.user?.role as Role;
+    if (!canAccess(userRole, "menu-items")) {
+      return NextResponse.json({ error: "Accès non autorisé" }, { status: 403 });
+    }
+
     const { id } = await params;
     const existing = await db.menuItem.findUnique({ where: { id } });
     if (!existing) return NextResponse.json({ error: "Élément introuvable" }, { status: 404 });
 
     await db.menuItem.delete({ where: { id } });
+    await logAudit(session.user!.id!, "DELETE", "menuItem", id, { label: existing.label });
 
     return NextResponse.json({ success: true });
   } catch {

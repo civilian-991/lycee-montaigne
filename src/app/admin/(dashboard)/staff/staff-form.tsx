@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 
 interface StaffFormProps {
   initialData?: {
@@ -18,6 +19,7 @@ export function StaffForm({ initialData }: StaffFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [messageHtml, setMessageHtml] = useState(initialData?.messageHtml || "");
   const isEdit = !!initialData;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -30,7 +32,7 @@ export function StaffForm({ initialData }: StaffFormProps) {
       name: form.get("name") as string,
       title: form.get("title") as string,
       photo: (form.get("photo") as string) || null,
-      messageHtml: (form.get("messageHtml") as string) || null,
+      messageHtml: messageHtml || null,
       section: form.get("section") as string,
     };
 
@@ -71,18 +73,20 @@ export function StaffForm({ initialData }: StaffFormProps) {
           <select id="section" name="section" required defaultValue={initialData?.section || "direction"} className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary">
             <option value="direction">Direction</option>
             <option value="administration">Administration</option>
-            <option value="comite">Comité des parents</option>
+            <option value="comite">Comite des parents</option>
           </select>
         </div>
-        <div>
-          <label htmlFor="messageHtml" className="block text-sm font-medium text-text">Message</label>
-          <textarea id="messageHtml" name="messageHtml" rows={5} defaultValue={initialData?.messageHtml || ""} className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary" />
-        </div>
+        <RichTextEditor
+          value={messageHtml}
+          onChange={setMessageHtml}
+          label="Message"
+          placeholder="Message du membre..."
+        />
       </div>
       {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
       <div className="mt-6 flex gap-3">
         <button type="submit" disabled={loading} className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-light disabled:opacity-50">
-          {loading ? "Enregistrement..." : isEdit ? "Mettre à jour" : "Créer"}
+          {loading ? "Enregistrement..." : isEdit ? "Mettre a jour" : "Creer"}
         </button>
         <button type="button" onClick={() => router.back()} className="rounded-lg border border-border px-5 py-2.5 text-sm font-medium text-text-muted hover:bg-background-alt">
           Annuler

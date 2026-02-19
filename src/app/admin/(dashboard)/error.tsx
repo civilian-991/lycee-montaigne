@@ -14,7 +14,9 @@ export default function AdminError({
           Erreur inattendue
         </h2>
         <p className="mt-2 text-sm text-red-600">
-          {error.message || "Une erreur s'est produite dans le panneau d'administration."}
+          {process.env.NODE_ENV === "development"
+            ? error.message || "Une erreur s'est produite dans le panneau d'administration."
+            : "Une erreur est survenue."}
         </p>
         {error.digest && (
           <p className="mt-1 text-xs text-red-400">Ref: {error.digest}</p>

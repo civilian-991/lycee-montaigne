@@ -2,10 +2,10 @@ import { Suspense } from "react";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Plus } from "lucide-react";
-import { ActivityDeleteButton } from "./delete-button";
 import { SearchInput } from "@/components/admin/search-input";
 import { Pagination } from "@/components/admin/pagination";
 import { parsePagination, totalPages as computeTotalPages } from "@/lib/admin-utils";
+import { ActivitiesSortableList } from "./activities-sortable-list";
 
 export default async function AdminActivitiesPage({
   searchParams,
@@ -51,8 +51,8 @@ export default async function AdminActivitiesPage({
     <>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-text">Activités</h1>
-          <p className="mt-1 text-sm text-text-muted">{totalCount} activité(s)</p>
+          <h1 className="text-2xl font-bold text-text">Activites</h1>
+          <p className="mt-1 text-sm text-text-muted">{totalCount} activite(s)</p>
         </div>
         <Link
           href="/admin/activities/new"
@@ -65,43 +65,21 @@ export default async function AdminActivitiesPage({
 
       <div className="mb-4 max-w-sm">
         <Suspense fallback={null}>
-          <SearchInput placeholder="Rechercher une activité..." />
+          <SearchInput placeholder="Rechercher une activite..." />
         </Suspense>
       </div>
 
       {items.length === 0 ? (
         <div className="rounded-xl border border-border bg-white p-8 text-center text-sm text-text-muted">
-          {search ? "Aucun résultat pour cette recherche." : "Aucune activité pour le moment."}
+          {search ? "Aucun resultat pour cette recherche." : "Aucune activite pour le moment."}
         </div>
       ) : (
         categories.map((category) => (
-          <div key={category} className="mb-6">
-            <h2 className="mb-3 text-sm font-semibold uppercase text-text-muted">{category}</h2>
-            <div className="space-y-2">
-              {items
-                .filter((item) => item.category === category)
-                .map((item) => (
-                  <div key={item.id} className="flex items-center justify-between rounded-xl border border-border bg-white p-4">
-                    <div>
-                      <p className="font-medium text-text">{item.title}</p>
-                      {item.description && (
-                        <p className="mt-0.5 text-sm text-text-muted line-clamp-1">{item.description}</p>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-text-muted">#{item.order}</span>
-                      <Link
-                        href={`/admin/activities/${item.id}`}
-                        className="rounded px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10"
-                      >
-                        Modifier
-                      </Link>
-                      <ActivityDeleteButton id={item.id} />
-                    </div>
-                  </div>
-                ))}
-            </div>
-          </div>
+          <ActivitiesSortableList
+            key={category}
+            category={category}
+            initialItems={items.filter((item) => item.category === category)}
+          />
         ))
       )}
 

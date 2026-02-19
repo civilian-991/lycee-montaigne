@@ -6,6 +6,7 @@ import { DeleteButton } from "./delete-button";
 import { ToggleActiveButton } from "./toggle-active-button";
 import { Pagination } from "@/components/admin/pagination";
 import { SearchInput } from "@/components/admin/search-input";
+import { StatusFilter } from "@/components/admin/status-filter";
 import { parsePagination, parseSearch, totalPages } from "@/lib/admin-utils";
 
 export default async function AdminAnnouncementsPage({
@@ -16,15 +17,18 @@ export default async function AdminAnnouncementsPage({
   const sp = await searchParams;
   const { page, skip, take, pageSize } = parsePagination(sp);
   const q = parseSearch(sp);
+  const status = (sp.status as string) || undefined;
 
-  const where = q
-    ? { title: { contains: q, mode: "insensitive" as const } }
-    : {};
+  const where = {
+    ...(q && { title: { contains: q, mode: "insensitive" as const } }),
+    ...(status && { status: status as any }),
+  };
 
   let items: {
     id: string;
     title: string;
     active: boolean;
+    status: string;
     startDate: Date | null;
     endDate: Date | null;
     createdAt: Date;
@@ -40,6 +44,7 @@ export default async function AdminAnnouncementsPage({
           id: true,
           title: true,
           active: true,
+          status: true,
           startDate: true,
           endDate: true,
           createdAt: true,
@@ -72,9 +77,14 @@ export default async function AdminAnnouncementsPage({
         </Link>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex items-center gap-3">
+        <div className="flex-1">
+          <Suspense fallback={null}>
+            <SearchInput placeholder="Rechercher une annonce..." />
+          </Suspense>
+        </div>
         <Suspense fallback={null}>
-          <SearchInput placeholder="Rechercher une annonce..." />
+          <StatusFilter />
         </Suspense>
       </div>
 
@@ -88,6 +98,7 @@ export default async function AdminAnnouncementsPage({
             <thead className="border-b border-border bg-background-alt text-left text-xs font-medium uppercase text-text-muted">
               <tr>
                 <th scope="col" className="px-4 py-3">Titre</th>
+                <th scope="col" className="px-4 py-3">Actif</th>
                 <th scope="col" className="px-4 py-3">Statut</th>
                 <th scope="col" className="px-4 py-3">Début</th>
                 <th scope="col" className="px-4 py-3">Fin</th>
@@ -101,6 +112,13 @@ export default async function AdminAnnouncementsPage({
                   <td className="px-4 py-3 font-medium text-text">{item.title}</td>
                   <td className="px-4 py-3">
                     <ToggleActiveButton id={item.id} active={item.active} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                      item.status === "PUBLISHED" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
+                    }`}>
+                      {item.status === "PUBLISHED" ? "Publié" : "Brouillon"}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-text-muted">
                     {item.startDate ? fmt.format(item.startDate) : "—"}

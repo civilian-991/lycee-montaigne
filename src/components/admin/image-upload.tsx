@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { Upload, X, Image as ImageIcon } from "lucide-react";
+import { Upload, X, Image as ImageIcon, FolderOpen } from "lucide-react";
+import { MediaPickerModal } from "./media-picker";
 
 interface ImageUploadProps {
   value: string;
@@ -13,7 +14,8 @@ export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadPro
   const [uploading, setUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [mode, setMode] = useState<"upload" | "url">(value ? "url" : "upload");
+  const [mode, setMode] = useState<"upload" | "url" | "browse">(value ? "url" : "upload");
+  const [pickerOpen, setPickerOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = useCallback(
@@ -52,23 +54,25 @@ export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadPro
     if (file) handleFile(file);
   }
 
+  const tabClass = (tab: string) =>
+    `rounded-lg px-3 py-1 text-xs font-medium ${
+      mode === tab
+        ? "bg-primary text-white"
+        : "border border-border text-text-muted hover:bg-background-alt"
+    }`;
+
   return (
     <div>
       <label className="block text-sm font-medium text-text">{label}</label>
       <div className="mt-1 flex gap-2">
-        <button
-          type="button"
-          onClick={() => setMode("upload")}
-          className={`rounded-lg px-3 py-1 text-xs font-medium ${mode === "upload" ? "bg-primary text-white" : "border border-border text-text-muted hover:bg-background-alt"}`}
-        >
+        <button type="button" onClick={() => setMode("upload")} className={tabClass("upload")}>
           Upload
         </button>
-        <button
-          type="button"
-          onClick={() => setMode("url")}
-          className={`rounded-lg px-3 py-1 text-xs font-medium ${mode === "url" ? "bg-primary text-white" : "border border-border text-text-muted hover:bg-background-alt"}`}
-        >
+        <button type="button" onClick={() => setMode("url")} className={tabClass("url")}>
           URL
+        </button>
+        <button type="button" onClick={() => setMode("browse")} className={tabClass("browse")}>
+          Bibliotheque
         </button>
       </div>
 
@@ -77,7 +81,7 @@ export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadPro
           <div
             tabIndex={0}
             role="button"
-            aria-label="Déposer ou sélectionner un fichier"
+            aria-label="Deposer ou selectionner un fichier"
             onDragOver={(e) => {
               e.preventDefault();
               setDragOver(true);
@@ -111,7 +115,7 @@ export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadPro
             <p className="mt-1 text-sm text-red-600">{error}</p>
           )}
         </>
-      ) : (
+      ) : mode === "url" ? (
         <input
           type="url"
           value={value}
@@ -119,6 +123,27 @@ export function ImageUpload({ value, onChange, label = "Image" }: ImageUploadPro
           placeholder="https://..."
           className="mt-2 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         />
+      ) : (
+        <>
+          <button
+            type="button"
+            onClick={() => setPickerOpen(true)}
+            className="mt-2 flex w-full cursor-pointer flex-col items-center gap-2 rounded-lg border-2 border-dashed border-border p-6 text-center transition-colors hover:border-primary/50"
+          >
+            <FolderOpen className="h-6 w-6 text-text-muted" />
+            <p className="text-sm text-text-muted">
+              <span className="font-medium text-primary">Parcourir la mediatheque</span>
+            </p>
+          </button>
+          <MediaPickerModal
+            open={pickerOpen}
+            onClose={() => setPickerOpen(false)}
+            onSelect={(url) => {
+              onChange(url);
+              setPickerOpen(false);
+            }}
+          />
+        </>
       )}
 
       {value && (

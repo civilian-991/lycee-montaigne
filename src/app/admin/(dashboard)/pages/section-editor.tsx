@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, Plus, Save, Trash2 } from "lucide-react";
 import { DeleteModal } from "@/components/admin/delete-modal";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 
 interface Section {
   id: string;
@@ -33,10 +34,20 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
 
   const [movingId, setMovingId] = useState<string | null>(null);
 
+  // Rich text state for each section's contentHtml, keyed by section id
+  const [contentHtmlMap, setContentHtmlMap] = useState<Record<string, string>>(() => {
+    const map: Record<string, string> = {};
+    for (const s of initialSections) {
+      map[s.id] = s.contentHtml || "";
+    }
+    return map;
+  });
+
   // New section form state
   const [showNewForm, setShowNewForm] = useState(false);
   const [newLoading, setNewLoading] = useState(false);
   const [newError, setNewError] = useState("");
+  const [newContentHtml, setNewContentHtml] = useState("");
 
   async function handleSaveSection(sectionId: string, form: FormData) {
     setSaveError(null);
@@ -44,7 +55,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
     const body = {
       sectionKey: form.get("sectionKey") as string,
       title: (form.get("title") as string) || null,
-      contentHtml: (form.get("contentHtml") as string) || null,
+      contentHtml: contentHtmlMap[sectionId] || null,
       image: (form.get("image") as string) || null,
       order: parseInt(form.get("order") as string, 10) || 0,
     };
@@ -62,6 +73,8 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
       setSections((prev) =>
         prev.map((s) => (s.id === sectionId ? updated : s)).sort((a, b) => a.order - b.order)
       );
+      // Sync the content map with the server response
+      setContentHtmlMap((prev) => ({ ...prev, [sectionId]: updated.contentHtml || "" }));
     } catch {
       setSaveError("Erreur lors de la sauvegarde.");
     } finally {
@@ -78,6 +91,11 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
         method: "DELETE",
       });
       setSections((prev) => prev.filter((s) => s.id !== deleteTarget));
+      setContentHtmlMap((prev) => {
+        const next = { ...prev };
+        delete next[deleteTarget];
+        return next;
+      });
       setDeleteTarget(null);
     } catch {
       setSaveError("Erreur lors de la suppression.");
@@ -95,7 +113,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
     const body = {
       sectionKey: form.get("sectionKey") as string,
       title: (form.get("title") as string) || null,
-      contentHtml: (form.get("contentHtml") as string) || null,
+      contentHtml: newContentHtml || null,
       image: (form.get("image") as string) || null,
       order: parseInt(form.get("order") as string, 10) || 0,
     };
@@ -111,12 +129,14 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
 
       const created = await res.json();
       setSections((prev) => [...prev, created].sort((a, b) => a.order - b.order));
+      setContentHtmlMap((prev) => ({ ...prev, [created.id]: created.contentHtml || "" }));
       setShowNewForm(false);
+      setNewContentHtml("");
       setExpandedId(created.id);
       router.refresh();
       (e.target as HTMLFormElement).reset();
     } catch {
-      setNewError("Erreur lors de la création. Vérifiez que la clé de section est unique.");
+      setNewError("Erreur lors de la creation. Verifiez que la cle de section est unique.");
     } finally {
       setNewLoading(false);
     }
@@ -152,7 +172,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
         return next.sort((a, b) => a.order - b.order);
       });
     } catch {
-      setSaveError("Erreur lors du déplacement.");
+      setSaveError("Erreur lors du deplacement.");
     } finally {
       setMovingId(null);
     }
@@ -187,7 +207,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="new-sectionKey" className="block text-sm font-medium text-text">
-                Clé de section *
+                Cle de section *
               </label>
               <input
                 id="new-sectionKey"
@@ -204,14 +224,10 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
               <input id="new-title" name="title" className={inputClass} />
             </div>
             <div className="sm:col-span-2">
-              <label htmlFor="new-contentHtml" className="block text-sm font-medium text-text">
-                Contenu HTML
-              </label>
-              <textarea
-                id="new-contentHtml"
-                name="contentHtml"
-                rows={4}
-                className={inputClass}
+              <RichTextEditor
+                value={newContentHtml}
+                onChange={setNewContentHtml}
+                label="Contenu"
               />
             </div>
             <div>
@@ -246,7 +262,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
               disabled={newLoading}
               className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-light disabled:opacity-50"
             >
-              {newLoading ? "Création..." : "Créer la section"}
+              {newLoading ? "Creation..." : "Creer la section"}
             </button>
             <button
               type="button"
@@ -338,7 +354,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
                         <label className="block text-sm font-medium text-text">
-                          Clé de section *
+                          Cle de section *
                         </label>
                         <input
                           name="sectionKey"
@@ -356,14 +372,12 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
                         />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-sm font-medium text-text">
-                          Contenu HTML
-                        </label>
-                        <textarea
-                          name="contentHtml"
-                          rows={6}
-                          defaultValue={section.contentHtml || ""}
-                          className={inputClass}
+                        <RichTextEditor
+                          value={contentHtmlMap[section.id] || ""}
+                          onChange={(html) =>
+                            setContentHtmlMap((prev) => ({ ...prev, [section.id]: html }))
+                          }
+                          label="Contenu"
                         />
                       </div>
                       <div>
@@ -420,7 +434,7 @@ export function SectionEditor({ pageId, initialSections }: SectionEditorProps) {
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDeleteSection}
         title="Supprimer cette section"
-        description="Cette section sera définitivement supprimée. Cette action est irréversible."
+        description="Cette section sera definitivement supprimee. Cette action est irreversible."
         loading={deleteLoading}
       />
     </div>

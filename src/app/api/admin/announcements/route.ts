@@ -5,12 +5,20 @@ import { announcementSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { cleanHtml } from "@/lib/sanitize";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
-    const items = await db.announcement.findMany({ orderBy: { createdAt: "desc" } });
+    const { searchParams } = new URL(req.url);
+    const status = searchParams.get("status");
+
+    const items = await db.announcement.findMany({
+      where: {
+        ...(status && { status: status as any }),
+      },
+      orderBy: { createdAt: "desc" },
+    });
     return NextResponse.json(items);
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
@@ -35,6 +43,7 @@ export async function POST(req: Request) {
         active: parsed.active ?? true,
         startDate: parsed.startDate ? new Date(parsed.startDate) : null,
         endDate: parsed.endDate ? new Date(parsed.endDate) : null,
+        status: parsed.status,
       },
     });
 

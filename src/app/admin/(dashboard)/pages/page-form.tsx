@@ -10,6 +10,7 @@ interface PageFormProps {
     title: string;
     metaDescription: string | null;
     ogImage: string | null;
+    status: string;
   };
 }
 
@@ -33,6 +34,7 @@ export function PageForm({ initialData }: PageFormProps) {
       title: form.get("title") as string,
       metaDescription: (form.get("metaDescription") as string) || null,
       ogImage: (form.get("ogImage") as string) || null,
+      status: form.get("status") as string,
     };
 
     try {
@@ -106,6 +108,18 @@ export function PageForm({ initialData }: PageFormProps) {
             className={inputClass}
             placeholder="https://..."
           />
+        </div>
+        <div>
+          <label htmlFor="status" className="block text-sm font-medium text-text">Statut</label>
+          <select
+            id="status"
+            name="status"
+            defaultValue={initialData?.status ?? "PUBLISHED"}
+            className={inputClass}
+          >
+            <option value="PUBLISHED">Publié</option>
+            <option value="DRAFT">Brouillon</option>
+          </select>
         </div>
       </div>
 

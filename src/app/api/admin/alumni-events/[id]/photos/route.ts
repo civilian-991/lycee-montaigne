@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { alumniPhotoSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
+import { logAudit } from "@/lib/audit";
 
 export async function POST(
   req: Request,
@@ -28,6 +29,7 @@ export async function POST(
       },
     });
 
+    await logAudit(session.user!.id!, "CREATE", "alumniPhoto", photo.id, { eventId: id });
     return NextResponse.json(photo, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

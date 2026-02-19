@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { alumniEventSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { cleanHtmlNullable } from "@/lib/sanitize";
+import { logAudit } from "@/lib/audit";
 
 export async function GET(req: Request) {
   try {
@@ -50,6 +51,7 @@ export async function POST(req: Request) {
       },
     });
 
+    await logAudit(session.user!.id!, "CREATE", "alumniEvent", event.id, { title: event.title });
     return NextResponse.json(event, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

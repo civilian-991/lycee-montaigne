@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default async function EtablissementPage() {
-  const findPage = () => db.page.findUnique({
-    where: { slug: PAGE_SLUGS.etablissement },
+  const findPage = () => db.page.findFirst({
+    where: { slug: PAGE_SLUGS.etablissement, status: "PUBLISHED" },
     include: { sections: { orderBy: { order: "asc" } } },
   });
   const findGov = () => db.governanceInstance.findMany({

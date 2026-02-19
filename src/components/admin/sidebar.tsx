@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import {
   LayoutDashboard,
   Newspaper,
@@ -25,9 +25,22 @@ import {
   Navigation2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { canAccess, type Role } from "@/lib/permissions";
 
-const navSections = [
+type NavItem = {
+  label: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  resource?: string;
+};
+
+type NavSection = {
+  title?: string;
+  items: NavItem[];
+};
+
+const navSections: NavSection[] = [
   {
     items: [
       { label: "Tableau de bord", href: "/admin", icon: LayoutDashboard },
@@ -36,26 +49,26 @@ const navSections = [
   {
     title: "Contenu",
     items: [
-      { label: "Actualités", href: "/admin/news", icon: Newspaper },
-      { label: "Documents", href: "/admin/documents", icon: FileText },
-      { label: "Annonces", href: "/admin/announcements", icon: Megaphone },
-      { label: "Pages", href: "/admin/pages", icon: BookOpen },
-      { label: "Anciens", href: "/admin/alumni-events", icon: GraduationCap },
-      { label: "Activités", href: "/admin/activities", icon: Activity },
-      { label: "Certifications", href: "/admin/certifications", icon: Award },
-      { label: "Instances", href: "/admin/governance-instances", icon: Building2 },
+      { label: "Actualités", href: "/admin/news", icon: Newspaper, resource: "news" },
+      { label: "Documents", href: "/admin/documents", icon: FileText, resource: "documents" },
+      { label: "Annonces", href: "/admin/announcements", icon: Megaphone, resource: "announcements" },
+      { label: "Pages", href: "/admin/pages", icon: BookOpen, resource: "pages" },
+      { label: "Anciens", href: "/admin/alumni-events", icon: GraduationCap, resource: "alumni-events" },
+      { label: "Activités", href: "/admin/activities", icon: Activity, resource: "activities" },
+      { label: "Certifications", href: "/admin/certifications", icon: Award, resource: "certifications" },
+      { label: "Instances", href: "/admin/governance-instances", icon: Building2, resource: "governance-instances" },
     ],
   },
   {
     title: "Gestion",
     items: [
-      { label: "Carousel", href: "/admin/carousel", icon: Image },
-      { label: "Liens rapides", href: "/admin/links", icon: Link2 },
-      { label: "Équipe", href: "/admin/staff", icon: Users },
-      { label: "Messages", href: "/admin/contact-submissions", icon: Mail },
-      { label: "Navigation", href: "/admin/menu-items", icon: Navigation2 },
-      { label: "Médias", href: "/admin/media", icon: FolderOpen },
-      { label: "Paramètres", href: "/admin/settings", icon: Settings },
+      { label: "Carousel", href: "/admin/carousel", icon: Image, resource: "carousel" },
+      { label: "Liens rapides", href: "/admin/links", icon: Link2, resource: "links" },
+      { label: "Équipe", href: "/admin/staff", icon: Users, resource: "staff" },
+      { label: "Messages", href: "/admin/contact-submissions", icon: Mail, resource: "contact-submissions" },
+      { label: "Navigation", href: "/admin/menu-items", icon: Navigation2, resource: "menu-items" },
+      { label: "Médias", href: "/admin/media", icon: FolderOpen, resource: "media" },
+      { label: "Paramètres", href: "/admin/settings", icon: Settings, resource: "settings" },
     ],
   },
 ];
@@ -63,6 +76,20 @@ const navSections = [
 export function AdminSidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
+  const userRole = (session?.user?.role ?? "EDITOR") as Role;
+
+  // Filter nav sections based on role
+  const filteredSections = useMemo(() => {
+    return navSections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter(
+          (item) => !item.resource || canAccess(userRole, item.resource)
+        ),
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [userRole]);
 
   // Escape key handler for mobile sidebar
   useEffect(() => {
@@ -88,7 +115,7 @@ export function AdminSidebar() {
         </div>
       </div>
       <nav className="flex-1 overflow-y-auto p-3">
-        {navSections.map((section, sIdx) => (
+        {filteredSections.map((section, sIdx) => (
           <div key={sIdx}>
             {section.title && (
               <p className="mb-1 mt-4 px-3 text-xs font-semibold uppercase tracking-wider text-text-muted/60">

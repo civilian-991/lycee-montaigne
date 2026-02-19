@@ -47,6 +47,7 @@ export async function PUT(
         active: parsed.active ?? true,
         startDate: parsed.startDate ? new Date(parsed.startDate) : null,
         endDate: parsed.endDate ? new Date(parsed.endDate) : null,
+        status: parsed.status,
       },
     });
 

@@ -1,24 +1,25 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { z } from "zod";
 import { contactFormSchema } from "@/lib/validations";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { parseBody } from "@/lib/api-utils";
+import { contactLimiter, checkRateLimit } from "@/lib/rate-limit";
 
 export async function POST(request: Request) {
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
 
-  const rl = checkRateLimit(`contact:${ip}`);
+  const rl = await checkRateLimit(contactLimiter, `contact:${ip}`);
   if (!rl.allowed) {
+    const retryAfter = rl.retryAfterMs ? Math.ceil(rl.retryAfterMs / 1000) : 60;
     return NextResponse.json(
-      { error: "Trop de requêtes. Veuillez réessayer dans une minute." },
-      { status: 429, headers: { "Retry-After": String(Math.ceil(rl.retryAfterMs / 1000)) } },
+      { error: "Trop de requêtes. Veuillez réessayer plus tard." },
+      { status: 429, headers: { "Retry-After": String(retryAfter) } },
     );
   }
 
   try {
-    const body = await request.json();
-    const data = contactFormSchema.parse(body);
+    const data = await parseBody(request, contactFormSchema);
+    if (data instanceof NextResponse) return data;
 
     await db.contactSubmission.create({
       data: {
@@ -30,10 +31,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Données invalides", details: error.issues }, { status: 400 });
-    }
+  } catch {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

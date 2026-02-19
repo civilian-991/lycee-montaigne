@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 
 interface EventFormProps {
   initialData?: {
@@ -16,6 +17,7 @@ export function EventForm({ initialData }: EventFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [descriptionHtml, setDescriptionHtml] = useState(initialData?.descriptionHtml || "");
   const isEdit = !!initialData;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -27,7 +29,7 @@ export function EventForm({ initialData }: EventFormProps) {
     const body = {
       title: form.get("title") as string,
       date: form.get("date") as string,
-      descriptionHtml: (form.get("descriptionHtml") as string) || null,
+      descriptionHtml: descriptionHtml || null,
     };
 
     try {
@@ -78,19 +80,12 @@ export function EventForm({ initialData }: EventFormProps) {
             className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
-        <div>
-          <label htmlFor="descriptionHtml" className="block text-sm font-medium text-text">
-            Description (HTML)
-          </label>
-          <textarea
-            id="descriptionHtml"
-            name="descriptionHtml"
-            rows={6}
-            defaultValue={initialData?.descriptionHtml || ""}
-            className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-            placeholder="<p>Description de l'événement...</p>"
-          />
-        </div>
+        <RichTextEditor
+          value={descriptionHtml}
+          onChange={setDescriptionHtml}
+          label="Description"
+          placeholder="Description de l'evenement..."
+        />
       </div>
 
       {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
@@ -101,7 +96,7 @@ export function EventForm({ initialData }: EventFormProps) {
           disabled={loading}
           className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-light disabled:opacity-50"
         >
-          {loading ? "Enregistrement..." : isEdit ? "Mettre à jour" : "Créer"}
+          {loading ? "Enregistrement..." : isEdit ? "Mettre a jour" : "Creer"}
         </button>
         <button
           type="button"

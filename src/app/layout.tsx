@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Source_Sans_3 } from "next/font/google";
 import { getSiteUrl } from "@/lib/utils";
+import "@/lib/env"; // Force env validation on every cold start
 import "./globals.css";
 
 const fraunces = Fraunces({

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 
 interface GovernanceInstanceFormProps {
   initialData?: {
@@ -25,6 +26,9 @@ export function GovernanceInstanceForm({ initialData }: GovernanceInstanceFormPr
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [descriptionHtml, setDescriptionHtml] = useState(initialData?.descriptionHtml || "");
+  const [compositionHtml, setCompositionHtml] = useState(initialData?.compositionHtml || "");
+  const [responsibilitiesHtml, setResponsibilitiesHtml] = useState(initialData?.responsibilitiesHtml || "");
   const isEdit = !!initialData;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -39,12 +43,12 @@ export function GovernanceInstanceForm({ initialData }: GovernanceInstanceFormPr
       subtitle: form.get("subtitle") as string,
       iconName: (form.get("iconName") as string) || "Building2",
       accentColor: (form.get("accentColor") as string) || "from-primary to-primary-dark",
-      descriptionHtml: form.get("descriptionHtml") as string,
-      compositionHtml: form.get("compositionHtml") as string,
+      descriptionHtml,
+      compositionHtml,
       membersJson: (form.get("membersJson") as string) || null,
       meetingFrequency: (form.get("meetingFrequency") as string) || null,
       presidence: (form.get("presidence") as string) || null,
-      responsibilitiesHtml: form.get("responsibilitiesHtml") as string,
+      responsibilitiesHtml,
       order: parseInt((form.get("order") as string) || "0", 10),
     };
 
@@ -156,37 +160,21 @@ export function GovernanceInstanceForm({ initialData }: GovernanceInstanceFormPr
           </div>
         </div>
 
-        <div>
-          <label htmlFor="descriptionHtml" className="block text-sm font-medium text-text">
-            Description (HTML) *
-          </label>
-          <textarea
-            id="descriptionHtml"
-            name="descriptionHtml"
-            required
-            rows={6}
-            defaultValue={initialData?.descriptionHtml}
-            className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-            placeholder="<p>Description de l'instance...</p>"
-          />
-          <p className="mt-1 text-xs text-text-muted">Contenu HTML pour la section description</p>
-        </div>
+        <RichTextEditor
+          value={descriptionHtml}
+          onChange={setDescriptionHtml}
+          label="Description"
+          required
+          placeholder="Description de l'instance..."
+        />
 
-        <div>
-          <label htmlFor="compositionHtml" className="block text-sm font-medium text-text">
-            Composition (HTML) *
-          </label>
-          <textarea
-            id="compositionHtml"
-            name="compositionHtml"
-            required
-            rows={4}
-            defaultValue={initialData?.compositionHtml}
-            className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-            placeholder="<ul><li>Membre 1</li><li>Membre 2</li></ul>"
-          />
-          <p className="mt-1 text-xs text-text-muted">Contenu HTML pour la section composition</p>
-        </div>
+        <RichTextEditor
+          value={compositionHtml}
+          onChange={setCompositionHtml}
+          label="Composition"
+          required
+          placeholder="Composition de l'instance..."
+        />
 
         <div>
           <label htmlFor="membersJson" className="block text-sm font-medium text-text">
@@ -232,21 +220,13 @@ export function GovernanceInstanceForm({ initialData }: GovernanceInstanceFormPr
           </div>
         </div>
 
-        <div>
-          <label htmlFor="responsibilitiesHtml" className="block text-sm font-medium text-text">
-            Responsabilites (HTML) *
-          </label>
-          <textarea
-            id="responsibilitiesHtml"
-            name="responsibilitiesHtml"
-            required
-            rows={5}
-            defaultValue={initialData?.responsibilitiesHtml}
-            className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-            placeholder="<ul><li>Responsabilite 1</li><li>Responsabilite 2</li></ul>"
-          />
-          <p className="mt-1 text-xs text-text-muted">Contenu HTML pour la section missions principales</p>
-        </div>
+        <RichTextEditor
+          value={responsibilitiesHtml}
+          onChange={setResponsibilitiesHtml}
+          label="Responsabilites"
+          required
+          placeholder="Missions principales de l'instance..."
+        />
       </div>
 
       {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
@@ -257,7 +237,7 @@ export function GovernanceInstanceForm({ initialData }: GovernanceInstanceFormPr
           disabled={loading}
           className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-light disabled:opacity-50"
         >
-          {loading ? "Enregistrement..." : isEdit ? "Mettre à jour" : "Créer"}
+          {loading ? "Enregistrement..." : isEdit ? "Mettre a jour" : "Creer"}
         </button>
         <button
           type="button"

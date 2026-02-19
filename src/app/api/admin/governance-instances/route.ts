@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { governanceInstanceSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { cleanHtml } from "@/lib/sanitize";
+import { logAudit } from "@/lib/audit";
 
 export async function GET() {
   try {
@@ -49,6 +50,7 @@ export async function POST(req: Request) {
       },
     });
 
+    await logAudit(session.user!.id!, "CREATE", "governanceInstance", item.id, { title: item.title });
     return NextResponse.json(item, { status: 201 });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {

@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { DeleteButton } from "./delete-button";
 import { Pagination } from "@/components/admin/pagination";
 import { SearchInput } from "@/components/admin/search-input";
+import { StatusFilter } from "@/components/admin/status-filter";
 import { parsePagination, parseSearch, totalPages } from "@/lib/admin-utils";
 
 export default async function AdminNewsPage({
@@ -15,12 +16,14 @@ export default async function AdminNewsPage({
   const sp = await searchParams;
   const { page, skip, take, pageSize } = parsePagination(sp);
   const q = parseSearch(sp);
+  const status = (sp.status as string) || undefined;
 
-  const where = q
-    ? { title: { contains: q, mode: "insensitive" as const } }
-    : {};
+  const where = {
+    ...(q && { title: { contains: q, mode: "insensitive" as const } }),
+    ...(status && { status: status as any }),
+  };
 
-  let items: { id: string; title: string; category: string | null; publishedAt: Date }[] = [];
+  let items: { id: string; title: string; category: string | null; publishedAt: Date; status: string }[] = [];
   let count = 0;
 
   try {
@@ -28,7 +31,7 @@ export default async function AdminNewsPage({
       db.newsItem.findMany({
         where,
         orderBy: { publishedAt: "desc" },
-        select: { id: true, title: true, category: true, publishedAt: true },
+        select: { id: true, title: true, category: true, publishedAt: true, status: true },
         skip,
         take,
       }),
@@ -56,9 +59,14 @@ export default async function AdminNewsPage({
         </Link>
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex items-center gap-3">
+        <div className="flex-1">
+          <Suspense fallback={null}>
+            <SearchInput placeholder="Rechercher une actualité..." />
+          </Suspense>
+        </div>
         <Suspense fallback={null}>
-          <SearchInput placeholder="Rechercher une actualité..." />
+          <StatusFilter />
         </Suspense>
       </div>
 
@@ -73,6 +81,7 @@ export default async function AdminNewsPage({
               <tr>
                 <th scope="col" className="px-4 py-3">Titre</th>
                 <th scope="col" className="px-4 py-3">Catégorie</th>
+                <th scope="col" className="px-4 py-3">Statut</th>
                 <th scope="col" className="px-4 py-3">Date</th>
                 <th scope="col" className="px-4 py-3 text-right">Actions</th>
               </tr>
@@ -82,6 +91,13 @@ export default async function AdminNewsPage({
                 <tr key={item.id} className="hover:bg-background-alt/50">
                   <td className="px-4 py-3 font-medium text-text">{item.title}</td>
                   <td className="px-4 py-3 text-text-muted">{item.category || "—"}</td>
+                  <td className="px-4 py-3">
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                      item.status === "PUBLISHED" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"
+                    }`}>
+                      {item.status === "PUBLISHED" ? "Publié" : "Brouillon"}
+                    </span>
+                  </td>
                   <td className="px-4 py-3 text-text-muted">
                     {new Intl.DateTimeFormat("fr-FR").format(item.publishedAt)}
                   </td>

@@ -28,6 +28,7 @@ export default async function EditAnnouncementPage({
           endDate: item.endDate
             ? item.endDate.toISOString().split("T")[0]
             : null,
+          status: item.status,
         }}
       />
     </>

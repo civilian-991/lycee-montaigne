@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 export default async function OrientationPage() {
   const settings = await getSettings();
 
-  const findPage = () => db.page.findUnique({
-    where: { slug: PAGE_SLUGS.orientation },
+  const findPage = () => db.page.findFirst({
+    where: { slug: PAGE_SLUGS.orientation, status: "PUBLISHED" },
     include: { sections: { orderBy: { order: "asc" } } },
   });
   let documents: Awaited<ReturnType<typeof db.document.findMany>> = [];

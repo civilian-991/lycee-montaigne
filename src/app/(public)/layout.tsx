@@ -26,6 +26,7 @@ export default async function PublicLayout({
           db.announcement.findFirst({
             where: {
               active: true,
+              status: "PUBLISHED",
               OR: [
                 { startDate: null, endDate: null },
                 { startDate: { lte: now }, endDate: null },

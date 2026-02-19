@@ -5,12 +5,18 @@ import { db } from "@/lib/db";
 import { pageSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
+    const { searchParams } = new URL(req.url);
+    const status = searchParams.get("status");
+
     const pages = await db.page.findMany({
+      where: {
+        ...(status && { status: status as any }),
+      },
       orderBy: { updatedAt: "desc" },
       include: { _count: { select: { sections: true } } },
     });
@@ -38,6 +44,7 @@ export async function POST(req: Request) {
         title: parsed.title,
         metaDescription: parsed.metaDescription || null,
         ogImage: parsed.ogImage || null,
+        status: parsed.status,
       },
     });
 

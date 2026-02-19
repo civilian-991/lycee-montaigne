@@ -19,6 +19,7 @@ export default async function EditNewsPage({ params }: { params: Promise<{ id: s
           image: item.image,
           link: item.link,
           category: item.category,
+          status: item.status,
         }}
       />
     </>

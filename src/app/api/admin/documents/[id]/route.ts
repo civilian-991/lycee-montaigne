@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { documentSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { deleteBlob } from "@/lib/blob-cleanup";
+import { logAudit } from "@/lib/audit";
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -18,6 +19,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const parsed = await parseBody(req, documentSchema);
     if (parsed instanceof NextResponse) return parsed;
 
+    const existing = await db.document.findUnique({ where: { id } });
     const doc = await db.document.update({
       where: { id },
       data: {
@@ -28,6 +30,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       },
     });
 
+    if (existing?.fileUrl && existing.fileUrl !== doc.fileUrl) {
+      await deleteBlob(existing.fileUrl);
+    }
+
+    await logAudit(session.user!.id!, "UPDATE", "document", doc.id, { title: doc.title });
     return NextResponse.json(doc);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
@@ -51,6 +58,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 
     await deleteBlob(existing.fileUrl);
     await db.document.delete({ where: { id } });
+    await logAudit(session.user!.id!, "DELETE", "document", id, { title: existing.title });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

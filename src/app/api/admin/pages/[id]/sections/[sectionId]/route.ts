@@ -6,6 +6,7 @@ import { pageSectionSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { cleanHtmlNullable } from "@/lib/sanitize";
 import { deleteBlob } from "@/lib/blob-cleanup";
+import { logAudit } from "@/lib/audit";
 
 export async function PUT(
   req: Request,
@@ -33,6 +34,7 @@ export async function PUT(
       },
     });
 
+    await logAudit(session.user!.id!, "UPDATE", "pageSection", section.id, { sectionKey: section.sectionKey });
     return NextResponse.json(section);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
@@ -59,6 +61,7 @@ export async function DELETE(
 
     await deleteBlob(existing.image);
     await db.pageSection.delete({ where: { id: sectionId } });
+    await logAudit(session.user!.id!, "DELETE", "pageSection", sectionId, { sectionKey: existing.sectionKey });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

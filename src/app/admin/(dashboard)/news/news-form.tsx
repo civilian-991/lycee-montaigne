@@ -10,6 +10,7 @@ interface NewsFormProps {
     image: string | null;
     link: string | null;
     category: string | null;
+    status: string;
   };
 }
 
@@ -30,6 +31,7 @@ export function NewsForm({ initialData }: NewsFormProps) {
       image: (form.get("image") as string) || null,
       link: (form.get("link") as string) || null,
       category: (form.get("category") as string) || null,
+      status: form.get("status") as string,
     };
 
     try {
@@ -94,6 +96,18 @@ export function NewsForm({ initialData }: NewsFormProps) {
             className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             placeholder="actualité, événement..."
           />
+        </div>
+        <div>
+          <label htmlFor="status" className="block text-sm font-medium text-text">Statut</label>
+          <select
+            id="status"
+            name="status"
+            defaultValue={initialData?.status ?? "PUBLISHED"}
+            className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          >
+            <option value="PUBLISHED">Publié</option>
+            <option value="DRAFT">Brouillon</option>
+          </select>
         </div>
       </div>
 

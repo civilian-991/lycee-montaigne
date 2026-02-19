@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { pageSectionSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { cleanHtmlNullable } from "@/lib/sanitize";
+import { logAudit } from "@/lib/audit";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -28,6 +29,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       },
     });
 
+    await logAudit(session.user!.id!, "CREATE", "pageSection", section.id, { pageId: id, sectionKey: section.sectionKey });
     return NextResponse.json(section, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

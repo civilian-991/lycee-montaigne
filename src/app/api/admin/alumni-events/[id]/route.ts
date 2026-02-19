@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { alumniEventSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { cleanHtmlNullable } from "@/lib/sanitize";
+import { logAudit } from "@/lib/audit";
 
 export async function GET(
   _req: Request,
@@ -52,6 +53,7 @@ export async function PUT(
       },
     });
 
+    await logAudit(session.user!.id!, "UPDATE", "alumniEvent", event.id, { title: event.title });
     return NextResponse.json(event);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
@@ -77,6 +79,7 @@ export async function DELETE(
     if (!existing) return NextResponse.json({ error: "Événement introuvable" }, { status: 404 });
 
     await db.alumniEvent.delete({ where: { id } });
+    await logAudit(session.user!.id!, "DELETE", "alumniEvent", id, { title: existing.title });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

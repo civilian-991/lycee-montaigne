@@ -5,6 +5,8 @@ import { db } from "@/lib/db";
 import { carouselSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { deleteBlob } from "@/lib/blob-cleanup";
+import { logAudit } from "@/lib/audit";
+import { canAccess, type Role } from "@/lib/permissions";
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -14,10 +16,16 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
+    const userRole = session.user?.role as Role;
+    if (!canAccess(userRole, "carousel")) {
+      return NextResponse.json({ error: "Accès non autorisé" }, { status: 403 });
+    }
+
     const { id } = await params;
     const parsed = await parseBody(req, carouselSchema.partial());
     if (parsed instanceof NextResponse) return parsed;
 
+    const existing = await db.carouselSlide.findUnique({ where: { id } });
     const updated = await db.carouselSlide.update({
       where: { id },
       data: {
@@ -28,6 +36,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       },
     });
 
+    if (existing?.imageUrl && existing.imageUrl !== updated.imageUrl) {
+      await deleteBlob(existing.imageUrl);
+    }
+
+    await logAudit(session.user!.id!, "UPDATE", "carouselSlide", updated.id, { altText: updated.altText });
     return NextResponse.json(updated);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
@@ -45,12 +58,18 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
+    const userRole = session.user?.role as Role;
+    if (!canAccess(userRole, "carousel")) {
+      return NextResponse.json({ error: "Accès non autorisé" }, { status: 403 });
+    }
+
     const { id } = await params;
     const existing = await db.carouselSlide.findUnique({ where: { id } });
     if (!existing) return NextResponse.json({ error: "Slide introuvable" }, { status: 404 });
 
     await deleteBlob(existing.imageUrl);
     await db.carouselSlide.delete({ where: { id } });
+    await logAudit(session.user!.id!, "DELETE", "carouselSlide", id, { altText: existing.altText });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "./db";
-import { checkRateLimit } from "./rate-limit";
+import { authLimiter, checkRateLimit } from "./rate-limit";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
@@ -22,11 +22,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const email = (credentials.email as string).toLowerCase().trim();
 
-        // Rate limit login attempts per email (10 attempts per 5 minutes)
-        const rl = checkRateLimit(`login:${email}`, {
-          windowMs: 5 * 60 * 1000,
-          max: 10,
-        });
+        // Rate limit login attempts per email (5 attempts per 15 minutes)
+        const rl = await checkRateLimit(authLimiter, `login:${email}`);
         if (!rl.allowed) return null;
 
         const user = await db.user.findUnique({
@@ -44,7 +41,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         if (!isValid) return null;
 
-        return { id: user.id, email: user.email, name: user.name };
+        return { id: user.id, email: user.email, name: user.name, role: user.role };
       },
     }),
   ],
@@ -52,12 +49,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.role = (user as any).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        session.user.role = token.role as string;
       }
       return session;
     },

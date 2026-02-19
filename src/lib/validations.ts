@@ -21,8 +21,8 @@ export const passwordSchema = z
   .min(8, "Le mot de passe doit contenir au moins 8 caractères");
 
 export const loginSchema = z.object({
-  email: z.string().email("Adresse email invalide"),
-  password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
+  email: z.string().email("Adresse email invalide").max(200),
+  password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères").max(200),
 });
 
 export type LoginData = z.infer<typeof loginSchema>;
@@ -30,119 +30,122 @@ export type LoginData = z.infer<typeof loginSchema>;
 // Admin resource schemas
 
 export const newsSchema = z.object({
-  title: z.string().min(1, "Le titre est requis"),
-  image: z.string().nullable().optional(),
-  link: z.string().nullable().optional(),
-  category: z.string().nullable().optional(),
+  title: z.string().min(1, "Le titre est requis").max(200),
+  image: z.string().max(2000).nullable().optional(),
+  link: z.string().max(2000).nullable().optional(),
+  category: z.string().max(200).nullable().optional(),
+  status: z.enum(["DRAFT", "PUBLISHED"]).optional().default("PUBLISHED"),
 });
 
 export const documentSchema = z.object({
-  title: z.string().min(1, "Le titre est requis"),
-  fileUrl: z.string().min(1, "L'URL du fichier est requise"),
-  category: z.string().min(1, "La catégorie est requise"),
-  academicYear: z.string().nullable().optional(),
+  title: z.string().min(1, "Le titre est requis").max(200),
+  fileUrl: z.string().min(1, "L'URL du fichier est requise").max(2000),
+  category: z.string().min(1, "La catégorie est requise").max(200),
+  academicYear: z.string().max(200).nullable().optional(),
 });
 
 export const staffSchema = z.object({
-  name: z.string().min(1, "Le nom est requis"),
-  title: z.string().min(1, "Le titre est requis"),
-  photo: z.string().nullable().optional(),
-  messageHtml: z.string().nullable().optional(),
-  section: z.string().min(1, "La section est requise"),
+  name: z.string().min(1, "Le nom est requis").max(200),
+  title: z.string().min(1, "Le titre est requis").max(200),
+  photo: z.string().max(2000).nullable().optional(),
+  messageHtml: z.string().max(100000).nullable().optional(),
+  section: z.string().min(1, "La section est requise").max(200),
 });
 
 export const carouselSchema = z.object({
-  imageUrl: z.string().min(1, "L'URL de l'image est requise"),
-  altText: z.string().optional().default(""),
-  link: z.string().nullable().optional(),
+  imageUrl: z.string().min(1, "L'URL de l'image est requise").max(2000),
+  altText: z.string().max(200).optional().default(""),
+  link: z.string().max(2000).nullable().optional(),
   order: z.number().optional().default(0),
 });
 
 export const quickLinkSchema = z.object({
-  label: z.string().min(1, "Le libellé est requis"),
-  url: z.string().min(1, "L'URL est requise"),
-  target: z.string().optional().default("_self"),
+  label: z.string().min(1, "Le libellé est requis").max(200),
+  url: z.string().min(1, "L'URL est requise").max(2000),
+  target: z.string().max(200).optional().default("_self"),
   order: z.number().optional().default(0),
 });
 
 export const announcementSchema = z.object({
-  title: z.string().min(1, "Le titre est requis"),
-  contentHtml: z.string().min(1, "Le contenu est requis"),
+  title: z.string().min(1, "Le titre est requis").max(200),
+  contentHtml: z.string().min(1, "Le contenu est requis").max(100000),
   active: z.boolean().optional().default(true),
-  startDate: z.string().nullable().optional(),
-  endDate: z.string().nullable().optional(),
+  startDate: z.string().max(200).nullable().optional(),
+  endDate: z.string().max(200).nullable().optional(),
+  status: z.enum(["DRAFT", "PUBLISHED"]).optional().default("PUBLISHED"),
 });
 
 export const pageSchema = z.object({
-  slug: z.string().min(1, "Le slug est requis"),
-  title: z.string().min(1, "Le titre est requis"),
-  metaDescription: z.string().nullable().optional(),
-  ogImage: z.string().nullable().optional(),
+  slug: z.string().min(1, "Le slug est requis").max(100),
+  title: z.string().min(1, "Le titre est requis").max(200),
+  metaDescription: z.string().max(1000).nullable().optional(),
+  ogImage: z.string().max(2000).nullable().optional(),
+  status: z.enum(["DRAFT", "PUBLISHED"]).optional().default("PUBLISHED"),
 });
 
 export const pageSectionSchema = z.object({
-  sectionKey: z.string().min(1, "La clé de section est requise"),
-  title: z.string().nullable().optional(),
-  contentHtml: z.string().nullable().optional(),
-  image: z.string().nullable().optional(),
+  sectionKey: z.string().min(1, "La clé de section est requise").max(100),
+  title: z.string().max(200).nullable().optional(),
+  contentHtml: z.string().max(100000).nullable().optional(),
+  image: z.string().max(2000).nullable().optional(),
   order: z.number().optional().default(0),
 });
 
 export const alumniEventSchema = z.object({
-  title: z.string().min(1, "Le titre est requis"),
-  date: z.string().min(1, "La date est requise"),
-  descriptionHtml: z.string().nullable().optional(),
+  title: z.string().min(1, "Le titre est requis").max(200),
+  date: z.string().min(1, "La date est requise").max(200),
+  descriptionHtml: z.string().max(100000).nullable().optional(),
 });
 
 export const alumniPhotoSchema = z.object({
-  imageUrl: z.string().min(1, "L'URL de l'image est requise"),
-  altText: z.string().optional().default(""),
+  imageUrl: z.string().min(1, "L'URL de l'image est requise").max(2000),
+  altText: z.string().max(200).optional().default(""),
   order: z.number().optional().default(0),
 });
 
 export const activitySchema = z.object({
-  title: z.string().min(1, "Le titre est requis"),
-  description: z.string().nullable().optional(),
-  image: z.string().nullable().optional(),
-  category: z.string().min(1, "La catégorie est requise"),
+  title: z.string().min(1, "Le titre est requis").max(200),
+  description: z.string().max(1000).nullable().optional(),
+  image: z.string().max(2000).nullable().optional(),
+  category: z.string().min(1, "La catégorie est requise").max(200),
   order: z.number().optional().default(0),
 });
 
 export const certificationSchema = z.object({
-  name: z.string().min(1, "Le nom est requis"),
-  image: z.string().nullable().optional(),
-  description: z.string().nullable().optional(),
+  name: z.string().min(1, "Le nom est requis").max(200),
+  image: z.string().max(2000).nullable().optional(),
+  description: z.string().max(1000).nullable().optional(),
   order: z.number().optional().default(0),
 });
 
 export const governanceInstanceSchema = z.object({
-  slug: z.string().min(1, "Le slug est requis"),
-  title: z.string().min(1, "Le titre est requis"),
-  subtitle: z.string().min(1, "Le sous-titre est requis"),
-  iconName: z.string().default("Building2"),
-  accentColor: z.string().default("from-primary to-primary-dark"),
-  descriptionHtml: z.string().min(1, "La description est requise"),
-  compositionHtml: z.string().min(1, "La composition est requise"),
-  membersJson: z.string().nullable().optional(),
-  meetingFrequency: z.string().nullable().optional(),
-  presidence: z.string().nullable().optional(),
-  responsibilitiesHtml: z.string().min(1, "Les responsabilités sont requises"),
+  slug: z.string().min(1, "Le slug est requis").max(100),
+  title: z.string().min(1, "Le titre est requis").max(200),
+  subtitle: z.string().min(1, "Le sous-titre est requis").max(200),
+  iconName: z.string().max(200).default("Building2"),
+  accentColor: z.string().max(200).default("from-primary to-primary-dark"),
+  descriptionHtml: z.string().min(1, "La description est requise").max(100000),
+  compositionHtml: z.string().min(1, "La composition est requise").max(100000),
+  membersJson: z.string().max(100000).nullable().optional(),
+  meetingFrequency: z.string().max(200).nullable().optional(),
+  presidence: z.string().max(200).nullable().optional(),
+  responsibilitiesHtml: z.string().min(1, "Les responsabilités sont requises").max(100000),
   order: z.coerce.number().int().default(0),
 });
 
 export const menuItemSchema = z.object({
-  label: z.string().min(1, "Le libellé est requis"),
-  url: z.string().nullable().optional(),
-  parentId: z.string().nullable().optional(),
+  label: z.string().min(1, "Le libellé est requis").max(200),
+  url: z.string().max(2000).nullable().optional(),
+  parentId: z.string().max(200).nullable().optional(),
   order: z.number().optional().default(0),
-  pageId: z.string().nullable().optional(),
+  pageId: z.string().max(200).nullable().optional(),
 });
 
 export const contactSubmissionPatchSchema = z.object({
   read: z.boolean(),
 });
 
-export const settingsSchema = z.record(z.string(), z.string()).refine(
+export const settingsSchema = z.record(z.string().max(100), z.string().max(10000)).refine(
   (data) => {
     const keys = Object.keys(data);
     return keys.every((key) =>
@@ -155,7 +158,7 @@ export const settingsSchema = z.record(z.string(), z.string()).refine(
 );
 
 export const uploadDeleteSchema = z.object({
-  url: z.string().min(1, "L'URL est requise"),
+  url: z.string().min(1, "L'URL est requise").max(2000),
 });
 
 export const ALLOWED_UPLOAD_TYPES = [
@@ -163,7 +166,6 @@ export const ALLOWED_UPLOAD_TYPES = [
   "image/png",
   "image/gif",
   "image/webp",
-  "image/svg+xml",
   "application/pdf",
 ] as const;
 

@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { pageSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { deleteBlob } from "@/lib/blob-cleanup";
+import { logAudit } from "@/lib/audit";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -44,9 +45,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
         title: parsed.title,
         metaDescription: parsed.metaDescription || null,
         ogImage: parsed.ogImage || null,
+        status: parsed.status,
       },
     });
 
+    await logAudit(session.user!.id!, "UPDATE", "page", page.id, { title: page.title });
     return NextResponse.json(page);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
@@ -77,6 +80,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     }
 
     await db.page.delete({ where: { id } });
+    await logAudit(session.user!.id!, "DELETE", "page", id, { title: existing.title });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

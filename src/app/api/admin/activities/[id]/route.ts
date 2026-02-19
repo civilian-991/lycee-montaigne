@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { activitySchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { deleteBlob } from "@/lib/blob-cleanup";
+import { logAudit } from "@/lib/audit";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -32,6 +33,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const parsed = await parseBody(req, activitySchema);
     if (parsed instanceof NextResponse) return parsed;
 
+    const existing = await db.activityItem.findUnique({ where: { id } });
     const item = await db.activityItem.update({
       where: { id },
       data: {
@@ -43,6 +45,11 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       },
     });
 
+    if (existing?.image && existing.image !== item.image) {
+      await deleteBlob(existing.image);
+    }
+
+    await logAudit(session.user!.id!, "UPDATE", "activityItem", item.id, { title: item.title });
     return NextResponse.json(item);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
@@ -66,6 +73,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 
     await deleteBlob(existing.image);
     await db.activityItem.delete({ where: { id } });
+    await logAudit(session.user!.id!, "DELETE", "activityItem", id, { title: existing.title });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

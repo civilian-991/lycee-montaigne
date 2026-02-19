@@ -18,7 +18,7 @@ export default async function HomePage() {
   try {
     [quickLinks, rawNews, heroSlides, rawSettings] = await Promise.all([
       db.quickLink.findMany({ orderBy: { order: "asc" } }),
-      db.newsItem.findMany({ orderBy: { publishedAt: "desc" }, take: 3 }),
+      db.newsItem.findMany({ where: { status: "PUBLISHED" }, orderBy: { publishedAt: "desc" }, take: 3 }),
       db.carouselSlide.findMany({ orderBy: { order: "asc" } }),
       db.siteSetting.findMany(),
     ]);

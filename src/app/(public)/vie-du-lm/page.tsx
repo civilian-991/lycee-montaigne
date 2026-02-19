@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 export default async function VieDuLMPage() {
   const settings = await getSettings();
 
-  const findPage = () => db.page.findUnique({
-    where: { slug: PAGE_SLUGS.vieDuLm },
+  const findPage = () => db.page.findFirst({
+    where: { slug: PAGE_SLUGS.vieDuLm, status: "PUBLISHED" },
     include: { sections: { orderBy: { order: "asc" } } },
   });
   let rawNews: Awaited<ReturnType<typeof db.newsItem.findMany>> = [];
@@ -24,7 +24,7 @@ export default async function VieDuLMPage() {
 
   try {
     [rawNews, page] = await Promise.all([
-      db.newsItem.findMany({ orderBy: { publishedAt: "desc" }, take: 6 }),
+      db.newsItem.findMany({ where: { status: "PUBLISHED" }, orderBy: { publishedAt: "desc" }, take: 6 }),
       findPage(),
     ]);
   } catch {

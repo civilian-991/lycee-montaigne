@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { governanceInstanceSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
 import { cleanHtml } from "@/lib/sanitize";
+import { logAudit } from "@/lib/audit";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -50,6 +51,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       },
     });
 
+    await logAudit(session.user!.id!, "UPDATE", "governanceInstance", item.id, { title: item.title });
     return NextResponse.json(item);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
@@ -72,6 +74,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     if (!existing) return NextResponse.json({ error: "Instance introuvable" }, { status: 404 });
 
     await db.governanceInstance.delete({ where: { id } });
+    await logAudit(session.user!.id!, "DELETE", "governanceInstance", id, { title: existing.title });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

@@ -7,12 +7,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   password  String
   name      String
-  role      String   @default("admin")
+  role      Role     @default(ADMIN)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -25,11 +36,13 @@ model Page {
   title           String
   metaDescription String?       @map("meta_description")
   ogImage         String?       @map("og_image")
+  status          ContentStatus @default(PUBLISHED)
   sections        PageSection[]
   menuItems       MenuItem[]
   createdAt       DateTime      @default(now()) @map("created_at")
   updatedAt       DateTime      @updatedAt @map("updated_at")
 
+  @@index([status])
   @@map("pages")
 }
 
@@ -48,17 +61,19 @@ model PageSection {
 }
 
 model NewsItem {
-  id          String   @id @default(cuid())
+  id          String        @id @default(cuid())
   title       String
   image       String?
   link        String?
   category    String?
-  publishedAt DateTime @default(now()) @map("published_at")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  status      ContentStatus @default(PUBLISHED)
+  publishedAt DateTime      @default(now()) @map("published_at")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
 
   @@index([publishedAt])
   @@index([category])
+  @@index([status])
   @@map("news_items")
 }
 
@@ -194,16 +209,18 @@ model ActivityItem {
 }
 
 model Announcement {
-  id          String    @id @default(cuid())
+  id          String        @id @default(cuid())
   title       String
-  contentHtml String    @map("content_html")
-  active      Boolean   @default(true)
-  startDate   DateTime? @map("start_date")
-  endDate     DateTime? @map("end_date")
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  contentHtml String        @map("content_html")
+  active      Boolean       @default(true)
+  status      ContentStatus @default(PUBLISHED)
+  startDate   DateTime?     @map("start_date")
+  endDate     DateTime?     @map("end_date")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
 
   @@index([active, startDate, endDate])
+  @@index([status])
   @@map("announcements")
 }
 

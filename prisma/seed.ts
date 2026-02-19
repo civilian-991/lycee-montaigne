@@ -35,9 +35,13 @@ async function main() {
     update: {},
     create: {
       email: "admin@lycee-montaigne.edu.lb",
-      password: hashSync(process.env.ADMIN_PASSWORD || "admin123", 12),
+      password: hashSync((() => {
+        const pw = process.env.ADMIN_PASSWORD;
+        if (!pw) throw new Error("ADMIN_PASSWORD env var required for seeding");
+        return pw;
+      })(), 12),
       name: "Administrateur",
-      role: "admin",
+      role: "ADMIN",
     },
   });
   console.log("Admin user ready.");

@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 export default async function PoleInclusionPage() {
   const settings = await getSettings();
 
-  const findPage = () => db.page.findUnique({
-    where: { slug: PAGE_SLUGS.poleInclusion },
+  const findPage = () => db.page.findFirst({
+    where: { slug: PAGE_SLUGS.poleInclusion, status: "PUBLISHED" },
     include: { sections: { orderBy: { order: "asc" } } },
   });
   let page: Awaited<ReturnType<typeof findPage>> = null;

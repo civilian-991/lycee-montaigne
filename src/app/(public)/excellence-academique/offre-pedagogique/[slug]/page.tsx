@@ -59,8 +59,8 @@ export default async function OffrePedagogiquePage({
   let page = null;
   try {
     page = pageSlug
-      ? await db.page.findUnique({
-          where: { slug: pageSlug },
+      ? await db.page.findFirst({
+          where: { slug: pageSlug, status: "PUBLISHED" },
           include: { sections: { orderBy: { order: "asc" } } },
         })
       : null;

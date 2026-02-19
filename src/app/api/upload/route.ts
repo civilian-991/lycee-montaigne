@@ -46,9 +46,6 @@ function validateMagicBytes(buffer: ArrayBuffer, mime: string): boolean {
         bytes[10] === 0x42 &&
         bytes[11] === 0x50
       );
-    case "image/svg+xml":
-      // SVG starts with '<' (0x3C) or '<?xml' (0x3C 0x3F)
-      return bytes[0] === 0x3c;
     default:
       return false;
   }
@@ -68,7 +65,7 @@ export async function POST(req: Request) {
 
     if (!(ALLOWED_UPLOAD_TYPES as readonly string[]).includes(file.type)) {
       return NextResponse.json(
-        { error: "Type de fichier non autorisé. Types acceptés : JPEG, PNG, GIF, WebP, SVG, PDF" },
+        { error: "Type de fichier non autorisé. Types acceptés : JPEG, PNG, GIF, WebP, PDF" },
         { status: 400 }
       );
     }

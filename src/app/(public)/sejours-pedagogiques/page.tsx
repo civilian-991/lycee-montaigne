@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 };
 
 export default async function SejoursPedagogiquesPage() {
-  const findPage = () => db.page.findUnique({
-    where: { slug: PAGE_SLUGS.sejoursPedagogiques },
+  const findPage = () => db.page.findFirst({
+    where: { slug: PAGE_SLUGS.sejoursPedagogiques, status: "PUBLISHED" },
     include: { sections: { orderBy: { order: "asc" } } },
   });
   let page: Awaited<ReturnType<typeof findPage>> = null;

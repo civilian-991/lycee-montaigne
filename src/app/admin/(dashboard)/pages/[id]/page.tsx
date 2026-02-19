@@ -36,6 +36,7 @@ export default async function EditPagePage({ params }: { params: Promise<{ id: s
           title: page.title,
           metaDescription: page.metaDescription,
           ogImage: page.ogImage,
+          status: page.status,
         }}
       />
 

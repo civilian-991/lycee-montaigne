@@ -1,11 +1,10 @@
 import { Suspense } from "react";
 import { db } from "@/lib/db";
 import Link from "next/link";
-import Image from "next/image";
 import { Plus } from "lucide-react";
-import { CertificationDeleteButton } from "./delete-button";
 import { SearchInput } from "@/components/admin/search-input";
 import { Pagination } from "@/components/admin/pagination";
+import { CertificationsSortableList } from "./certifications-sortable-list";
 
 const PAGE_SIZE = 20;
 
@@ -71,46 +70,10 @@ export default async function AdminCertificationsPage({
 
       {certifications.length === 0 ? (
         <div className="rounded-xl border border-border bg-white p-8 text-center text-sm text-text-muted">
-          {search ? "Aucun résultat pour cette recherche." : "Aucune certification pour le moment."}
+          {search ? "Aucun resultat pour cette recherche." : "Aucune certification pour le moment."}
         </div>
       ) : (
-        <div className="space-y-2">
-          {certifications.map((cert) => (
-            <div key={cert.id} className="flex items-center justify-between rounded-xl border border-border bg-white p-4">
-              <div className="flex items-center gap-4">
-                {cert.image ? (
-                  <Image
-                    src={cert.image}
-                    alt={cert.name}
-                    width={40}
-                    height={40}
-                    className="h-10 w-10 rounded-lg object-cover"
-                  />
-                ) : (
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-background-alt text-xs text-text-muted">
-                    —
-                  </div>
-                )}
-                <div>
-                  <p className="font-medium text-text">{cert.name}</p>
-                  {cert.description && (
-                    <p className="text-sm text-text-muted line-clamp-1">{cert.description}</p>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-text-muted">Ordre : {cert.order}</span>
-                <Link
-                  href={`/admin/certifications/${cert.id}`}
-                  className="rounded px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/10"
-                >
-                  Modifier
-                </Link>
-                <CertificationDeleteButton id={cert.id} />
-              </div>
-            </div>
-          ))}
-        </div>
+        <CertificationsSortableList initialCertifications={certifications} />
       )}
 
       <Suspense fallback={null}>

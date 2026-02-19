@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 
 interface AnnouncementFormProps {
   initialData?: {
@@ -11,6 +12,7 @@ interface AnnouncementFormProps {
     active: boolean;
     startDate: string | null;
     endDate: string | null;
+    status: string;
   };
 }
 
@@ -18,6 +20,7 @@ export function AnnouncementForm({ initialData }: AnnouncementFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [contentHtml, setContentHtml] = useState(initialData?.contentHtml || "");
   const isEdit = !!initialData;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -28,10 +31,11 @@ export function AnnouncementForm({ initialData }: AnnouncementFormProps) {
     const form = new FormData(e.currentTarget);
     const body = {
       title: form.get("title") as string,
-      contentHtml: form.get("contentHtml") as string,
+      contentHtml,
       active: form.get("active") === "on",
       startDate: (form.get("startDate") as string) || null,
       endDate: (form.get("endDate") as string) || null,
+      status: form.get("status") as string,
     };
 
     try {
@@ -70,20 +74,13 @@ export function AnnouncementForm({ initialData }: AnnouncementFormProps) {
           />
         </div>
 
-        <div>
-          <label htmlFor="contentHtml" className="block text-sm font-medium text-text">
-            Contenu HTML *
-          </label>
-          <textarea
-            id="contentHtml"
-            name="contentHtml"
-            required
-            rows={8}
-            defaultValue={initialData?.contentHtml}
-            className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-            placeholder="<p>Contenu de l'annonce...</p>"
-          />
-        </div>
+        <RichTextEditor
+          value={contentHtml}
+          onChange={setContentHtml}
+          label="Contenu"
+          required
+          placeholder="Contenu de l'annonce..."
+        />
 
         <div className="flex items-center gap-2">
           <input
@@ -101,7 +98,7 @@ export function AnnouncementForm({ initialData }: AnnouncementFormProps) {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="startDate" className="block text-sm font-medium text-text">
-              Date de début
+              Date de debut
             </label>
             <input
               id="startDate"
@@ -124,6 +121,18 @@ export function AnnouncementForm({ initialData }: AnnouncementFormProps) {
             />
           </div>
         </div>
+        <div>
+          <label htmlFor="status" className="block text-sm font-medium text-text">Statut</label>
+          <select
+            id="status"
+            name="status"
+            defaultValue={initialData?.status ?? "PUBLISHED"}
+            className="mt-1 block w-full rounded-lg border border-border px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+          >
+            <option value="PUBLISHED">Publié</option>
+            <option value="DRAFT">Brouillon</option>
+          </select>
+        </div>
       </div>
 
       {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
@@ -134,7 +143,7 @@ export function AnnouncementForm({ initialData }: AnnouncementFormProps) {
           disabled={loading}
           className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-light disabled:opacity-50"
         >
-          {loading ? "Enregistrement..." : isEdit ? "Mettre à jour" : "Créer"}
+          {loading ? "Enregistrement..." : isEdit ? "Mettre a jour" : "Creer"}
         </button>
         <button
           type="button"

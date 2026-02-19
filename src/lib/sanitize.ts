@@ -29,7 +29,7 @@ export function cleanHtml(dirty: string): string {
       video: ["src", "controls", "width", "height", "class"],
       source: ["src", "type"],
       a: ["href", "target", "rel", "class"],
-      "*": ["class", "id", "style"],
+      "*": ["class"],
     },
     allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com"],
   });

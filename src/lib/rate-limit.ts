@@ -1,58 +1,69 @@
-const MAX_MAP_SIZE = 10_000;
-const MAX_TTL_MS = 15 * 60 * 1000; // 15 minutes
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
-interface RateLimitEntry {
-  count: number;
-  resetTime: number;
+// Upstash rate limiting result type
+interface RateLimitResult {
+  allowed: boolean;
+  retryAfterMs?: number;
 }
 
-const store = new Map<string, RateLimitEntry>();
+const hasUpstashConfig =
+  !!process.env.UPSTASH_REDIS_REST_URL && !!process.env.UPSTASH_REDIS_REST_TOKEN;
 
-function cleanup() {
-  const now = Date.now();
-  for (const [key, entry] of store) {
-    if (now > entry.resetTime) {
-      store.delete(key);
-    }
-  }
+if (!hasUpstashConfig) {
+  console.warn(
+    "[rate-limit] UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN not set. " +
+      "Rate limiting is disabled — all requests will be allowed."
+  );
 }
+
+const redis = hasUpstashConfig
+  ? new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL!,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    })
+  : null;
+
+// Auth rate limiter: 5 attempts per 15 minutes
+export const authLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(5, "15 m"),
+      prefix: "ratelimit:auth",
+    })
+  : null;
+
+// Contact form rate limiter: 3 per hour
+export const contactLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(3, "1 h"),
+      prefix: "ratelimit:contact",
+    })
+  : null;
 
 /**
- * Simple in-memory rate limiter.
- * Returns { allowed: true } if the request is within limits,
- * or { allowed: false, retryAfterMs } if rate-limited.
+ * Check rate limit using an Upstash Ratelimit instance.
+ * Falls back to allowing all requests if Upstash is not configured (local dev).
  */
-export function checkRateLimit(
-  key: string,
-  opts: { windowMs?: number; max?: number } = {}
-): { allowed: true } | { allowed: false; retryAfterMs: number } {
-  const windowMs = Math.min(opts.windowMs ?? 60_000, MAX_TTL_MS);
-  const max = opts.max ?? 5;
-  const now = Date.now();
-
-  // Cleanup on every call (cheap iteration for small maps)
-  cleanup();
-
-  // Evict oldest entries if map is too large
-  if (store.size > MAX_MAP_SIZE) {
-    const excess = store.size - MAX_MAP_SIZE;
-    const iter = store.keys();
-    for (let i = 0; i < excess; i++) {
-      const next = iter.next();
-      if (!next.done) store.delete(next.value);
-    }
-  }
-
-  const entry = store.get(key);
-
-  if (entry && now < entry.resetTime) {
-    if (entry.count >= max) {
-      return { allowed: false, retryAfterMs: entry.resetTime - now };
-    }
-    entry.count++;
+export async function checkRateLimit(
+  limiter: Ratelimit | null,
+  key: string
+): Promise<RateLimitResult> {
+  if (!limiter) {
     return { allowed: true };
   }
 
-  store.set(key, { count: 1, resetTime: now + windowMs });
-  return { allowed: true };
+  try {
+    const { success, reset } = await limiter.limit(key);
+    if (success) {
+      return { allowed: true };
+    }
+    const retryAfterMs = Math.max(0, reset - Date.now());
+    return { allowed: false, retryAfterMs };
+  } catch (error) {
+    // If Upstash is unreachable, fail open so the app stays usable
+    console.error("[rate-limit] Upstash error, allowing request:", error);
+    return { allowed: true };
+  }
 }

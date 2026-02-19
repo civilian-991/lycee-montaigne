@@ -3,11 +3,17 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { quickLinkSchema } from "@/lib/validations";
 import { parseBody, checkOrigin } from "@/lib/api-utils";
+import { canAccess, type Role } from "@/lib/permissions";
 
 export async function GET() {
   try {
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+
+    const userRole = session.user?.role as Role;
+    if (!canAccess(userRole, "links")) {
+      return NextResponse.json({ error: "Accès non autorisé" }, { status: 403 });
+    }
 
     const links = await db.quickLink.findMany({ orderBy: { order: "asc" } });
     return NextResponse.json(links);
@@ -23,6 +29,11 @@ export async function POST(req: Request) {
 
     const session = await auth();
     if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+
+    const userRole = session.user?.role as Role;
+    if (!canAccess(userRole, "links")) {
+      return NextResponse.json({ error: "Accès non autorisé" }, { status: 403 });
+    }
 
     const parsed = await parseBody(req, quickLinkSchema);
     if (parsed instanceof NextResponse) return parsed;
