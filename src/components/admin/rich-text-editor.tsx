@@ -81,6 +81,7 @@ export function RichTextEditor({
   );
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit.configure({
         heading: { levels: [2, 3] },
@@ -105,7 +106,6 @@ export function RichTextEditor({
         class: "prose prose-sm max-w-none min-h-[200px] px-4 py-3 focus:outline-none",
       },
     },
-    ...(placeholder ? { editorProps: { attributes: { class: "prose prose-sm max-w-none min-h-[200px] px-4 py-3 focus:outline-none", "data-placeholder": placeholder } } } : {}),
   });
 
   // Sync external value changes (e.g. when initialData loads)
