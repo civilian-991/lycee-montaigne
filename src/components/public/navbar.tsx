@@ -185,7 +185,7 @@ export function Navbar({
             <span className="h-4 w-px bg-white/12" />
             <div className="flex items-center gap-4">
               {partnerLogos.map((logo) => (
-                <Image key={logo.src} src={logo.src} alt={logo.alt} width={80} height={32} className="h-5 w-auto brightness-0 invert opacity-35 transition-opacity duration-300 hover:opacity-70" />
+                <Image key={logo.src} src={logo.src} alt={logo.alt} width={100} height={40} className="h-7 w-auto opacity-80 transition-opacity duration-300 hover:opacity-100" />
               ))}
             </div>
           </div>
@@ -347,17 +347,13 @@ export function Navbar({
                           openDropdown === item.label ? "rotate-180" : ""
                         )} />
                       )}
-                      {/* Active indicator — organic wave shape */}
+                      {/* Active indicator */}
                       {isActive(item.href) && (
                         <motion.div
                           layoutId="nav-indicator"
-                          className="absolute -bottom-[11px] left-2 right-2"
+                          className="absolute -bottom-[11px] left-2 right-2 h-[3px] rounded-full bg-secondary"
                           transition={{ type: "spring", stiffness: 380, damping: 28 }}
-                        >
-                          <svg viewBox="0 0 100 6" preserveAspectRatio="none" className="h-[3px] w-full">
-                            <path d="M0 3 Q25 0 50 3 Q75 6 100 3" fill="none" stroke="var(--color-secondary)" strokeWidth="3" strokeLinecap="round" />
-                          </svg>
-                        </motion.div>
+                        />
                       )}
                     </Link>
 
@@ -607,7 +603,7 @@ export function Navbar({
             </div>
             <div className="mt-5 flex items-center justify-center gap-5 border-t border-border/25 pt-5">
               {partnerLogos.map((logo) => (
-                <Image key={logo.src} src={logo.src} alt={logo.alt} width={60} height={24} className="h-6 w-auto opacity-30" />
+                <Image key={logo.src} src={logo.src} alt={logo.alt} width={60} height={24} className="h-6 w-auto opacity-70" />
               ))}
             </div>
           </div>

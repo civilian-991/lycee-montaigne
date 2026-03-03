@@ -33,20 +33,6 @@ export function PageHero({ title, image, className }: PageHeroProps) {
         <h1 className="text-3xl font-bold text-white md:text-4xl lg:text-5xl">
           <TextReveal text={title} />
         </h1>
-        <svg
-          className="mx-auto mt-4 h-3 w-24"
-          viewBox="0 0 100 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <path
-            d="M0 6 C 20 0, 30 12, 50 6 S 80 0, 100 6"
-            stroke="var(--color-secondary)"
-            strokeWidth="3"
-            fill="none"
-          />
-        </svg>
       </div>
       <div className="absolute bottom-0 left-0 right-0">
         <WaveDivider fill="var(--color-background)" />
