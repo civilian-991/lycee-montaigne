@@ -22,6 +22,8 @@ export const JSON_SETTING_KEYS = [
   "educational_paths",
   "supply_lists",
   "health_staff",
+  "homepage_reasons",
+  "tuition_levels",
 ] as const;
 
 /* ------------------------------------------------------------------ */
@@ -113,6 +115,24 @@ export interface HealthStaffMember {
   role: string;
 }
 
+export interface HomepageReason {
+  title: string;
+  description: string;
+}
+
+export interface TuitionInstallment {
+  label: string;
+  fraisLL: string;
+  fraisUSD: string;
+  contributionUSD: string;
+  collationUSD: string;
+}
+
+export interface TuitionLevel {
+  level: string;
+  installments: TuitionInstallment[];
+}
+
 export interface SiteSettings {
   /* General */
   site_name: string;
@@ -155,6 +175,10 @@ export interface SiteSettings {
   /* Inscriptions */
   inscription_documents: InscriptionDocument[];
 
+  /* Tarifs */
+  tuition_levels: TuitionLevel[];
+  tuition_year: string;
+
   /* Health */
   health_staff: HealthStaffMember[];
   health_referents: string;
@@ -172,8 +196,19 @@ export interface SiteSettings {
   alumni_committee: AlumniCommitteeMember[];
   alumni_subcommittees: AlumniSubcommittee[];
 
+  /* Homepage */
+  homepage_reasons: HomepageReason[];
+  trait_union_title: string;
+  trait_union_description: string;
+  trait_union_image: string;
+  trait_union_link: string;
+
   /* Vie du LM */
   webradio_referents: string;
+  sustainability_referents: string;
+  sustainability_label: string;
+  cvc_url: string;
+  cvl_url: string;
   supply_lists: SupplyListLevel[];
 }
 
@@ -375,6 +410,43 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   /* Inscriptions */
   inscription_documents: [],
 
+  /* Tarifs */
+  tuition_year: "2025-2026",
+  tuition_levels: [
+    {
+      level: "Maternelle",
+      installments: [
+        { label: "1er versement", fraisLL: "5 000 000", fraisUSD: "550", contributionUSD: "200", collationUSD: "100" },
+        { label: "2e versement", fraisLL: "5 000 000", fraisUSD: "550", contributionUSD: "200", collationUSD: "—" },
+        { label: "3e versement", fraisLL: "5 000 000", fraisUSD: "550", contributionUSD: "200", collationUSD: "—" },
+      ],
+    },
+    {
+      level: "Ecole elementaire",
+      installments: [
+        { label: "1er versement", fraisLL: "5 000 000", fraisUSD: "650", contributionUSD: "200", collationUSD: "100" },
+        { label: "2e versement", fraisLL: "5 000 000", fraisUSD: "650", contributionUSD: "200", collationUSD: "—" },
+        { label: "3e versement", fraisLL: "5 000 000", fraisUSD: "650", contributionUSD: "200", collationUSD: "—" },
+      ],
+    },
+    {
+      level: "College",
+      installments: [
+        { label: "1er versement", fraisLL: "6 000 000", fraisUSD: "750", contributionUSD: "250", collationUSD: "—" },
+        { label: "2e versement", fraisLL: "6 000 000", fraisUSD: "750", contributionUSD: "250", collationUSD: "—" },
+        { label: "3e versement", fraisLL: "6 000 000", fraisUSD: "750", contributionUSD: "250", collationUSD: "—" },
+      ],
+    },
+    {
+      level: "Lycee",
+      installments: [
+        { label: "1er versement", fraisLL: "7 000 000", fraisUSD: "900", contributionUSD: "300", collationUSD: "—" },
+        { label: "2e versement", fraisLL: "7 000 000", fraisUSD: "900", contributionUSD: "300", collationUSD: "—" },
+        { label: "3e versement", fraisLL: "7 000 000", fraisUSD: "900", contributionUSD: "300", collationUSD: "—" },
+      ],
+    },
+  ],
+
   /* Health */
   health_staff: [],
   health_referents: "",
@@ -392,8 +464,24 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   alumni_committee: [],
   alumni_subcommittees: [],
 
+  /* Homepage */
+  homepage_reasons: [
+    { title: "Excellence academique", description: "Un enseignement rigoureux suivant les programmes francais, avec des resultats exceptionnels aux examens nationaux et internationaux." },
+    { title: "Ouverture internationale", description: "29 nationalites representees, un Bac Francais International, et des partenariats avec des universites prestigieuses dans le monde entier." },
+    { title: "Epanouissement de l'eleve", description: "Un accompagnement personnalise de la maternelle a la terminale, avec des activites periscolaires variees et un pole inclusion dedie." },
+    { title: "Valeurs humanistes", description: "Une ecole pour toutes les intelligences et tous les talents, fondee sur le regard positif, l'educabilite et le refus du determinisme." },
+  ],
+  trait_union_title: "Numero 91 - Decembre 2025",
+  trait_union_description: "Decouvrez le dernier numero du Trait d'union, le journal du Lycee Montaigne.",
+  trait_union_image: "/images/hp-services-items/January2026/HcSaUtgkncgRCfvVKoV4.jpeg",
+  trait_union_link: "/documents",
+
   /* Vie du LM */
   webradio_referents: "",
+  sustainability_referents: "Mme Roula Chalabi (1er degre)\nM. Robert Sreih (2nd degre)",
+  sustainability_label: "Label EFE3D Niveau Expert",
+  cvc_url: "",
+  cvl_url: "",
   supply_lists: [],
 };
 
@@ -421,6 +509,15 @@ export const ALL_SETTING_KEYS = [
   "health_referents",
   "ccc_email",
   "webradio_referents",
+  "sustainability_referents",
+  "sustainability_label",
+  "cvc_url",
+  "cvl_url",
+  "trait_union_title",
+  "trait_union_description",
+  "trait_union_image",
+  "trait_union_link",
+  "tuition_year",
   ...JSON_SETTING_KEYS,
 ] as const;
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Globe } from "lucide-react";
@@ -50,30 +51,19 @@ interface HomeContentProps {
 
 /* stats are now computed from settings inside the component */
 
-const reasons = [
-  {
-    title: "Excellence academique",
-    description: "Un enseignement rigoureux suivant les programmes francais, avec des resultats exceptionnels aux examens nationaux et internationaux.",
-  },
-  {
-    title: "Ouverture internationale",
-    description: "29 nationalites representees, un Bac Francais International, et des partenariats avec des universites prestigieuses dans le monde entier.",
-  },
-  {
-    title: "Epanouissement de l'eleve",
-    description: "Un accompagnement personnalise de la maternelle a la terminale, avec des activites periscolaires variees et un pole inclusion dedie.",
-  },
-  {
-    title: "Valeurs humanistes",
-    description: "Une ecole pour toutes les intelligences et tous les talents, fondee sur le regard positif, l'educabilite et le refus du determinisme.",
-  },
-];
-
 /* ------------------------------------------------------------------ */
 /*  Component                                                         */
 /* ------------------------------------------------------------------ */
 
 export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: HomeContentProps) {
+  const reasons: { title: string; description: string }[] = (() => {
+    try {
+      const parsed = JSON.parse(settings.homepage_reasons || "[]");
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : [];
+    } catch {
+      return [];
+    }
+  })();
   const stats = [
     { value: parseInt(settings.stat_eleves || "1085"), label: "Eleves" },
     { value: parseInt(settings.stat_reussite || "100"), suffix: "%", label: "Reussite au bac" },
@@ -84,26 +74,42 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
   const siteName = settings.site_name || "Lycee Montaigne";
   const siteSubtitle = settings.site_subtitle || "Beit Chabab";
 
-  const heroImage =
-    heroSlides.length > 0 ? (localImage(heroSlides[0].imageUrl) ?? null) : null;
-  const heroAlt =
-    heroSlides.length > 0
-      ? heroSlides[0].altText
-      : `${siteName} - ${siteSubtitle}`;
+  /* ── Carousel state ── */
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const slideCount = heroSlides.length;
+
+  const nextSlide = useCallback(() => {
+    if (slideCount > 1) setCurrentSlide((prev) => (prev + 1) % slideCount);
+  }, [slideCount]);
+
+  useEffect(() => {
+    if (slideCount <= 1 || isPaused) return;
+    const timer = setInterval(nextSlide, 5000);
+    return () => clearInterval(timer);
+  }, [slideCount, isPaused, nextSlide]);
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative flex min-h-[600px] items-center overflow-hidden bg-primary md:min-h-[90vh]">
-        {heroImage && (
-          <Image
-            src={heroImage}
-            alt={heroAlt}
-            fill
-            className="object-cover"
-            priority
-          />
-        )}
+      {/* Hero Carousel */}
+      <section
+        className="relative flex min-h-[600px] items-center overflow-hidden bg-primary md:min-h-[90vh]"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        {heroSlides.map((slide, i) => {
+          const imgSrc = localImage(slide.imageUrl);
+          return imgSrc ? (
+            <Image
+              key={slide.id}
+              src={imgSrc}
+              alt={slide.altText}
+              fill
+              className={`object-cover transition-opacity duration-1000 ${i === currentSlide ? "opacity-100" : "opacity-0"}`}
+              priority={i === 0}
+            />
+          ) : null;
+        })}
         <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/60 to-primary/40" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-20">
           <div className="max-w-2xl">
@@ -138,6 +144,19 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
             </FadeInView>
           </div>
         </div>
+        {/* Carousel dots */}
+        {slideCount > 1 && (
+          <div className="absolute bottom-12 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+            {heroSlides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentSlide(i)}
+                aria-label={`Slide ${i + 1}`}
+                className={`h-2.5 rounded-full transition-all duration-300 ${i === currentSlide ? "w-8 bg-white" : "w-2.5 bg-white/40 hover:bg-white/60"}`}
+              />
+            ))}
+          </div>
+        )}
         <div className="absolute bottom-0 left-0 right-0">
           <WaveDivider fill="var(--color-background-alt)" />
         </div>
@@ -179,9 +198,10 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
       )}
 
       {/* Pourquoi l'enseignement francais */}
+      {reasons.length > 0 && (
       <section id="pourquoi" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader title="Pourquoi l'enseignement francais ?" />
+          <SectionHeader title="Pourquoi choisir l'enseignement francais et le Lycee Montaigne" />
           <div className="mt-12 grid items-center gap-10 lg:grid-cols-2">
             <FadeInView>
               <div className="space-y-6">
@@ -209,6 +229,7 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
           </div>
         </div>
       </section>
+      )}
 
       {/* Stats */}
       <div>
@@ -221,40 +242,42 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
         <WaveDivider fill="var(--color-primary)" flip />
       </div>
 
-      {/* Info a la une — only shown if DB has news */}
-      {featuredNews.length > 0 && (
+      {/* Info a la une + Trait d'union — combined row */}
       <section id="info-une" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader title="Info a la une" />
-          <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2">
-            {featuredNews.map((item) => (
-              <StaggerItem key={item.id}>
-                <Card
-                  title={item.title}
-                  image={item.image ?? undefined}
-                  href={item.link ?? undefined}
-                />
-              </StaggerItem>
-            ))}
-          </StaggerChildren>
-        </div>
-      </section>
-      )}
-
-      {/* Trait d'union */}
-      <section id="trait-union" className="bg-background-alt py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader title="Trait d'union" subtitle="Le journal du Lycee Montaigne" />
-          <FadeInView>
-            <div className="mx-auto mt-12 max-w-2xl">
-              <Card
-                title="Numero 91 - Decembre 2025"
-                description="Decouvrez le dernier numero du Trait d'union, le journal du Lycee Montaigne."
-                image="/images/hp-services-items/January2026/HcSaUtgkncgRCfvVKoV4.jpeg"
-                href="/documents"
-              />
+          <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
+            {/* Left: Info à la une (~70%) */}
+            {featuredNews.length > 0 && (
+              <div>
+                <SectionHeader title="Info a la une" className="text-left" />
+                <StaggerChildren className="mt-8 grid gap-6 md:grid-cols-2">
+                  {featuredNews.map((item) => (
+                    <StaggerItem key={item.id}>
+                      <Card
+                        title={item.title}
+                        image={item.image ?? undefined}
+                        href={item.link ?? undefined}
+                      />
+                    </StaggerItem>
+                  ))}
+                </StaggerChildren>
+              </div>
+            )}
+            {/* Right: Trait d'union (~30%) */}
+            <div>
+              <SectionHeader title="Trait d'union" className="text-left" />
+              <FadeInView>
+                <div className="mt-8">
+                  <Card
+                    title={settings.trait_union_title || "Trait d'union"}
+                    description={settings.trait_union_description || ""}
+                    image={settings.trait_union_image || ""}
+                    href={settings.trait_union_link || "/documents"}
+                  />
+                </div>
+              </FadeInView>
             </div>
-          </FadeInView>
+          </div>
         </div>
       </section>
 

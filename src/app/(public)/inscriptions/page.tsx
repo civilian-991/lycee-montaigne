@@ -32,6 +32,8 @@ export default async function InscriptionsPage() {
     <InscriptionsContent
       sections={sections}
       inscriptionDocuments={settings.inscription_documents}
+      tuitionLevels={settings.tuition_levels}
+      tuitionYear={settings.tuition_year}
     />
   );
 }

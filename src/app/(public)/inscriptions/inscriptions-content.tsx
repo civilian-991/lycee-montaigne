@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import Image from "next/image";
 import { localImage } from "@/lib/utils";
 import { PageHero } from "@/components/ui/page-hero";
@@ -23,14 +24,29 @@ interface InscriptionDocumentData {
   description: string;
 }
 
+interface TuitionInstallment {
+  label: string;
+  fraisLL: string;
+  fraisUSD: string;
+  contributionUSD: string;
+  collationUSD: string;
+}
+
+interface TuitionLevel {
+  level: string;
+  installments: TuitionInstallment[];
+}
+
 /* ── Props ────────────────────────────────────────────── */
 interface InscriptionsContentProps {
   sections: PageSectionRow[];
   inscriptionDocuments: InscriptionDocumentData[];
+  tuitionLevels: TuitionLevel[];
+  tuitionYear: string;
 }
 
 /* ── Component ────────────────────────────────────────── */
-export function InscriptionsContent({ sections, inscriptionDocuments }: InscriptionsContentProps) {
+export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLevels, tuitionYear }: InscriptionsContentProps) {
   /* ── Look up CMS sections by key ── */
   const procedureSection = sections.find((s) => s.sectionKey === "procedure");
   const portesOuvertesSection = sections.find((s) => s.sectionKey === "portes-ouvertes");
@@ -166,6 +182,74 @@ export function InscriptionsContent({ sections, inscriptionDocuments }: Inscript
                 />
               </div>
             </div>
+          </FadeInView>
+        </div>
+      </section>
+
+      {/* Tarifs scolaires */}
+      <section id="tarifs" className="bg-background-alt py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHeader
+            title={`Tarifs scolaires ${tuitionYear}`}
+            subtitle="Frais de scolarite par niveau"
+          />
+          <FadeInView>
+            <div className="mt-12 overflow-x-auto rounded-2xl border border-border bg-background shadow-[var(--shadow-soft)]">
+              <table className="w-full min-w-[700px] text-sm">
+                <thead>
+                  <tr className="border-b border-border bg-primary text-white">
+                    <th className="px-4 py-3 text-left font-semibold">Niveau</th>
+                    <th className="px-4 py-3 text-left font-semibold">Frais de scolarite (LL)</th>
+                    <th className="px-4 py-3 text-left font-semibold">Frais d&apos;enseignement ($)</th>
+                    <th className="px-4 py-3 text-left font-semibold">Contribution en dollars ($)</th>
+                    <th className="px-4 py-3 text-left font-semibold">Collation ($)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {tuitionLevels.map((level, levelIdx) => {
+                    const isEven = levelIdx % 2 === 0;
+
+                    const sumField = (field: keyof TuitionInstallment) =>
+                      level.installments.reduce((sum, inst) => {
+                        const val = inst[field].replace(/[^0-9]/g, "");
+                        return sum + (parseInt(val) || 0);
+                      }, 0);
+
+                    const formatNum = (n: number) =>
+                      n > 0 ? n.toLocaleString("fr-FR").replace(/,/g, " ") : "\u2014";
+
+                    const isLast = levelIdx === tuitionLevels.length - 1;
+
+                    return (
+                      <Fragment key={level.level}>
+                        <tr className={isEven ? "bg-secondary/5" : "bg-primary/5"}>
+                          <td colSpan={5} className={`px-4 py-2 font-bold ${isEven ? "text-secondary" : "text-primary"}`}>{level.level}</td>
+                        </tr>
+                        {level.installments.map((inst) => (
+                          <tr key={inst.label} className="hover:bg-background-alt/50">
+                            <td className="px-4 py-2.5 text-text-muted">{inst.label}</td>
+                            <td className="px-4 py-2.5">{inst.fraisLL}</td>
+                            <td className="px-4 py-2.5">{inst.fraisUSD}</td>
+                            <td className="px-4 py-2.5">{inst.contributionUSD}</td>
+                            <td className="px-4 py-2.5">{inst.collationUSD}</td>
+                          </tr>
+                        ))}
+                        <tr className={`${!isLast ? (isEven ? "border-b-2 border-secondary/30" : "border-b-2 border-primary/30") : ""} ${isEven ? "bg-secondary/5" : "bg-primary/5"} font-semibold`}>
+                          <td className="px-4 py-2.5">Total {level.level}</td>
+                          <td className="px-4 py-2.5">{formatNum(sumField("fraisLL"))}</td>
+                          <td className="px-4 py-2.5">{formatNum(sumField("fraisUSD"))}</td>
+                          <td className="px-4 py-2.5">{formatNum(sumField("contributionUSD"))}</td>
+                          <td className="px-4 py-2.5">{formatNum(sumField("collationUSD"))}</td>
+                        </tr>
+                      </Fragment>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p className="mt-4 text-center text-xs text-text-muted">
+              Les montants sont donnes a titre indicatif et peuvent etre sujets a modification. Contactez l&apos;administration pour plus de details.
+            </p>
           </FadeInView>
         </div>
       </section>

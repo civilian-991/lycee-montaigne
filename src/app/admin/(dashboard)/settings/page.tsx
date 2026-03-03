@@ -23,6 +23,25 @@ export interface SettingCategory {
 
 const categories: SettingCategory[] = [
   {
+    id: "homepage",
+    label: "Page d'accueil",
+    fields: [
+      {
+        key: "homepage_reasons",
+        label: "Pourquoi choisir le Lycee Montaigne",
+        type: "json",
+        jsonFields: [
+          { key: "title", label: "Titre" },
+          { key: "description", label: "Description", type: "textarea" },
+        ],
+      },
+      { key: "trait_union_title", label: "Trait d'union — Titre", type: "text" },
+      { key: "trait_union_description", label: "Trait d'union — Description", type: "textarea" },
+      { key: "trait_union_image", label: "Trait d'union — Image URL", type: "url" },
+      { key: "trait_union_link", label: "Trait d'union — Lien", type: "url" },
+    ],
+  },
+  {
     id: "general",
     label: "General",
     fields: [
@@ -169,6 +188,26 @@ const categories: SettingCategory[] = [
           { key: "description", label: "Description" },
         ],
       },
+      { key: "tuition_year", label: "Annee scolaire (tarifs)", type: "text" },
+      {
+        key: "tuition_levels",
+        label: "Niveaux de tarification",
+        type: "json",
+        jsonFields: [
+          { key: "level", label: "Niveau" },
+        ],
+        nestedArrayField: {
+          key: "installments",
+          label: "Versements",
+          itemFields: [
+            { key: "label", label: "Libelle" },
+            { key: "fraisLL", label: "Frais LL" },
+            { key: "fraisUSD", label: "Frais USD" },
+            { key: "contributionUSD", label: "Contribution USD" },
+            { key: "collationUSD", label: "Collation USD" },
+          ],
+        },
+      },
     ],
   },
   {
@@ -265,6 +304,10 @@ const categories: SettingCategory[] = [
     id: "vie_lm",
     label: "Vie du LM",
     fields: [
+      { key: "sustainability_label", label: "Label developpement durable", type: "text" },
+      { key: "sustainability_referents", label: "Referents developpement durable", type: "textarea" },
+      { key: "cvc_url", label: "URL activites CVC/CVCO", type: "url" },
+      { key: "cvl_url", label: "URL activites CVL", type: "url" },
       { key: "webradio_referents", label: "Referents webradio", type: "textarea" },
       {
         key: "supply_lists",

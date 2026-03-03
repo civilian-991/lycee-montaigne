@@ -9,8 +9,6 @@ import { WaveDivider } from "@/components/ui/wave-divider";
 import { ArrowRight, Leaf, Radio, Vote, Equal, Plane, ExternalLink } from "lucide-react";
 import { localImage } from "@/lib/utils";
 
-const INSTAGRAM_URL = "https://www.instagram.com/lyceemontaigne.liban/";
-
 type PageSectionRow = {
   id: string;
   pageId: string;
@@ -31,9 +29,15 @@ interface VieContentProps {
   }>;
   sections: PageSectionRow[];
   webradioReferents: string;
+  sustainabilityReferents: string;
+  sustainabilityLabel: string;
+  cvcUrl: string;
+  cvlUrl: string;
+  instagramUrl: string;
 }
 
-export function VieContent({ news, sections, webradioReferents }: VieContentProps) {
+export function VieContent({ news, sections, webradioReferents, sustainabilityReferents, sustainabilityLabel, cvcUrl, cvlUrl, instagramUrl }: VieContentProps) {
+  const instagramLink = instagramUrl || "https://www.instagram.com/lyceemontaigne.liban/";
   // Look up CMS sections by key
   const devDurableSection = sections.find((s) => s.sectionKey === "developpement-durable");
   const webradioSection = sections.find((s) => s.sectionKey === "webradio");
@@ -63,7 +67,7 @@ export function VieContent({ news, sections, webradioReferents }: VieContentProp
           <div className="flex flex-wrap items-end justify-between gap-4">
             <SectionHeader title="Actualites" className="mb-0 text-left" />
             <a
-              href={INSTAGRAM_URL}
+              href={instagramLink}
               target="_blank"
               rel="noopener noreferrer"
               className="mb-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#f09433] via-[#e6683c] to-[#bc1888] px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_-2px_rgba(188,24,136,0.4)]"
@@ -77,7 +81,7 @@ export function VieContent({ news, sections, webradioReferents }: VieContentProp
             <div className="mt-4 grid gap-5 lg:grid-cols-5">
               {/* Featured — large */}
               <a
-                href={displayNews[0]?.link ?? INSTAGRAM_URL}
+                href={displayNews[0]?.link ?? instagramLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)] lg:col-span-3 lg:row-span-2"
@@ -104,7 +108,7 @@ export function VieContent({ news, sections, webradioReferents }: VieContentProp
               {displayNews.slice(1, 5).map((item) => (
                 <a
                   key={item.title}
-                  href={item.link ?? INSTAGRAM_URL}
+                  href={item.link ?? instagramLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)] lg:col-span-1"
@@ -153,26 +157,24 @@ export function VieContent({ news, sections, webradioReferents }: VieContentProp
                       dangerouslySetInnerHTML={{ __html: devDurableSection.contentHtml }}
                     />
                   ) : (
-                    <>
-                      <p className="mt-6 leading-relaxed text-text-muted">
-                        Depuis sa creation en 2012, le Lycee Montaigne s&apos;engage en faveur du developpement durable
-                        et de l&apos;eco-citoyennete. Notre demarche vise a former des citoyens responsables et
-                        conscients des enjeux environnementaux.
-                      </p>
-                      <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-sm font-semibold text-secondary">
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-secondary text-[10px] font-bold text-white">3</span>
-                        Label EFE3D Niveau Expert
-                      </div>
-                      <div className="mt-6 rounded-2xl border border-border bg-background p-5 shadow-[var(--shadow-soft)]">
-                        <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referents</p>
-                        <p className="mt-2 text-sm text-text">
-                          Mme Roula Chalabi <span className="text-text-muted">(1er degre)</span>
-                        </p>
-                        <p className="mt-1 text-sm text-text">
-                          M. Robert Sreih <span className="text-text-muted">(2nd degre)</span>
-                        </p>
-                      </div>
-                    </>
+                    <p className="mt-6 leading-relaxed text-text-muted">
+                      Depuis sa creation en 2012, le Lycee Montaigne s&apos;engage en faveur du developpement durable
+                      et de l&apos;eco-citoyennete. Notre demarche vise a former des citoyens responsables et
+                      conscients des enjeux environnementaux.
+                    </p>
+                  )}
+                  {sustainabilityLabel && (
+                    <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-2 text-sm font-semibold text-secondary">
+                      {sustainabilityLabel}
+                    </div>
+                  )}
+                  {sustainabilityReferents && (
+                    <div className="mt-6 rounded-2xl border border-border bg-background p-5 shadow-[var(--shadow-soft)]">
+                      <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referents</p>
+                      {sustainabilityReferents.split("\n").filter(Boolean).map((line, i) => (
+                        <p key={i} className="mt-1 text-sm text-text">{line}</p>
+                      ))}
+                    </div>
                   )}
                 </div>
                 {sustainabilityImages.length > 0 ? (
@@ -268,73 +270,99 @@ export function VieContent({ news, sections, webradioReferents }: VieContentProp
               title="Nos valeurs en action"
               subtitle="Democratie scolaire et egalite au coeur de notre projet educatif"
             />
-            <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2">
-              {/* Democratie scolaire */}
-              <StaggerItem>
-                <div className="group h-full overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
-                  <div className="relative aspect-[16/9] overflow-hidden">
+            {/* Democratie scolaire — full-width prominent card */}
+            <FadeInView>
+              <div className="mt-12 overflow-hidden rounded-[24px] border border-border bg-background shadow-[var(--shadow-warm)]">
+                <div className="grid items-stretch lg:grid-cols-2">
+                  <div className="relative min-h-[280px]">
                     <Image
                       src={localImage(climatSection?.image) || "/images/climat-categories/April2025/mNHwl4NOWUZkZgPfyTNi.jpeg"}
                       alt="Democratie scolaire"
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                     />
                     <div className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white/90 shadow-[var(--shadow-soft)] backdrop-blur-sm">
                       <Vote className="h-5 w-5 text-primary" />
                     </div>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold text-primary">
+                  <div className="flex flex-col justify-center p-8 md:p-10">
+                    <h3 className="font-heading text-2xl font-bold text-primary md:text-3xl">
                       {climatSection?.title || "Democratie scolaire"}
                     </h3>
                     {climatSection?.contentHtml ? (
                       <div
-                        className="mt-2 text-sm leading-relaxed text-text-muted [&>p]:mt-2"
+                        className="mt-3 leading-relaxed text-text-muted [&>p]:mt-3"
                         dangerouslySetInnerHTML={{ __html: climatSection.contentHtml }}
                       />
                     ) : (
-                      <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                      <p className="mt-3 leading-relaxed text-text-muted">
                         Le Lycee Montaigne favorise la participation active des eleves a travers les instances de
                         democratie scolaire : conseil de vie collegienne (CVC), conseil de vie lyceenne (CVL),
                         et elections de delegues.
                       </p>
                     )}
+                    {(cvcUrl || cvlUrl) && (
+                      <div className="mt-6 flex flex-wrap gap-3">
+                        {cvcUrl && (
+                          <a
+                            href={cvcUrl}
+                            className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-light hover:shadow-[0_4px_16px_-2px_rgba(2,53,91,0.25)]"
+                          >
+                            Acceder aux activites du CVCO
+                            <ArrowRight className="h-4 w-4" />
+                          </a>
+                        )}
+                        {cvlUrl && (
+                          <a
+                            href={cvlUrl}
+                            className="inline-flex items-center gap-2 rounded-full border-2 border-primary/20 bg-background px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary hover:text-white"
+                          >
+                            Acceder aux activites du CVL
+                            <ArrowRight className="h-4 w-4" />
+                          </a>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
-              </StaggerItem>
+              </div>
+            </FadeInView>
 
-              {/* Egalite */}
+            {/* Egalite */}
+            <StaggerChildren className="mt-8 grid gap-6 md:grid-cols-1">
               <StaggerItem>
-                <div id="egalite" className="group h-full overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
-                  <div className="relative aspect-[16/9] overflow-hidden">
-                    <Image
-                      src={localImage(egaliteSection?.image) || "/images/egalite-intros/October2024/7QOD9LQ0ZmvqaH1ck4qJ.jpg"}
-                      alt="Egalite filles-garcons"
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                    <div className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white/90 shadow-[var(--shadow-soft)] backdrop-blur-sm">
-                      <Equal className="h-5 w-5 text-primary" />
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-lg font-bold text-primary">
-                      {egaliteSection?.title || "Egalite"}
-                    </h3>
-                    {egaliteSection?.contentHtml ? (
-                      <div
-                        className="mt-2 text-sm leading-relaxed text-text-muted [&>p]:mt-2"
-                        dangerouslySetInnerHTML={{ __html: egaliteSection.contentHtml }}
+                <div id="egalite" className="group overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:shadow-[var(--shadow-warm)]">
+                  <div className="grid items-stretch lg:grid-cols-2">
+                    <div className="relative aspect-[16/9] overflow-hidden lg:aspect-auto lg:min-h-[240px]">
+                      <Image
+                        src={localImage(egaliteSection?.image) || "/images/egalite-intros/October2024/7QOD9LQ0ZmvqaH1ck4qJ.jpg"}
+                        alt="Egalite filles-garcons"
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
                       />
-                    ) : (
-                      <p className="mt-2 text-sm leading-relaxed text-text-muted">
-                        Conformement a la politique de l&apos;AEFE, le Lycee Montaigne s&apos;inscrit dans une demarche
-                        active de promotion de l&apos;egalite entre les filles et les garcons et de lutte
-                        contre les stereotypes.
-                      </p>
-                    )}
+                      <div className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-xl bg-white/90 shadow-[var(--shadow-soft)] backdrop-blur-sm">
+                        <Equal className="h-5 w-5 text-primary" />
+                      </div>
+                    </div>
+                    <div className="p-6 md:p-8">
+                      <h3 className="text-lg font-bold text-primary">
+                        {egaliteSection?.title || "Egalite"}
+                      </h3>
+                      {egaliteSection?.contentHtml ? (
+                        <div
+                          className="mt-2 text-sm leading-relaxed text-text-muted [&>p]:mt-2"
+                          dangerouslySetInnerHTML={{ __html: egaliteSection.contentHtml }}
+                        />
+                      ) : (
+                        <p className="mt-2 text-sm leading-relaxed text-text-muted">
+                          Conformement a la politique de l&apos;AEFE, le Lycee Montaigne s&apos;inscrit dans une demarche
+                          active de promotion de l&apos;egalite entre les filles et les garcons et de lutte
+                          contre les stereotypes.
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </StaggerItem>
