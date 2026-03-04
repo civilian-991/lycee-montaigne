@@ -66,10 +66,14 @@ export const navigation: NavItem[] = [
     href: "/vie-du-lm",
     children: [
       { label: "Actualités", href: "/vie-du-lm#actualite" },
+      { label: "Toutes les actualités", href: "/actualites" },
       { label: "Développement durable", href: "/vie-du-lm#dev" },
       { label: "Webradio", href: "/vie-du-lm#web" },
       { label: "Démocratie scolaire", href: "/vie-du-lm#climat" },
+      { label: "CVC", href: "/vie-du-lm/climat/cvc" },
+      { label: "CVL", href: "/vie-du-lm/climat/cvl" },
       { label: "Égalité", href: "/vie-du-lm#egalite" },
+      { label: "Activités égalité", href: "/vie-du-lm/egalite/activite" },
       { label: "Séjours", href: "/vie-du-lm#sejour" },
     ],
   },
@@ -89,6 +93,7 @@ export const navigation: NavItem[] = [
     children: [
       { label: "Activités périscolaires", href: "/extrascolaire#activite" },
       { label: "Association sportive", href: "/extrascolaire#action" },
+      { label: "Ligue sportive", href: "/ligue-sportive" },
     ],
   },
   {

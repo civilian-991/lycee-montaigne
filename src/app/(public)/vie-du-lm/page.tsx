@@ -46,8 +46,6 @@ export default async function VieDuLMPage() {
       webradioReferents={settings.webradio_referents}
       sustainabilityReferents={settings.sustainability_referents}
       sustainabilityLabel={settings.sustainability_label}
-      cvcUrl={settings.cvc_url}
-      cvlUrl={settings.cvl_url}
       instagramUrl={settings.instagram}
     />
   );

@@ -6,7 +6,7 @@ import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { WaveDivider } from "@/components/ui/wave-divider";
-import { ArrowRight, Leaf, Radio, Vote, Equal, Plane, ExternalLink } from "lucide-react";
+import { ArrowRight, Leaf, Radio, Vote, Equal, Plane } from "lucide-react";
 import { localImage } from "@/lib/utils";
 
 type PageSectionRow = {
@@ -31,12 +31,10 @@ interface VieContentProps {
   webradioReferents: string;
   sustainabilityReferents: string;
   sustainabilityLabel: string;
-  cvcUrl: string;
-  cvlUrl: string;
   instagramUrl: string;
 }
 
-export function VieContent({ news, sections, webradioReferents, sustainabilityReferents, sustainabilityLabel, cvcUrl, cvlUrl, instagramUrl }: VieContentProps) {
+export function VieContent({ news, sections, webradioReferents, sustainabilityReferents, sustainabilityLabel, instagramUrl }: VieContentProps) {
   const instagramLink = instagramUrl || "https://www.instagram.com/lyceemontaigne.liban/";
   // Look up CMS sections by key
   const devDurableSection = sections.find((s) => s.sectionKey === "developpement-durable");
@@ -133,6 +131,18 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
             <p className="mt-8 text-center text-text-muted">
               Aucune actualite pour le moment. Suivez-nous sur Instagram pour les dernieres nouvelles.
             </p>
+          )}
+
+          {displayNews.length > 0 && (
+            <div className="mt-8 text-center">
+              <Link
+                href="/actualites"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-primary/20 px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary hover:text-white"
+              >
+                Voir toutes les actualites
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           )}
         </div>
       </section>
@@ -302,28 +312,22 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                         et elections de delegues.
                       </p>
                     )}
-                    {(cvcUrl || cvlUrl) && (
-                      <div className="mt-6 flex flex-wrap gap-3">
-                        {cvcUrl && (
-                          <a
-                            href={cvcUrl}
-                            className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-light hover:shadow-[0_4px_16px_-2px_rgba(2,53,91,0.25)]"
-                          >
-                            Acceder aux activites du CVCO
-                            <ArrowRight className="h-4 w-4" />
-                          </a>
-                        )}
-                        {cvlUrl && (
-                          <a
-                            href={cvlUrl}
-                            className="inline-flex items-center gap-2 rounded-full border-2 border-primary/20 bg-background px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary hover:text-white"
-                          >
-                            Acceder aux activites du CVL
-                            <ArrowRight className="h-4 w-4" />
-                          </a>
-                        )}
-                      </div>
-                    )}
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      <Link
+                        href="/vie-du-lm/climat/cvc"
+                        className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-light hover:shadow-[0_4px_16px_-2px_rgba(2,53,91,0.25)]"
+                      >
+                        Acceder aux activites du CVC
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                      <Link
+                        href="/vie-du-lm/climat/cvl"
+                        className="inline-flex items-center gap-2 rounded-full border-2 border-primary/20 bg-background px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary hover:text-white"
+                      >
+                        Acceder aux activites du CVL
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -362,6 +366,13 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                           contre les stereotypes.
                         </p>
                       )}
+                      <Link
+                        href="/vie-du-lm/egalite/activite"
+                        className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-secondary"
+                      >
+                        Voir les activites
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
                     </div>
                   </div>
                 </div>
