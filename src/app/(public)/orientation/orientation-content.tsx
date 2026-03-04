@@ -79,10 +79,15 @@ interface OrientationContentProps {
 /* ── Component ────────────────────────────────────────── */
 export function OrientationContent({ documents, sections, activities, universities }: OrientationContentProps) {
   /* ── Look up CMS sections by key ── */
+  const orientationIntroSection = sections.find((s) => s.sectionKey === "orientation-intro");
   const parcoursAvenirSection = sections.find((s) => s.sectionKey === "parcours-avenir");
+  const calendriersIntroSection = sections.find((s) => s.sectionKey === "calendriers-intro");
+  const admissionsPostbacSection = sections.find((s) => s.sectionKey === "admissions-postbac");
   const parcoursupSection = sections.find((s) => s.sectionKey === "parcoursup");
   const admissionsSection = sections.find((s) => s.sectionKey === "admissions");
   const admissionsImagesSection = sections.find((s) => s.sectionKey === "admissions-images");
+  const universitesLibanSection = sections.find((s) => s.sectionKey === "universites-liban");
+  const universitesEtrangerSection = sections.find((s) => s.sectionKey === "universites-etranger");
   const universitesSection = sections.find((s) => s.sectionKey === "universites");
   const ctaSection = sections.find((s) => s.sectionKey === "cta");
 
@@ -122,13 +127,75 @@ export function OrientationContent({ documents, sections, activities, universiti
 
   /* ── Derive universities from settings, with CMS image data if available ── */
   const cmsUniversities = safeJsonParse<{ name: string; image: string; url: string }[]>(universitesSection?.contentHtml);
-  const displayUniversities = cmsUniversities && cmsUniversities.length > 0
+  const allUniversities = cmsUniversities && cmsUniversities.length > 0
     ? cmsUniversities
     : universities.map((u) => ({ name: u.name, image: "", url: u.url }));
+
+  /* ── Split universities into Lebanon / International via CMS sections or heuristics ── */
+  const cmsLibanUnis = safeJsonParse<{ name: string; image: string; url: string }[]>(universitesLibanSection?.contentHtml);
+  const cmsEtrangerUnis = safeJsonParse<{ name: string; image: string; url: string }[]>(universitesEtrangerSection?.contentHtml);
+
+  const lebaneseKeywords = ["lau", "aub", "usj", "usek", "ndu", "bau", "liu", "aust", "liban", "lebanese", "balamand", "sagesse", "antonine", "alba"];
+  const universitesLiban = cmsLibanUnis && cmsLibanUnis.length > 0
+    ? cmsLibanUnis
+    : allUniversities.filter((u) => lebaneseKeywords.some((k) => u.name.toLowerCase().includes(k) || u.url.toLowerCase().includes(k)));
+  const universitesEtranger = cmsEtrangerUnis && cmsEtrangerUnis.length > 0
+    ? cmsEtrangerUnis
+    : allUniversities.filter((u) => !lebaneseKeywords.some((k) => u.name.toLowerCase().includes(k) || u.url.toLowerCase().includes(k)));
 
   return (
     <>
       <PageHero title="Orientation" />
+
+      {/* ─── Orientation intro ─── */}
+      <section className="py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4">
+          <FadeInView>
+            <div className="mx-auto max-w-4xl">
+              {orientationIntroSection?.image && (
+                <div className="float-left mb-4 mr-6 w-36 overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
+                  <Image
+                    src={localImage(orientationIntroSection.image) || orientationIntroSection.image}
+                    alt="Conseillere d'orientation"
+                    width={144}
+                    height={192}
+                    className="h-auto w-full object-cover"
+                  />
+                </div>
+              )}
+              {orientationIntroSection?.title && (
+                <h2 className="font-heading text-2xl font-bold text-primary md:text-3xl">
+                  {orientationIntroSection.title}
+                </h2>
+              )}
+              {orientationIntroSection?.contentHtml ? (
+                <div
+                  className="mt-4 leading-relaxed text-text-muted [&>p]:mt-4"
+                  dangerouslySetInnerHTML={{ __html: orientationIntroSection.contentHtml }}
+                />
+              ) : (
+                <>
+                  <h2 className="font-heading text-2xl font-bold text-primary md:text-3xl">
+                    Le service d&apos;orientation
+                  </h2>
+                  <p className="mt-4 leading-relaxed text-text-muted">
+                    Le Lycee Montaigne dispose d&apos;un service d&apos;orientation dedie a l&apos;accompagnement
+                    personnalise de chaque eleve dans la construction de son projet d&apos;avenir. Notre
+                    conseillere d&apos;orientation est presente pour informer, conseiller et guider les
+                    eleves et leurs familles a chaque etape du parcours scolaire.
+                  </p>
+                  <p className="mt-4 leading-relaxed text-text-muted">
+                    De l&apos;exploration des metiers a la preparation des candidatures post-bac, en passant
+                    par les forums et les entretiens individualises, notre equipe met tout en oeuvre
+                    pour que chaque eleve trouve sa voie.
+                  </p>
+                </>
+              )}
+              <div className="clear-both" />
+            </div>
+          </FadeInView>
+        </div>
+      </section>
 
       {/* ─── Parcours avenir ─── */}
       <section id="presentation" className="py-16 md:py-24">
@@ -182,6 +249,38 @@ export function OrientationContent({ documents, sections, activities, universiti
               title="Calendriers d'orientation"
               subtitle="Planifiez l'annee de votre enfant avec les echeances cles"
             />
+            {/* Calendriers intro text + photo */}
+            <FadeInView>
+              <div className="mt-8 grid items-center gap-8 lg:grid-cols-[1fr_300px]">
+                <div>
+                  {calendriersIntroSection?.contentHtml ? (
+                    <div
+                      className="leading-relaxed text-text-muted [&>p]:mt-4"
+                      dangerouslySetInnerHTML={{ __html: calendriersIntroSection.contentHtml }}
+                    />
+                  ) : (
+                    <p className="leading-relaxed text-text-muted">
+                      Les calendriers d&apos;orientation permettent aux eleves et a leurs familles de
+                      visualiser les etapes cles de l&apos;annee : forums des metiers, journees portes
+                      ouvertes des universites, dates limites de candidature et entretiens
+                      d&apos;orientation. Chaque niveau dispose de son propre calendrier adapte
+                      aux echeances specifiques.
+                    </p>
+                  )}
+                </div>
+                {calendriersIntroSection?.image && (
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
+                    <Image
+                      src={localImage(calendriersIntroSection.image) || calendriersIntroSection.image}
+                      alt="Calendriers d'orientation"
+                      fill
+                      className="object-cover"
+                      sizes="300px"
+                    />
+                  </div>
+                )}
+              </div>
+            </FadeInView>
             <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-3">
               {orientationCalendars.map((cal) => (
                 <StaggerItem key={cal.level}>
@@ -254,7 +353,42 @@ export function OrientationContent({ documents, sections, activities, universiti
         </section>
       )}
 
-      {/* ─── Resultats admissions ─── */}
+      {/* ─── Admissions post-bac ─── */}
+      <section id="admissions-postbac" className="py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4">
+          <FadeInView>
+            <div className="mx-auto max-w-3xl text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-white">
+                <GraduationCap className="h-7 w-7" />
+              </div>
+              <SectionHeader title={admissionsPostbacSection?.title || "Admissions post-bac"} />
+              {admissionsPostbacSection?.contentHtml ? (
+                <div
+                  className="mt-4 text-text-muted [&>p]:mt-4"
+                  dangerouslySetInnerHTML={{ __html: admissionsPostbacSection.contentHtml }}
+                />
+              ) : (
+                <p className="mt-4 text-text-muted">
+                  Decouvrez les possibilites d&apos;admission post-bac pour les eleves du Lycee Montaigne.
+                  Notre equipe accompagne chaque eleve dans ses demarches d&apos;inscription aupres des
+                  etablissements d&apos;enseignement superieur au Liban et a l&apos;international.
+                </p>
+              )}
+            </div>
+            {/* Placeholder for Genially embed — content managed via CMS */}
+            {admissionsPostbacSection?.contentHtml && admissionsPostbacSection.contentHtml.includes("iframe") && (
+              <div className="mt-8 overflow-hidden rounded-2xl border border-border shadow-[var(--shadow-soft)]">
+                <div
+                  className="[&>iframe]:h-[500px] [&>iframe]:w-full"
+                  dangerouslySetInnerHTML={{ __html: admissionsPostbacSection.contentHtml }}
+                />
+              </div>
+            )}
+          </FadeInView>
+        </div>
+      </section>
+
+      {/* ─── Les succes de l'orientation ─── */}
       <section id="admissions" className="bg-background-alt py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <FadeInView>
@@ -262,7 +396,7 @@ export function OrientationContent({ documents, sections, activities, universiti
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-secondary to-secondary-dark text-white">
                 <Trophy className="h-7 w-7" />
               </div>
-              <SectionHeader title={admissionsSection?.title || "Admissions post-bac 2024-2025"} />
+              <SectionHeader title={admissionsSection?.title || "Les succes de l'orientation au college et au lycee"} />
               {admissionsSection?.contentHtml ? (
                 <div
                   className="mt-4 text-text-muted [&>p]:mt-4"
@@ -280,7 +414,7 @@ export function OrientationContent({ documents, sections, activities, universiti
             <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
               {displayAdmissionImages.map((img, i) => (
                 <StaggerItem key={i}>
-                  <div className="group relative aspect-[3/4] overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)]">
+                  <div className="group relative aspect-square overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)]">
                     <Image
                       src={img}
                       alt={`Resultats d'admission ${i + 1}`}
@@ -319,8 +453,11 @@ export function OrientationContent({ documents, sections, activities, universiti
                   <Compass className="h-6 w-6" />
                 </div>
                 <h2 className="font-heading text-3xl font-bold md:text-4xl">
-                  {parcoursupSection?.title || "Parcoursup"}
+                  Accompagnement personnalise en France
                 </h2>
+                <p className="mt-2 text-lg font-semibold text-white/60">
+                  {parcoursupSection?.title || "Parcoursup"}
+                </p>
                 {parcoursupSection?.contentHtml ? (
                   <div
                     className="mt-4 leading-relaxed text-white/80 [&>p]:mt-4"
@@ -359,23 +496,23 @@ export function OrientationContent({ documents, sections, activities, universiti
 
       <WaveDivider fill="var(--color-background)" className="relative -mt-px rotate-180" />
 
-      {/* ─── Inscriptions universites ─── */}
-      {displayUniversities.length > 0 && (
-        <section id="uni" className="py-16 md:py-24">
+      {/* ─── Accompagnement personnalise au Liban ─── */}
+      {universitesLiban.length > 0 && (
+        <section id="uni-liban" className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">
             <FadeInView>
               <div className="mx-auto max-w-3xl text-center">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-white">
                   <GraduationCap className="h-7 w-7" />
                 </div>
-                <SectionHeader title="Inscriptions universites" />
+                <SectionHeader title="Accompagnement personnalise au Liban" />
                 <p className="mt-4 text-text-muted">
-                  Accedez directement aux portails d&apos;admission des universites partenaires au Liban et a l&apos;international.
+                  Accedez directement aux portails d&apos;admission des universites partenaires au Liban.
                 </p>
               </div>
             </FadeInView>
             <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-              {displayUniversities.map((uni) => (
+              {universitesLiban.map((uni) => (
                 <StaggerItem key={uni.name}>
                   <a
                     href={uni.url}
@@ -396,6 +533,57 @@ export function OrientationContent({ documents, sections, activities, universiti
                     ) : (
                       <div className="flex h-16 w-full items-center justify-center">
                         <GraduationCap className="h-8 w-8 text-primary/40" />
+                      </div>
+                    )}
+                    <div className="mt-3 flex items-center gap-1.5 text-xs font-medium text-primary transition-colors group-hover:text-secondary">
+                      {uni.name}
+                      <ExternalLink className="h-3 w-3" />
+                    </div>
+                  </a>
+                </StaggerItem>
+              ))}
+            </StaggerChildren>
+          </div>
+        </section>
+      )}
+
+      {/* ─── Accompagnement personnalise a l'etranger ─── */}
+      {universitesEtranger.length > 0 && (
+        <section id="uni-etranger" className="bg-background-alt py-16 md:py-24">
+          <div className="mx-auto max-w-7xl px-4">
+            <FadeInView>
+              <div className="mx-auto max-w-3xl text-center">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-secondary-dark to-secondary text-white">
+                  <GraduationCap className="h-7 w-7" />
+                </div>
+                <SectionHeader title="Accompagnement personnalise a l'etranger" />
+                <p className="mt-4 text-text-muted">
+                  Accedez directement aux portails d&apos;admission des universites partenaires a l&apos;international.
+                </p>
+              </div>
+            </FadeInView>
+            <StaggerChildren className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+              {universitesEtranger.map((uni) => (
+                <StaggerItem key={uni.name}>
+                  <a
+                    href={uni.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex flex-col items-center rounded-[20px] border border-border bg-background p-5 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
+                  >
+                    {uni.image ? (
+                      <div className="relative h-16 w-full">
+                        <Image
+                          src={localImage(uni.image) || uni.image}
+                          alt={uni.name}
+                          fill
+                          className="object-contain transition-transform duration-300 group-hover:scale-110"
+                          sizes="120px"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex h-16 w-full items-center justify-center">
+                        <GraduationCap className="h-8 w-8 text-secondary/40" />
                       </div>
                     )}
                     <div className="mt-3 flex items-center gap-1.5 text-xs font-medium text-primary transition-colors group-hover:text-secondary">
