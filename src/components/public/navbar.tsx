@@ -182,12 +182,6 @@ export function Navbar({
                 );
               })}
             </div>
-            <span className="h-4 w-px bg-white/12" />
-            <div className="flex items-center gap-4">
-              {partnerLogos.map((logo) => (
-                <Image key={logo.src} src={logo.src} alt={logo.alt} width={100} height={40} className="h-7 w-auto opacity-80 transition-opacity duration-300 hover:opacity-100" />
-              ))}
-            </div>
           </div>
         </div>
       </div>
@@ -292,6 +286,22 @@ export function Navbar({
           </button>
         </div>
       </header>
+
+      {/* ─── Partner Logos Strip ───────────────────────────────── */}
+      <div className="border-y border-border/30 bg-background-alt/50">
+        <div className="mx-auto flex max-w-7xl items-center justify-center gap-8 px-6 py-3 sm:gap-12 md:gap-16">
+          {partnerLogos.map((logo) => (
+            <Image
+              key={logo.src}
+              src={logo.src}
+              alt={logo.alt}
+              width={200}
+              height={80}
+              className="h-10 w-auto opacity-75 transition-opacity duration-300 hover:opacity-100 sm:h-12 md:h-14"
+            />
+          ))}
+        </div>
+      </div>
 
       {/* Sentinel for sticky detection */}
       <div ref={sentinelRef} className="h-0" />
@@ -601,9 +611,9 @@ export function Navbar({
                 );
               })}
             </div>
-            <div className="mt-5 flex items-center justify-center gap-5 border-t border-border/25 pt-5">
+            <div className="mt-5 flex items-center justify-center gap-6 border-t border-border/25 pt-5">
               {partnerLogos.map((logo) => (
-                <Image key={logo.src} src={logo.src} alt={logo.alt} width={60} height={24} className="h-6 w-auto opacity-70" />
+                <Image key={logo.src} src={logo.src} alt={logo.alt} width={120} height={48} className="h-10 w-auto opacity-75" />
               ))}
             </div>
           </div>
