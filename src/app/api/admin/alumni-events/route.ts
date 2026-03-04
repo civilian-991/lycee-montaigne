@@ -28,6 +28,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(events);
   } catch (error) {
+    console.error("[API GET alumni-events]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -54,6 +55,7 @@ export async function POST(req: Request) {
     await logAudit(session.user!.id!, "CREATE", "alumniEvent", event.id, { title: event.title });
     return NextResponse.json(event, { status: 201 });
   } catch (error) {
+    console.error("[API POST alumni-events]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

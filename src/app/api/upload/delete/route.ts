@@ -27,6 +27,7 @@ export async function POST(req: Request) {
     await del(parsed.url);
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API POST upload/delete]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

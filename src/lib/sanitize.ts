@@ -31,7 +31,15 @@ export function cleanHtml(dirty: string): string {
       a: ["href", "target", "rel", "class"],
       "*": ["class"],
     },
-    allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com"],
+    allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "view.genially.com", "app.genially.com"],
+    transformTags: {
+      a: (tagName, attribs) => {
+        if (attribs.target === "_blank") {
+          attribs.rel = "noopener noreferrer";
+        }
+        return { tagName, attribs };
+      },
+    },
   });
 }
 

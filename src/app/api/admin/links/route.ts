@@ -17,7 +17,8 @@ export async function GET() {
 
     const links = await db.quickLink.findMany({ orderBy: { order: "asc" } });
     return NextResponse.json(links);
-  } catch {
+  } catch (error) {
+    console.error("[API GET links]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -49,6 +50,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(link, { status: 201 });
   } catch (error) {
+    console.error("[API POST links]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

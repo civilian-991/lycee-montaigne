@@ -37,6 +37,7 @@ export async function PUT(req: Request) {
     await logAudit(session.user!.id!, "UPDATE", "siteSetting", "bulk", { keys: entries.map(([k]) => k) });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API PUT settings]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

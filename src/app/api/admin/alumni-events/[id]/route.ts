@@ -25,6 +25,7 @@ export async function GET(
 
     return NextResponse.json(event);
   } catch (error) {
+    console.error("[API GET alumni-events]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -56,6 +57,7 @@ export async function PUT(
     await logAudit(session.user!.id!, "UPDATE", "alumniEvent", event.id, { title: event.title });
     return NextResponse.json(event);
   } catch (error) {
+    console.error("[API PUT alumni-events]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
     }
@@ -82,6 +84,7 @@ export async function DELETE(
     await logAudit(session.user!.id!, "DELETE", "alumniEvent", id, { title: existing.title });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API DELETE alumni-events]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

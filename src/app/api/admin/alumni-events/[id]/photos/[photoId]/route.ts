@@ -32,6 +32,7 @@ export async function PUT(
 
     return NextResponse.json(photo);
   } catch (error) {
+    console.error("[API PUT alumni-photos]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
     }
@@ -58,6 +59,7 @@ export async function DELETE(
     await db.alumniPhoto.delete({ where: { id: photoId } });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API DELETE alumni-photos]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

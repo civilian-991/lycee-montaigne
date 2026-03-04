@@ -17,6 +17,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     if (!item) return NextResponse.json({ error: "Non trouvé" }, { status: 404 });
     return NextResponse.json(item);
   } catch (error) {
+    console.error("[API GET activities]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -52,6 +53,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     await logAudit(session.user!.id!, "UPDATE", "activityItem", item.id, { title: item.title });
     return NextResponse.json(item);
   } catch (error) {
+    console.error("[API PUT activities]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
     }
@@ -76,6 +78,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     await logAudit(session.user!.id!, "DELETE", "activityItem", id, { title: existing.title });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API DELETE activities]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

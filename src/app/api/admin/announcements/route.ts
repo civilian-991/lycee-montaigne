@@ -21,6 +21,7 @@ export async function GET(req: Request) {
     });
     return NextResponse.json(items);
   } catch (error) {
+    console.error("[API GET announcements]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -49,6 +50,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(item, { status: 201 });
   } catch (error) {
+    console.error("[API POST announcements]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

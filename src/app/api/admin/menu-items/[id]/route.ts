@@ -25,7 +25,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     if (!item) return NextResponse.json({ error: "Élément introuvable" }, { status: 404 });
 
     return NextResponse.json(item);
-  } catch {
+  } catch (error) {
+    console.error("[API GET menu-items]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -61,6 +62,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     await logAudit(session.user!.id!, "UPDATE", "menuItem", updated.id, { label: updated.label });
     return NextResponse.json(updated);
   } catch (error) {
+    console.error("[API PUT menu-items]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
     }
@@ -89,7 +91,8 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     await logAudit(session.user!.id!, "DELETE", "menuItem", id, { label: existing.label });
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error) {
+    console.error("[API DELETE menu-items]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

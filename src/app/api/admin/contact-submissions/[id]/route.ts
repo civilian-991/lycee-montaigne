@@ -30,6 +30,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     return NextResponse.json(submission);
   } catch (error) {
+    console.error("[API PATCH contact-submissions]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
     }
@@ -58,6 +59,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API DELETE contact-submissions]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

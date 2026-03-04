@@ -38,6 +38,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     await logAudit(session.user!.id!, "UPDATE", "newsItem", item.id, { title: item.title });
     return NextResponse.json(item);
   } catch (error) {
+    console.error("[API PUT news]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
     }
@@ -62,6 +63,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     await logAudit(session.user!.id!, "DELETE", "newsItem", id, { title: existing.title });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API DELETE news]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

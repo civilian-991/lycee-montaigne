@@ -17,7 +17,8 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
     return NextResponse.json(submissions);
-  } catch {
+  } catch (error) {
+    console.error("[API GET contact-submissions]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

@@ -17,6 +17,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     if (!item) return NextResponse.json({ error: "Non trouvé" }, { status: 404 });
     return NextResponse.json(item);
   } catch (error) {
+    console.error("[API GET certifications]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -51,6 +52,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     await logAudit(session.user!.id!, "UPDATE", "certification", item.id, { name: item.name });
     return NextResponse.json(item);
   } catch (error) {
+    console.error("[API PUT certifications]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
     }
@@ -75,6 +77,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     await logAudit(session.user!.id!, "DELETE", "certification", id, { name: existing.name });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API DELETE certifications]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

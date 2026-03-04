@@ -23,6 +23,7 @@ export async function GET() {
 
     return NextResponse.json(staff);
   } catch (error) {
+    console.error("[API GET staff]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -56,6 +57,7 @@ export async function POST(req: Request) {
     await logAudit(session.user!.id!, "CREATE", "staffMember", member.id, { name: member.name });
     return NextResponse.json(member, { status: 201 });
   } catch (error) {
+    console.error("[API POST staff]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

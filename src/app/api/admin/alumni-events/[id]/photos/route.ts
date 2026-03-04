@@ -32,6 +32,7 @@ export async function POST(
     await logAudit(session.user!.id!, "CREATE", "alumniPhoto", photo.id, { eventId: id });
     return NextResponse.json(photo, { status: 201 });
   } catch (error) {
+    console.error("[API POST alumni-photos]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

@@ -35,6 +35,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
     return NextResponse.json(updated);
   } catch (error) {
+    console.error("[API PUT links]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
     }
@@ -62,6 +63,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     await db.quickLink.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API DELETE links]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

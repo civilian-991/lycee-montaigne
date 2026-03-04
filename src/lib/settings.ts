@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db } from "@/lib/db";
 
 /* ------------------------------------------------------------------ */
@@ -525,7 +526,7 @@ export const ALL_SETTING_KEYS = [
 /*  getSettings() — main helper used by server components              */
 /* ------------------------------------------------------------------ */
 
-export async function getSettings(): Promise<SiteSettings> {
+export const getSettings = cache(async function getSettings(): Promise<SiteSettings> {
   let rows: { key: string; value: string }[] = [];
   try {
     rows = await db.siteSetting.findMany({
@@ -558,4 +559,4 @@ export async function getSettings(): Promise<SiteSettings> {
   }
 
   return result as unknown as SiteSettings;
-}
+});

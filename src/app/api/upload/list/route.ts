@@ -10,6 +10,7 @@ export async function GET() {
     const { blobs } = await list();
     return NextResponse.json(blobs);
   } catch (error) {
+    console.error("[API GET upload/list]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

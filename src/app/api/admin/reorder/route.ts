@@ -71,7 +71,8 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (error) {
+    console.error("[API POST reorder]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

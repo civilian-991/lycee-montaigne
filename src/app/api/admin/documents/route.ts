@@ -13,6 +13,7 @@ export async function GET() {
     const docs = await db.document.findMany({ orderBy: [{ category: "asc" }, { order: "asc" }] });
     return NextResponse.json(docs);
   } catch (error) {
+    console.error("[API GET documents]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
     await logAudit(session.user!.id!, "CREATE", "document", doc.id, { title: doc.title });
     return NextResponse.json(doc, { status: 201 });
   } catch (error) {
+    console.error("[API POST documents]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

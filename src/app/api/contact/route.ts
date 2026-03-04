@@ -31,7 +31,8 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error) {
+    console.error("[API POST contact]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

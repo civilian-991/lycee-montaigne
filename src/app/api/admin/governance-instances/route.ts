@@ -18,6 +18,7 @@ export async function GET() {
 
     return NextResponse.json(items);
   } catch (error) {
+    console.error("[API GET governance-instances]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -53,6 +54,7 @@ export async function POST(req: Request) {
     await logAudit(session.user!.id!, "CREATE", "governanceInstance", item.id, { title: item.title });
     return NextResponse.json(item, { status: 201 });
   } catch (error) {
+    console.error("[API POST governance-instances]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
       return NextResponse.json({ error: "Une instance avec ce slug existe deja" }, { status: 409 });
     }

@@ -22,7 +22,8 @@ export async function GET() {
       orderBy: { order: "asc" },
     });
     return NextResponse.json(items);
-  } catch {
+  } catch (error) {
+    console.error("[API GET menu-items]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -73,6 +74,7 @@ export async function POST(req: Request) {
     await logAudit(session.user!.id!, "CREATE", "menuItem", item.id, { label: item.label });
     return NextResponse.json(item, { status: 201 });
   } catch (error) {
+    console.error("[API POST menu-items]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

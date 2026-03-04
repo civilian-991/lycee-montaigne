@@ -32,6 +32,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     await logAudit(session.user!.id!, "CREATE", "pageSection", section.id, { pageId: id, sectionKey: section.sectionKey });
     return NextResponse.json(section, { status: 201 });
   } catch (error) {
+    console.error("[API POST page-sections]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

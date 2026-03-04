@@ -31,15 +31,15 @@ export type LoginData = z.infer<typeof loginSchema>;
 
 export const newsSchema = z.object({
   title: z.string().min(1, "Le titre est requis").max(200),
-  image: z.string().max(2000).nullable().optional(),
-  link: z.string().max(2000).nullable().optional(),
+  image: z.string().url("URL d'image invalide").max(2000).nullable().optional().or(z.literal("")),
+  link: z.string().url("URL invalide").max(2000).nullable().optional().or(z.literal("")),
   category: z.string().max(200).nullable().optional(),
   status: z.enum(["DRAFT", "PUBLISHED"]).optional().default("PUBLISHED"),
 });
 
 export const documentSchema = z.object({
   title: z.string().min(1, "Le titre est requis").max(200),
-  fileUrl: z.string().min(1, "L'URL du fichier est requise").max(2000),
+  fileUrl: z.string().url("URL du fichier invalide").min(1, "L'URL du fichier est requise").max(2000),
   category: z.string().min(1, "La catégorie est requise").max(200),
   academicYear: z.string().max(200).nullable().optional(),
 });
@@ -47,21 +47,21 @@ export const documentSchema = z.object({
 export const staffSchema = z.object({
   name: z.string().min(1, "Le nom est requis").max(200),
   title: z.string().min(1, "Le titre est requis").max(200),
-  photo: z.string().max(2000).nullable().optional(),
+  photo: z.string().url("URL de photo invalide").max(2000).nullable().optional().or(z.literal("")),
   messageHtml: z.string().max(100000).nullable().optional(),
   section: z.string().min(1, "La section est requise").max(200),
 });
 
 export const carouselSchema = z.object({
-  imageUrl: z.string().min(1, "L'URL de l'image est requise").max(2000),
+  imageUrl: z.string().url("URL d'image invalide").min(1, "L'URL de l'image est requise").max(2000),
   altText: z.string().max(200).optional().default(""),
-  link: z.string().max(2000).nullable().optional(),
+  link: z.string().url("URL invalide").max(2000).nullable().optional().or(z.literal("")),
   order: z.number().optional().default(0),
 });
 
 export const quickLinkSchema = z.object({
   label: z.string().min(1, "Le libellé est requis").max(200),
-  url: z.string().min(1, "L'URL est requise").max(2000),
+  url: z.string().url("URL invalide").min(1, "L'URL est requise").max(2000),
   target: z.string().max(200).optional().default("_self"),
   order: z.number().optional().default(0),
 });
@@ -70,16 +70,16 @@ export const announcementSchema = z.object({
   title: z.string().min(1, "Le titre est requis").max(200),
   contentHtml: z.string().min(1, "Le contenu est requis").max(100000),
   active: z.boolean().optional().default(true),
-  startDate: z.string().max(200).nullable().optional(),
-  endDate: z.string().max(200).nullable().optional(),
+  startDate: z.string().datetime({ offset: true }).nullable().optional().or(z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Format de date invalide").nullable().optional()),
+  endDate: z.string().datetime({ offset: true }).nullable().optional().or(z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Format de date invalide").nullable().optional()),
   status: z.enum(["DRAFT", "PUBLISHED"]).optional().default("PUBLISHED"),
 });
 
 export const pageSchema = z.object({
-  slug: z.string().min(1, "Le slug est requis").max(100),
+  slug: z.string().min(1, "Le slug est requis").max(100).regex(/^[a-z0-9-]+$/, "Le slug ne doit contenir que des lettres minuscules, chiffres et tirets"),
   title: z.string().min(1, "Le titre est requis").max(200),
   metaDescription: z.string().max(1000).nullable().optional(),
-  ogImage: z.string().max(2000).nullable().optional(),
+  ogImage: z.string().url("URL d'image invalide").max(2000).nullable().optional().or(z.literal("")),
   status: z.enum(["DRAFT", "PUBLISHED"]).optional().default("PUBLISHED"),
 });
 
@@ -87,7 +87,7 @@ export const pageSectionSchema = z.object({
   sectionKey: z.string().min(1, "La clé de section est requise").max(100),
   title: z.string().max(200).nullable().optional(),
   contentHtml: z.string().max(100000).nullable().optional(),
-  image: z.string().max(2000).nullable().optional(),
+  image: z.string().url("URL d'image invalide").max(2000).nullable().optional().or(z.literal("")),
   order: z.number().optional().default(0),
 });
 
@@ -98,7 +98,7 @@ export const alumniEventSchema = z.object({
 });
 
 export const alumniPhotoSchema = z.object({
-  imageUrl: z.string().min(1, "L'URL de l'image est requise").max(2000),
+  imageUrl: z.string().url("URL d'image invalide").min(1, "L'URL de l'image est requise").max(2000),
   altText: z.string().max(200).optional().default(""),
   order: z.number().optional().default(0),
 });
@@ -106,20 +106,20 @@ export const alumniPhotoSchema = z.object({
 export const activitySchema = z.object({
   title: z.string().min(1, "Le titre est requis").max(200),
   description: z.string().max(1000).nullable().optional(),
-  image: z.string().max(2000).nullable().optional(),
+  image: z.string().url("URL d'image invalide").max(2000).nullable().optional().or(z.literal("")),
   category: z.string().min(1, "La catégorie est requise").max(200),
   order: z.number().optional().default(0),
 });
 
 export const certificationSchema = z.object({
   name: z.string().min(1, "Le nom est requis").max(200),
-  image: z.string().max(2000).nullable().optional(),
+  image: z.string().url("URL d'image invalide").max(2000).nullable().optional().or(z.literal("")),
   description: z.string().max(1000).nullable().optional(),
   order: z.number().optional().default(0),
 });
 
 export const governanceInstanceSchema = z.object({
-  slug: z.string().min(1, "Le slug est requis").max(100),
+  slug: z.string().min(1, "Le slug est requis").max(100).regex(/^[a-z0-9-]+$/, "Le slug ne doit contenir que des lettres minuscules, chiffres et tirets"),
   title: z.string().min(1, "Le titre est requis").max(200),
   subtitle: z.string().min(1, "Le sous-titre est requis").max(200),
   iconName: z.string().max(200).default("Building2"),
@@ -158,7 +158,7 @@ export const settingsSchema = z.record(z.string().max(100), z.string().max(10000
 );
 
 export const uploadDeleteSchema = z.object({
-  url: z.string().min(1, "L'URL est requise").max(2000),
+  url: z.string().url("URL invalide").min(1, "L'URL est requise").max(2000),
 });
 
 export const ALLOWED_UPLOAD_TYPES = [

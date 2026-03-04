@@ -24,6 +24,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     if (!member) return NextResponse.json({ error: "Non trouvé" }, { status: 404 });
     return NextResponse.json(member);
   } catch (error) {
+    console.error("[API GET staff]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -64,6 +65,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     await logAudit(session.user!.id!, "UPDATE", "staffMember", member.id, { name: member.name });
     return NextResponse.json(member);
   } catch (error) {
+    console.error("[API PUT staff]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
       return NextResponse.json({ error: "Ressource introuvable" }, { status: 404 });
     }
@@ -93,6 +95,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     await logAudit(session.user!.id!, "DELETE", "staffMember", id, { name: existing.name });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("[API DELETE staff]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

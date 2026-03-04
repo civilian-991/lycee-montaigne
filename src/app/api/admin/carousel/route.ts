@@ -18,7 +18,8 @@ export async function GET() {
 
     const slides = await db.carouselSlide.findMany({ orderBy: { order: "asc" } });
     return NextResponse.json(slides);
-  } catch {
+  } catch (error) {
+    console.error("[API GET carousel]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -51,6 +52,7 @@ export async function POST(req: Request) {
     await logAudit(session.user!.id!, "CREATE", "carouselSlide", slide.id, { altText: slide.altText });
     return NextResponse.json(slide, { status: 201 });
   } catch (error) {
+    console.error("[API POST carousel]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

@@ -90,6 +90,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ url: blob.url }, { status: 201 });
   } catch (error) {
+    console.error("[API POST upload]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

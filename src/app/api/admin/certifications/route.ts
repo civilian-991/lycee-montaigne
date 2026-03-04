@@ -13,6 +13,7 @@ export async function GET() {
     const items = await db.certification.findMany({ orderBy: { order: "asc" } });
     return NextResponse.json(items);
   } catch (error) {
+    console.error("[API GET certifications]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
     await logAudit(session.user!.id!, "CREATE", "certification", item.id, { name: item.name });
     return NextResponse.json(item, { status: 201 });
   } catch (error) {
+    console.error("[API POST certifications]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }

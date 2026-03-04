@@ -23,6 +23,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json(pages);
   } catch (error) {
+    console.error("[API GET pages]", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 }
@@ -50,6 +51,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(page, { status: 201 });
   } catch (error) {
+    console.error("[API POST pages]", error);
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
       return NextResponse.json({ error: "Une page avec ce slug existe deja" }, { status: 409 });
     }
