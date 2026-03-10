@@ -295,6 +295,15 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                 </StaggerItem>
               ))}
             </StaggerChildren>
+            <div className="mt-8 text-center">
+              <Link
+                href="/vie-du-lm/activites"
+                className="inline-flex items-center gap-2 rounded-full bg-secondary px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary/90 hover:shadow-[0_4px_16px_-2px_rgba(51,153,51,0.3)]"
+              >
+                Voir toutes les activités
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </section>
       )}
