@@ -268,17 +268,15 @@ export function OrientationContent({ documents, sections, activities, universiti
                     </p>
                   )}
                 </div>
-                {calendriersIntroSection?.image && (
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
-                    <Image
-                      src={localImage(calendriersIntroSection.image) || calendriersIntroSection.image}
-                      alt="Calendriers d'orientation"
-                      fill
-                      className="object-cover"
-                      sizes="300px"
-                    />
-                  </div>
-                )}
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
+                  <Image
+                    src={localImage(calendriersIntroSection?.image) || calendriersIntroSection?.image || "/images/oriantation-activities/November2025/0HnUrhMFu9ReUOd5Dcbs.jpeg"}
+                    alt="Calendriers d'orientation"
+                    fill
+                    className="object-cover"
+                    sizes="300px"
+                  />
+                </div>
               </div>
             </FadeInView>
             <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-3">
