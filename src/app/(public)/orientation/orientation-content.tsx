@@ -116,6 +116,7 @@ export function OrientationContent({ documents, sections, activities, universiti
       date: parsed?.date ?? "",
       description: parsed?.rest ?? a.description ?? "",
       image: a.image ?? "/images/oriantation-activities/November2025/0HnUrhMFu9ReUOd5Dcbs.jpeg",
+      link: (a as { link?: string | null }).link ?? null,
     };
   });
 
@@ -342,6 +343,16 @@ export function OrientationContent({ documents, sections, activities, universiti
                     <div className="p-5">
                       <h3 className="font-heading text-lg font-semibold text-text">{activity.title}</h3>
                       <p className="mt-2 text-sm leading-relaxed text-text-muted">{activity.description}</p>
+                      {activity.link && (
+                        <a
+                          href={activity.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-secondary hover:underline"
+                        >
+                          Voir la vidéo <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </StaggerItem>

@@ -214,7 +214,7 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
           <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-2">
             <StaggerItem>
               <a
-                href={restaurationDocs.find((d) => d.title.toLowerCase().includes("cantine"))?.fileUrl ?? "/images/restauration-files/January2026/mpYrj6lfFbbmG89EhsCF.pdf"}
+                href={restaurationDocs.find((d) => d.title.toLowerCase().includes("cantine"))?.fileUrl ?? "https://lycee-montaigne.edu.lb/storage/restauration-files/March2026/7PL4KyEJpf8CASXVAv2w.pdf"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group relative block overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)] transition-all duration-300 hover:-translate-y-1.5"

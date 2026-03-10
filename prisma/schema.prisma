@@ -201,6 +201,7 @@ model ActivityItem {
   title       String
   description String?
   image       String?
+  link        String?
   category    String
   order       Int     @default(0)
 

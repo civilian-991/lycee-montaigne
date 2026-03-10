@@ -228,7 +228,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   /* Contact */
   email: "info@lycee-montaigne.edu.lb",
-  phone: "+961 4 982 082 / 983 845 / 985 256",
+  phone: "+961 4 982 082 / +961 4 983 845 / +961 4 985 256",
   fax: "+961 4 985 256",
   address: "Beit Chabab, Quartier Baydar Chouar, Metn, Liban",
   google_maps_url: "https://maps.app.goo.gl/n8oJmjd1FfVNT2cp9",
@@ -475,7 +475,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   trait_union_title: "Numéro 91 - Décembre 2025",
   trait_union_description: "Découvrez le dernier numéro du Trait d'union, le journal du Lycée Montaigne.",
   trait_union_image: "/images/hp-services-items/January2026/HcSaUtgkncgRCfvVKoV4.jpeg",
-  trait_union_link: "/documents",
+  trait_union_link: "https://lycee-montaigne.edu.lb/storage/hp-services-items/January2026/ypxca3h4YSBTMQbvSzQb.pdf",
 
   /* Vie du LM */
   webradio_referents: "",
