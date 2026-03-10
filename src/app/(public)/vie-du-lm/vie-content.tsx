@@ -38,9 +38,12 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
   const instagramLink = instagramUrl || "https://www.instagram.com/lyceemontaigne.liban/";
   // Look up CMS sections by key
   const devDurableSection = sections.find((s) => s.sectionKey === "developpement-durable");
+  const efe3dSection = sections.find((s) => s.sectionKey === "efe3d");
+  const devActivites = sections.filter((s) => s.sectionKey.startsWith("dev-activite-"));
   const webradioSection = sections.find((s) => s.sectionKey === "webradio");
   const climatSection = sections.find((s) => s.sectionKey === "climat");
   const egaliteSection = sections.find((s) => s.sectionKey === "egalite");
+  const ligueSection = sections.find((s) => s.sectionKey === "ligue-sportive");
 
   // Sustainability images from PageSection
   const sustainabilitySections = sections.filter((s) => s.sectionKey === "developpement-durable-images");
@@ -221,6 +224,81 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
         <WaveDivider fill="var(--color-background)" />
       </section>
 
+      {/* ─── EFE3D Label ───────────────────────────────────────── */}
+      {efe3dSection && (
+        <section className="py-12 md:py-16">
+          <div className="mx-auto max-w-7xl px-4">
+            <FadeInView>
+              <div className="overflow-hidden rounded-[24px] border border-secondary/20 bg-secondary/5 p-8 shadow-[var(--shadow-soft)] md:p-10">
+                <div className="grid items-center gap-8 lg:grid-cols-2">
+                  <div>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-1.5 text-xs font-bold tracking-wide text-secondary uppercase">
+                      <Leaf className="h-3.5 w-3.5" />
+                      Labellisation EFE3D — Niveau 3 Expert
+                    </div>
+                    <h3 className="mt-4 font-heading text-2xl font-bold text-primary">
+                      {efe3dSection.title}
+                    </h3>
+                    <div
+                      className="mt-4 leading-relaxed text-text-muted [&>p]:mt-3"
+                      dangerouslySetInnerHTML={{ __html: efe3dSection.contentHtml ?? "" }}
+                    />
+                  </div>
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
+                    <Image
+                      src={efe3dSection.image || "/images/development-durables/November2024/IXjTyiAwx79KnYFRYWvR.jpg"}
+                      alt="EFE3D"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  </div>
+                </div>
+              </div>
+            </FadeInView>
+          </div>
+        </section>
+      )}
+
+      {/* ─── Dev Activities ────────────────────────────────────── */}
+      {devActivites.length > 0 && (
+        <section className="bg-background-alt py-16 md:py-20">
+          <div className="mx-auto max-w-7xl px-4">
+            <SectionHeader title="Activités" subtitle="Actions écoresponsables au sein de l'établissement" />
+            <StaggerChildren className="mt-10 grid gap-6 md:grid-cols-2">
+              {devActivites.map((act) => (
+                <StaggerItem key={act.id}>
+                  <div className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]">
+                    {act.image && (
+                      <div className="relative aspect-[16/9] overflow-hidden">
+                        <Image
+                          src={act.image}
+                          alt={act.title ?? "Activité"}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                        />
+                      </div>
+                    )}
+                    <div className="flex flex-1 flex-col p-6">
+                      {act.title && (
+                        <h3 className="font-semibold text-primary">{act.title}</h3>
+                      )}
+                      {act.contentHtml && (
+                        <div
+                          className="mt-3 flex-1 text-sm leading-relaxed text-text-muted [&>p]:mt-2 [&>ul]:mt-2 [&>ul]:list-disc [&>ul]:pl-4"
+                          dangerouslySetInnerHTML={{ __html: act.contentHtml }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </StaggerItem>
+              ))}
+            </StaggerChildren>
+          </div>
+        </section>
+      )}
+
       {/* ─── Webradio ──────────────────────────────────────────── */}
       <section id="web" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
@@ -264,6 +342,13 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                       <p className="mt-1.5 text-sm text-text">{webradioReferents}</p>
                     </div>
                   )}
+                  <Link
+                    href="/web-radio"
+                    className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-light hover:shadow-[0_4px_16px_-2px_rgba(2,53,91,0.25)]"
+                  >
+                    Accéder aux émissions
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </div>
             </div>
@@ -381,6 +466,45 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
           </div>
         </div>
         <WaveDivider fill="var(--color-background)" />
+      </section>
+
+      {/* ─── Ligue sportive AEFE ───────────────────────────────── */}
+      <section id="action" className="py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4">
+          <FadeInView>
+            <div className="grid items-center gap-12 lg:grid-cols-2">
+              <div>
+                <SectionHeader title={ligueSection?.title || "Ligue sportive AEFE"} className="text-left" />
+                {ligueSection?.contentHtml ? (
+                  <div
+                    className="mt-6 leading-relaxed text-text-muted [&>p]:mt-4"
+                    dangerouslySetInnerHTML={{ __html: ligueSection.contentHtml }}
+                  />
+                ) : (
+                  <p className="mt-6 leading-relaxed text-text-muted">
+                    Une ligue sportive scolaire AEFE-UNSS est une structure régionale au sein du réseau des établissements français à l&apos;étranger, visant à promouvoir la pratique du sport scolaire selon les principes de l&apos;AEFE et de l&apos;UNSS.
+                  </p>
+                )}
+                <Link
+                  href="/ligue-sportive"
+                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-light hover:shadow-[0_4px_16px_-2px_rgba(2,53,91,0.25)]"
+                >
+                  Lire plus
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
+                <Image
+                  src={ligueSection?.image || "https://lycee-montaigne.edu.lb/storage/ligue-sportive-events/May2025/4RSzcaY5Pm9PpOYkhyfK.jpeg"}
+                  alt="Ligue sportive AEFE"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+            </div>
+          </FadeInView>
+        </div>
       </section>
 
       {/* ─── Sejours — CTA banner ──────────────────────────────── */}
