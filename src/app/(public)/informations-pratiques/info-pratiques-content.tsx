@@ -5,6 +5,7 @@ import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { WaveDivider } from "@/components/ui/wave-divider";
+import Link from "next/link";
 import { Heart, Eye, Smile, ArrowRight, Calendar, ClipboardList, UtensilsCrossed, Stethoscope, BriefcaseBusiness, Download, FileText } from "lucide-react";
 
 /* ── Types ────────────────────────────────────────────── */
@@ -310,6 +311,15 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
                 <p className="mt-2 text-sm text-text">{healthReferents}</p>
               </div>
             )}
+            <div className="mt-8 text-center">
+              <Link
+                href="/informations-pratiques/activites"
+                className="inline-flex items-center gap-2 rounded-full bg-secondary px-8 py-3 text-sm font-semibold text-white shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary-dark hover:shadow-[var(--shadow-elevated)]"
+              >
+                Voir les activites sante
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
         </div>
         <WaveDivider fill="var(--color-background)" />

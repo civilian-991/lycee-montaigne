@@ -59,6 +59,7 @@ export const navigation: NavItem[] = [
       },
       { label: "Portes Ouvertes", href: "/inscriptions#porte-ouvertes" },
       { label: "Bourses Scolaires", href: "/inscriptions#bourse" },
+      { label: "Tarifs scolaires", href: "/inscriptions#tarifs" },
     ],
   },
   {
@@ -83,7 +84,8 @@ export const navigation: NavItem[] = [
     children: [
       { label: "Parcours avenir", href: "/orientation#presentation" },
       { label: "Parcoursup", href: "/orientation#parcoursup" },
-      { label: "Inscriptions Universités", href: "/orientation#uni" },
+      { label: "Universités au Liban", href: "/orientation#uni-liban" },
+      { label: "Universités à l'étranger", href: "/orientation#uni-etranger" },
       { label: "Activités", href: "/orientation#activites" },
     ],
   },
@@ -107,6 +109,7 @@ export const navigation: NavItem[] = [
       { label: "Listes de manuels", href: "/informations-pratiques#liste" },
       { label: "Restauration", href: "/informations-pratiques#restauration" },
       { label: "Santé", href: "/informations-pratiques#sante" },
+      { label: "Activités santé", href: "/informations-pratiques/activites" },
       { label: "Recrutement", href: "/informations-pratiques#recrutement" },
     ],
   },

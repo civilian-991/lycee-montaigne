@@ -452,7 +452,7 @@ export function OrientationContent({ documents, sections, activities, universiti
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm">
                   <Compass className="h-6 w-6" />
                 </div>
-                <h2 className="font-heading text-3xl font-bold md:text-4xl">
+                <h2 className="font-heading text-3xl font-bold text-white md:text-4xl">
                   Accompagnement personnalise en France
                 </h2>
                 <p className="mt-2 text-lg font-semibold text-white/60">
@@ -460,7 +460,7 @@ export function OrientationContent({ documents, sections, activities, universiti
                 </p>
                 {parcoursupSection?.contentHtml ? (
                   <div
-                    className="mt-4 leading-relaxed text-white/80 [&>p]:mt-4"
+                    className="mt-4 leading-relaxed text-white/80 [&>p]:mt-4 [&_h1]:text-white [&_h2]:text-white [&_h3]:text-white [&_h4]:text-white"
                     dangerouslySetInnerHTML={{ __html: parcoursupSection.contentHtml }}
                   />
                 ) : (
@@ -614,7 +614,7 @@ export function OrientationContent({ documents, sections, activities, universiti
             )}
             {ctaSection?.contentHtml ? (
               <div
-                className="mx-auto mt-4 max-w-xl text-white/80 [&>p]:mt-4"
+                className="mx-auto mt-4 max-w-xl text-white/80 [&>p]:mt-4 [&_h1]:text-white [&_h2]:text-white [&_h3]:text-white [&_h4]:text-white"
                 dangerouslySetInnerHTML={{ __html: ctaSection.contentHtml }}
               />
             ) : (

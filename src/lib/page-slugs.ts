@@ -9,4 +9,5 @@ export const PAGE_SLUGS = {
   cvl: "cvl",
   egaliteActivite: "egalite-activite",
   ligueSportive: "ligue-sportive",
+  santeActivite: "sante-activite",
 } as const;

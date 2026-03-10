@@ -6,7 +6,7 @@ import { localImage } from "@/lib/utils";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, FileDown } from "lucide-react";
 
 /* ── Types ────────────────────────────────────────────── */
 type PageSectionRow = {
@@ -51,6 +51,7 @@ export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLev
   const procedureSection = sections.find((s) => s.sectionKey === "procedure");
   const portesOuvertesSection = sections.find((s) => s.sectionKey === "portes-ouvertes");
   const boursesSection = sections.find((s) => s.sectionKey === "bourses");
+  const tarifsSection = sections.find((s) => s.sectionKey === "tarifs");
 
   return (
     <>
@@ -190,66 +191,101 @@ export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLev
       <section id="tarifs" className="bg-background-alt py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader
-            title={`Tarifs scolaires ${tuitionYear}`}
+            title={tarifsSection?.title || `Tarifs scolaires ${tuitionYear}`}
             subtitle="Frais de scolarite par niveau"
           />
           <FadeInView>
-            <div className="mt-12 overflow-x-auto rounded-2xl border border-border bg-background shadow-[var(--shadow-soft)]">
-              <table className="w-full min-w-[700px] text-sm">
-                <thead>
-                  <tr className="border-b border-border bg-primary text-white">
-                    <th className="px-4 py-3 text-left font-semibold">Niveau</th>
-                    <th className="px-4 py-3 text-left font-semibold">Frais de scolarite (LL)</th>
-                    <th className="px-4 py-3 text-left font-semibold">Frais d&apos;enseignement ($)</th>
-                    <th className="px-4 py-3 text-left font-semibold">Contribution en dollars ($)</th>
-                    <th className="px-4 py-3 text-left font-semibold">Collation ($)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {tuitionLevels.map((level, levelIdx) => {
-                    const isEven = levelIdx % 2 === 0;
+            {/* CMS image of the tarifs table (e.g. Word export as image) */}
+            {tarifsSection?.image && (
+              <div className="mt-8 overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--shadow-soft)]">
+                <Image
+                  src={localImage(tarifsSection.image) || tarifsSection.image}
+                  alt={tarifsSection.title || "Tarifs scolaires"}
+                  width={1200}
+                  height={800}
+                  className="h-auto w-full"
+                  sizes="(max-width: 1280px) 100vw, 1200px"
+                />
+              </div>
+            )}
 
-                    const sumField = (field: keyof TuitionInstallment) =>
-                      level.installments.reduce((sum, inst) => {
-                        const val = inst[field].replace(/[^0-9]/g, "");
-                        return sum + (parseInt(val) || 0);
-                      }, 0);
+            {/* CMS extra content / PDF download link */}
+            {tarifsSection?.contentHtml && (
+              <div
+                className="mt-6 text-sm text-text-muted [&>p]:mt-3 [&_a]:inline-flex [&_a]:items-center [&_a]:gap-2 [&_a]:font-semibold [&_a]:text-primary [&_a:hover]:text-secondary"
+                dangerouslySetInnerHTML={{ __html: tarifsSection.contentHtml }}
+              />
+            )}
 
-                    const formatNum = (n: number) =>
-                      n > 0 ? n.toLocaleString("fr-FR").replace(/,/g, " ") : "\u2014";
+            {/* PDF download button — shown when CMS section has no image yet but a link in contentHtml */}
+            {!tarifsSection?.image && !tarifsSection?.contentHtml && tuitionLevels.length === 0 && (
+              <p className="mt-8 text-center text-sm text-text-muted">
+                Les tarifs scolaires seront disponibles prochainement.
+              </p>
+            )}
 
-                    const isLast = levelIdx === tuitionLevels.length - 1;
+            {/* Structured table fallback (when no CMS image is provided) */}
+            {!tarifsSection?.image && tuitionLevels.length > 0 && (
+              <div className="mt-8 overflow-x-auto rounded-2xl border border-border bg-background shadow-[var(--shadow-soft)]">
+                <table className="w-full min-w-[700px] text-sm">
+                  <thead>
+                    <tr className="border-b border-border bg-primary text-white">
+                      <th className="px-4 py-3 text-left font-semibold">Niveau</th>
+                      <th className="px-4 py-3 text-left font-semibold">Frais de scolarite (LL)</th>
+                      <th className="px-4 py-3 text-left font-semibold">Frais d&apos;enseignement ($)</th>
+                      <th className="px-4 py-3 text-left font-semibold">Contribution en dollars ($)</th>
+                      <th className="px-4 py-3 text-left font-semibold">Collation ($)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {tuitionLevels.map((level, levelIdx) => {
+                      const isEven = levelIdx % 2 === 0;
 
-                    return (
-                      <Fragment key={level.level}>
-                        <tr className={isEven ? "bg-secondary/5" : "bg-primary/5"}>
-                          <td colSpan={5} className={`px-4 py-2 font-bold ${isEven ? "text-secondary" : "text-primary"}`}>{level.level}</td>
-                        </tr>
-                        {level.installments.map((inst) => (
-                          <tr key={inst.label} className="hover:bg-background-alt/50">
-                            <td className="px-4 py-2.5 text-text-muted">{inst.label}</td>
-                            <td className="px-4 py-2.5">{inst.fraisLL}</td>
-                            <td className="px-4 py-2.5">{inst.fraisUSD}</td>
-                            <td className="px-4 py-2.5">{inst.contributionUSD}</td>
-                            <td className="px-4 py-2.5">{inst.collationUSD}</td>
+                      const sumField = (field: keyof TuitionInstallment) =>
+                        level.installments.reduce((sum, inst) => {
+                          const val = inst[field].replace(/[^0-9]/g, "");
+                          return sum + (parseInt(val) || 0);
+                        }, 0);
+
+                      const formatNum = (n: number) =>
+                        n > 0 ? n.toLocaleString("fr-FR").replace(/,/g, " ") : "\u2014";
+
+                      const isLast = levelIdx === tuitionLevels.length - 1;
+
+                      return (
+                        <Fragment key={level.level}>
+                          <tr className={isEven ? "bg-secondary/5" : "bg-primary/5"}>
+                            <td colSpan={5} className={`px-4 py-2 font-bold ${isEven ? "text-secondary" : "text-primary"}`}>{level.level}</td>
                           </tr>
-                        ))}
-                        <tr className={`${!isLast ? (isEven ? "border-b-2 border-secondary/30" : "border-b-2 border-primary/30") : ""} ${isEven ? "bg-secondary/5" : "bg-primary/5"} font-semibold`}>
-                          <td className="px-4 py-2.5">Total {level.level}</td>
-                          <td className="px-4 py-2.5">{formatNum(sumField("fraisLL"))}</td>
-                          <td className="px-4 py-2.5">{formatNum(sumField("fraisUSD"))}</td>
-                          <td className="px-4 py-2.5">{formatNum(sumField("contributionUSD"))}</td>
-                          <td className="px-4 py-2.5">{formatNum(sumField("collationUSD"))}</td>
-                        </tr>
-                      </Fragment>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <p className="mt-4 text-center text-xs text-text-muted">
-              Les montants sont donnes a titre indicatif et peuvent etre sujets a modification. Contactez l&apos;administration pour plus de details.
-            </p>
+                          {level.installments.map((inst) => (
+                            <tr key={inst.label} className="hover:bg-background-alt/50">
+                              <td className="px-4 py-2.5 text-text-muted">{inst.label}</td>
+                              <td className="px-4 py-2.5">{inst.fraisLL}</td>
+                              <td className="px-4 py-2.5">{inst.fraisUSD}</td>
+                              <td className="px-4 py-2.5">{inst.contributionUSD}</td>
+                              <td className="px-4 py-2.5">{inst.collationUSD}</td>
+                            </tr>
+                          ))}
+                          <tr className={`${!isLast ? (isEven ? "border-b-2 border-secondary/30" : "border-b-2 border-primary/30") : ""} ${isEven ? "bg-secondary/5" : "bg-primary/5"} font-semibold`}>
+                            <td className="px-4 py-2.5">Total {level.level}</td>
+                            <td className="px-4 py-2.5">{formatNum(sumField("fraisLL"))}</td>
+                            <td className="px-4 py-2.5">{formatNum(sumField("fraisUSD"))}</td>
+                            <td className="px-4 py-2.5">{formatNum(sumField("contributionUSD"))}</td>
+                            <td className="px-4 py-2.5">{formatNum(sumField("collationUSD"))}</td>
+                          </tr>
+                        </Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {!tarifsSection?.image && tuitionLevels.length > 0 && (
+              <p className="mt-4 text-center text-xs text-text-muted">
+                Les montants sont donnes a titre indicatif et peuvent etre sujets a modification. Contactez l&apos;administration pour plus de details.
+              </p>
+            )}
           </FadeInView>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
+import { DEFAULT_SETTINGS } from "@/lib/settings";
 import { HomeContent } from "./home-content";
 
 export const metadata: Metadata = {
@@ -34,7 +35,16 @@ export default async function HomePage() {
     updatedAt: n.updatedAt.toISOString(),
   }));
 
-  const settingsMap = Object.fromEntries(rawSettings.map((s) => [s.key, s.value]));
+  const settingsMap: Record<string, string> = {
+    // Seed defaults for JSON settings that may be missing from DB
+    homepage_reasons: JSON.stringify(DEFAULT_SETTINGS.homepage_reasons),
+    trait_union_title: DEFAULT_SETTINGS.trait_union_title,
+    trait_union_description: DEFAULT_SETTINGS.trait_union_description,
+    trait_union_image: DEFAULT_SETTINGS.trait_union_image,
+    trait_union_link: DEFAULT_SETTINGS.trait_union_link,
+    // DB values override defaults
+    ...Object.fromEntries(rawSettings.map((s) => [s.key, s.value])),
+  };
 
   return (
     <HomeContent

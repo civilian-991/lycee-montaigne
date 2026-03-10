@@ -15,6 +15,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Old site had a typo in the URL ("activties" instead of "activites")
+      {
+        source: "/informations-pratiques/activties",
+        destination: "/informations-pratiques/activites",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
