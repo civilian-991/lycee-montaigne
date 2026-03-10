@@ -234,6 +234,26 @@ export function EtablissementContent({
                 Le règlement intérieur du Lycée Montaigne définit les droits et devoirs de chaque membre
                 de la communauté scolaire. Il garantit un cadre de vie harmonieux et propice à l&apos;apprentissage.
               </p>
+              <div className="mt-6 flex flex-wrap gap-4">
+                <a
+                  href="https://lycee-montaigne.edu.lb/storage/reglement-interieur-files/December2025/HowmguyQVttw1NQmz1bq.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-primary-dark hover:shadow-md"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+                  Règlement intérieur du 1er degré
+                </a>
+                <a
+                  href="https://lycee-montaigne.edu.lb/storage/reglement-interieur-files/December2025/XlZfAjfwFM4x1xrdBIgr.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-primary-dark hover:shadow-md"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+                  Règlement intérieur du 2nd degré
+                </a>
+              </div>
             </div>
           </FadeInView>
         </div>
