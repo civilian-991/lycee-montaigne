@@ -33,8 +33,8 @@ const CONSULTATION_DOMAINS = [
 ];
 
 export function CvlContent({ sections }: { sections: PageSectionRow[] }) {
-  const introSection = sections.find((s) => s.sectionKey === "intro");
-  const domainesSection = sections.find((s) => s.sectionKey === "domaines");
+  const introSection = sections.find((s) => s.sectionKey === "cvl-intro" || s.sectionKey === "intro");
+  const domainesSection = sections.find((s) => s.sectionKey === "cvl-missions" || s.sectionKey === "domaines");
   const fonctionnementSection = sections.find((s) => s.sectionKey === "fonctionnement");
 
   return (

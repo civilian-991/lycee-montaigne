@@ -18,7 +18,8 @@ type PageSectionRow = {
 };
 
 export function CvcContent({ sections }: { sections: PageSectionRow[] }) {
-  const introSection = sections.find((s) => s.sectionKey === "intro");
+  const introSection = sections.find((s) => s.sectionKey === "cvc-intro" || s.sectionKey === "intro");
+  const electionsSection = sections.find((s) => s.sectionKey === "cvc-elections");
 
   return (
     <>
@@ -72,8 +73,40 @@ export function CvcContent({ sections }: { sections: PageSectionRow[] }) {
         </div>
       </section>
 
+      {/* Elections section */}
+      {electionsSection && (
+        <section className="bg-background-alt py-16 md:py-24">
+          <div className="mx-auto max-w-7xl px-4">
+            <FadeInView>
+              <div className="grid items-center gap-12 lg:grid-cols-2">
+                <div className={`relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)] lg:order-first`}>
+                  {localImage(electionsSection.image) && (
+                    <Image
+                      src={localImage(electionsSection.image)!}
+                      alt={electionsSection.title || "Élections CVC"}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  )}
+                </div>
+                <div>
+                  <SectionHeader title={electionsSection.title || "Élections des représentants"} className="text-left" />
+                  {electionsSection.contentHtml && (
+                    <div
+                      className="mt-6 leading-relaxed text-text-muted [&>p]:mt-4"
+                      dangerouslySetInnerHTML={{ __html: electionsSection.contentHtml }}
+                    />
+                  )}
+                </div>
+              </div>
+            </FadeInView>
+          </div>
+        </section>
+      )}
+
       {/* Documents */}
-      <section className="bg-background-alt py-16 md:py-24">
+      <section className={`py-16 md:py-24 ${electionsSection ? "" : "bg-background-alt"}`}>
         <div className="mx-auto max-w-7xl px-4">
           <FadeInView>
             <SectionHeader title="Documents" />

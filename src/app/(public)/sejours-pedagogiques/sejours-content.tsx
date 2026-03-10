@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
-import { FadeInView } from "@/components/ui/motion";
+import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { localImage } from "@/lib/utils";
 
 type PageSectionRow = {
@@ -17,9 +17,12 @@ type PageSectionRow = {
 };
 
 export function SejoursContent({ sections }: { sections: PageSectionRow[] }) {
-  // Use CMS sections if available
   const introSection = sections.find((s) => s.sectionKey === "intro");
   const sportSection = sections.find((s) => s.sectionKey === "ligue-sportive");
+  // All sections that are individual trip/event articles
+  const tripSections = sections.filter(
+    (s) => s.sectionKey !== "intro" && s.sectionKey !== "ligue-sportive"
+  );
 
   return (
     <>
@@ -68,7 +71,50 @@ export function SejoursContent({ sections }: { sections: PageSectionRow[] }) {
         </div>
       </section>
 
-      <section className="bg-background-alt py-16 md:py-24">
+      {/* Trip articles grid */}
+      {tripSections.length > 0 && (
+        <section className="bg-background-alt py-16 md:py-24">
+          <div className="mx-auto max-w-7xl px-4">
+            <SectionHeader title="Nos voyages et aventures" subtitle="Des expériences inoubliables pour nos élèves" />
+            <StaggerChildren className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {tripSections.map((trip) => (
+                <StaggerItem key={trip.id}>
+                  <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)]">
+                    {trip.image && (
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        <Image
+                          src={trip.image}
+                          alt={trip.title || "Séjour pédagogique"}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      </div>
+                    )}
+                    <div className="flex flex-1 flex-col p-5">
+                      {trip.title && (
+                        <h3 className="text-base font-bold text-text transition-colors group-hover:text-primary">
+                          {trip.title}
+                        </h3>
+                      )}
+                      {trip.contentHtml && (
+                        <div
+                          className="mt-2 flex-1 text-sm leading-relaxed text-text-muted [&>p:first-child]:mt-0 [&>p]:mt-2 [&>ul]:mt-2 [&>ul]:list-disc [&>ul]:pl-4 line-clamp-[8]"
+                          dangerouslySetInnerHTML={{
+                            __html: trip.contentHtml.replace(/<\/?(strong|em|b|i)>/g, ""),
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </StaggerItem>
+              ))}
+            </StaggerChildren>
+          </div>
+        </section>
+      )}
+
+      <section className={`py-16 md:py-24 ${tripSections.length > 0 ? "" : "bg-background-alt"}`}>
         <div className="mx-auto max-w-7xl px-4">
           <FadeInView>
             <SectionHeader title={sportSection?.title || "Ligue sportive AEFE-UNSS"} />

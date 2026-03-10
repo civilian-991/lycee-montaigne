@@ -5,9 +5,16 @@ import { PageHero } from "@/components/ui/page-hero";
 import { SectionHeader } from "@/components/ui/section-header";
 import { FadeInView, StaggerChildren, StaggerItem } from "@/components/ui/motion";
 import { localImage } from "@/lib/utils";
-import { Heart, Users, BookOpen, Shield } from "lucide-react";
+import { Heart, Users, BookOpen, Shield, Sun, Sparkles, Rainbow } from "lucide-react";
 
 const pillarIcons = [Heart, Users, BookOpen, Shield];
+
+const espaceIcons: Record<string, typeof Heart> = {
+  "espace-soleil": Sun,
+  "espace-ebep": Sparkles,
+  "espace-arc-en-ciel": Rainbow,
+  "accompagnement": Shield,
+};
 
 type PageSectionRow = {
   id: string;
@@ -26,6 +33,8 @@ interface PillarData {
 
 export function PoleInclusionContent({ sections, pillars }: { sections: PageSectionRow[]; pillars: PillarData[] }) {
   const introSection = sections.find((s) => s.sectionKey === "intro");
+  // Extra sections seeded by migration (espace-soleil, espace-ebep, espace-arc-en-ciel, accompagnement)
+  const extraSections = sections.filter((s) => s.sectionKey !== "intro");
 
   return (
     <>
@@ -42,7 +51,7 @@ export function PoleInclusionContent({ sections, pillars }: { sections: PageSect
                 />
                 {introSection?.contentHtml ? (
                   <div
-                    className="mt-6 text-text-muted [&>p]:mt-4"
+                    className="mt-6 text-text-muted [&>p]:mt-4 [&>ul]:mt-4 [&>ul]:list-disc [&>ul]:pl-5 [&>ul>li]:mt-1"
                     dangerouslySetInnerHTML={{ __html: introSection.contentHtml }}
                   />
                 ) : (
@@ -73,8 +82,42 @@ export function PoleInclusionContent({ sections, pillars }: { sections: PageSect
         </div>
       </section>
 
-      {pillars.length > 0 && (
+      {/* Espace sections from DB (Soleil, Étincelle, Arc-en-Ciel, Accompagnement) */}
+      {extraSections.length > 0 && (
         <section className="bg-background-alt py-16 md:py-24">
+          <div className="mx-auto max-w-7xl px-4">
+            <SectionHeader title="Nos espaces d'accompagnement" subtitle="Un dispositif adapté à chaque étape de la scolarité" />
+            <StaggerChildren className="mt-12 grid gap-6 sm:grid-cols-2">
+              {extraSections.map((sec) => {
+                const Icon = espaceIcons[sec.sectionKey] || Heart;
+                return (
+                  <StaggerItem key={sec.id}>
+                    <div className="rounded-[20px] border border-border bg-background p-6 shadow-[var(--shadow-soft)]">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary/10 text-secondary">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        {sec.title && (
+                          <h3 className="font-semibold text-text">{sec.title}</h3>
+                        )}
+                      </div>
+                      {sec.contentHtml && (
+                        <div
+                          className="mt-4 text-sm leading-relaxed text-text-muted [&>p]:mt-2 [&>ul]:mt-2 [&>ul]:list-disc [&>ul]:pl-5 [&>ul>li]:mt-1"
+                          dangerouslySetInnerHTML={{ __html: sec.contentHtml }}
+                        />
+                      )}
+                    </div>
+                  </StaggerItem>
+                );
+              })}
+            </StaggerChildren>
+          </div>
+        </section>
+      )}
+
+      {pillars.length > 0 && (
+        <section className={`py-16 md:py-24 ${extraSections.length > 0 ? "" : "bg-background-alt"}`}>
           <div className="mx-auto max-w-7xl px-4">
             <SectionHeader title="Nos piliers" />
             <StaggerChildren className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
