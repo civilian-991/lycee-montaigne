@@ -297,7 +297,7 @@ export function OrientationContent({ documents, sections, activities, universiti
                           PDF
                         </span>
                       </div>
-                      <h3 className="mt-4 font-heading text-xl font-bold">{cal.level}</h3>
+                      <h3 className="mt-4 font-heading text-xl font-bold text-white">{cal.level}</h3>
                     </div>
                     <div className="p-5">
                       <p className="text-sm leading-relaxed text-text-muted">{cal.label}</p>
