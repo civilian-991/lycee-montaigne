@@ -1,5 +1,4 @@
 "use client";
-import { localImage } from "@/lib/utils";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -86,11 +85,12 @@ export function EtablissementContent({
   const missionSection = sections.find((s) => s.sectionKey === "mission");
 
   // Use DB staff for direction messages — no hardcoded fallback
+  // Use raw photo URL directly (not localImage) since old-site images are not stored locally
   const staffMessages = directionStaff.map((s) => ({
     id: s.id,
     title: s.title,
     name: s.name,
-    image: localImage(s.photo) || "",
+    image: s.photo || "",
     text: s.messageHtml || "",
   }));
 
@@ -150,6 +150,7 @@ export function EtablissementContent({
           <div className="mx-auto max-w-7xl px-4">
             <FadeInView>
               <div className={`grid items-center gap-12 lg:grid-cols-2 ${i % 2 !== 0 ? "lg:grid-flow-dense" : ""}`}>
+                {person.image && (
                 <div className={i % 2 !== 0 ? "lg:col-start-2" : ""}>
                   <div className="relative mx-auto aspect-[3/4] max-w-sm overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                     <Image
@@ -161,6 +162,7 @@ export function EtablissementContent({
                     />
                   </div>
                 </div>
+                )}
                 <div>
                   <SectionHeader title={person.title} className="text-left" />
                   {person.name && (
@@ -204,7 +206,7 @@ export function EtablissementContent({
               </div>
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                 <Image
-                  src="/images/comite-parents/December2025/ex9aVmzf9X4A0EDTgZEz.jpg"
+                  src="https://lycee-montaigne.edu.lb/storage/comite-parents/December2025/ex9aVmzf9X4A0EDTgZEz.jpg"
                   alt="Comité des parents du Lycée Montaigne"
                   fill
                   className="object-cover"
