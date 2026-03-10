@@ -275,9 +275,7 @@ export function AnciensContent({
                         <h3 className="mt-3 font-heading text-2xl font-bold text-text md:text-3xl">
                           {event.title}
                         </h3>
-                        <p className="mt-3 max-w-2xl leading-relaxed text-text-muted">
-                          {event.description}
-                        </p>
+                        <div className="mt-3 max-w-2xl leading-relaxed text-text-muted [&>p]:mt-2" dangerouslySetInnerHTML={{ __html: event.description }} />
                       </div>
 
                       {/* Photo grid */}

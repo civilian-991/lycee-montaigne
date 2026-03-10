@@ -293,7 +293,7 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
                           <p className="mt-1 text-sm font-medium text-secondary">{staff.name}</p>
                         )}
                         {staff.messageHtml && (
-                          <p className="mt-2 text-sm leading-relaxed text-text-muted">{staff.messageHtml}</p>
+                          <div className="mt-2 text-sm leading-relaxed text-text-muted" dangerouslySetInnerHTML={{ __html: staff.messageHtml }} />
                         )}
                       </div>
                     </StaggerItem>

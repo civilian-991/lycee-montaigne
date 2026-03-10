@@ -168,6 +168,35 @@ export function ExtrascolaireContent({ activities, sportsActivities }: Extrascol
           </FadeInView>
         </div>
       </section>
+
+      {/* Documents à télécharger */}
+      <section className="py-16 md:py-24">
+        <div className="mx-auto max-w-7xl px-4">
+          <SectionHeader title="Documents" subtitle="Règlements et descriptifs des activités périscolaires" />
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { label: "Règlement intérieur des activités périscolaires", href: "https://lycee-montaigne.edu.lb/storage/activites-prescolaires/December2025/IPMfacbyygHc1OtBsSgl.pdf" },
+              { label: "Descriptif des activités — 1er degré", href: "https://lycee-montaigne.edu.lb/storage/activites-prescolaires/December2025/cMVOtjEM2y8j4FUs0yJt.pdf" },
+              { label: "Tableau des activités 2ème période — 1er degré", href: "https://lycee-montaigne.edu.lb/storage/activites-prescolaires/December2025/DVdgUOEmmMigCJI1boMW.pdf" },
+              { label: "Descriptif des activités — 2nd degré", href: "https://lycee-montaigne.edu.lb/storage/activites-prescolaires/December2025/I6pLAYth3yz4wFq33pUq.pdf" },
+              { label: "Tableau des activités 2ème période — 2nd degré", href: "https://lycee-montaigne.edu.lb/storage/activites-prescolaires/December2025/nEhnt6nMduYpEqFH7e4o.pdf" },
+            ].map((doc) => (
+              <a
+                key={doc.href}
+                href={doc.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-4 rounded-[20px] border border-border bg-background p-5 shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-elevated)]"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 transition-colors group-hover:bg-primary/20">
+                  <svg className="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+                </div>
+                <span className="text-sm font-medium text-text transition-colors group-hover:text-primary">{doc.label}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   );
 }
