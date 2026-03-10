@@ -272,7 +272,7 @@ export function Navbar({
               href="/anciens"
               className="rounded-full bg-secondary px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary-light hover:shadow-[0_4px_16px_-2px_rgba(51,153,51,0.3)]"
             >
-              Anciens eleves
+              Anciens élèves
             </Link>
           </div>
 
@@ -587,7 +587,7 @@ export function Navbar({
               onClick={() => setMobileOpen(false)}
               className="block rounded-2xl bg-secondary py-3 text-center text-sm font-semibold text-white transition-all duration-300 hover:bg-secondary-light"
             >
-              Anciens eleves
+              Anciens élèves
             </Link>
           </div>
 

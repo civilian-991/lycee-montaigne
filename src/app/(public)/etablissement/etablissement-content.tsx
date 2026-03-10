@@ -166,7 +166,7 @@ export function EtablissementContent({
                   {person.name && (
                     <p className="mt-2 font-medium text-secondary">{person.name}</p>
                   )}
-                  <p className="mt-6 leading-relaxed text-text-muted">{person.text}</p>
+                  <div className="mt-6 leading-relaxed text-text-muted [&>p]:mt-4" dangerouslySetInnerHTML={{ __html: person.text }} />
                 </div>
               </div>
             </FadeInView>
