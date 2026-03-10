@@ -54,7 +54,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
   // Build news display items from DB only
   const displayNews = news.map((n) => ({
     title: n.title,
-    image: localImage(n.image) ?? "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
+    image: localImage(n.image) ?? n.image ?? "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg",
     link: n.link,
   }));
 

@@ -67,7 +67,7 @@ function CardInner({ item }: { item: NewsItem }) {
     <>
       <div className="relative aspect-[4/3] overflow-hidden">
         <Image
-          src={localImage(item.image) || "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg"}
+          src={localImage(item.image) || item.image || "/images/actualites/January2026/Gr126Yxp86fX8jQaSwnh.jpeg"}
           alt={item.title}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"
