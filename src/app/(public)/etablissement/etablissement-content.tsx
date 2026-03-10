@@ -141,10 +141,14 @@ export function EtablissementContent({
       </section>
 
       {/* Staff Messages */}
-      {staffMessages.map((person, i) => (
+      {staffMessages.map((person, i) => {
+        // Stable anchor IDs for menu links: chef (order 1), delegue (order 2), directrice (order 3+)
+        const anchorIds = ["chef", "delegue", "directrice"];
+        const anchorId = anchorIds[i] ?? `directeur-${i}`;
+        return (
         <section
           key={person.id}
-          id={person.id}
+          id={anchorId}
           className={i % 2 === 0 ? "bg-background-alt py-16 md:py-24" : "py-16 md:py-24"}
         >
           <div className="mx-auto max-w-7xl px-4">
@@ -174,7 +178,8 @@ export function EtablissementContent({
             </FadeInView>
           </div>
         </section>
-      ))}
+        );
+      })}
 
       {/* Comite des parents */}
       <section id="comite" className="bg-background-alt py-16 md:py-24">
@@ -236,7 +241,7 @@ export function EtablissementContent({
 
       {/* Instances de Gouvernance — only show if DB has data */}
       {governanceInstances.length > 0 && (
-      <section id="fonctionnement" className="bg-background-alt py-16 md:py-24">
+      <section id="instances" className="bg-background-alt py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader
             title="Instances de Gouvernance"

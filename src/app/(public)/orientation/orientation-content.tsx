@@ -495,6 +495,7 @@ export function OrientationContent({ documents, sections, activities, universiti
       <WaveDivider fill="var(--color-background)" className="relative -mt-px rotate-180" />
 
       {/* ─── Accompagnement personnalise au Liban ─── */}
+      <div id="uni" />
       {universitesLiban.length > 0 && (
         <section id="uni-liban" className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">

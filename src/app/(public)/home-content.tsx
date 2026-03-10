@@ -264,7 +264,7 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
               </div>
             )}
             {/* Right: Trait d'union (~30%) */}
-            <div>
+            <div id="trait-union">
               <SectionHeader title="Trait d'union" className="text-left" />
               <FadeInView>
                 <div className="mt-8">
