@@ -4,9 +4,9 @@ import { DEFAULT_SETTINGS } from "@/lib/settings";
 import { HomeContent } from "./home-content";
 
 export const metadata: Metadata = {
-  title: "Accueil | Lycee Montaigne",
+  title: "Accueil | Lycée Montaigne",
   description:
-    "Bienvenue au Lycee Montaigne de Beit Chabab — etablissement scolaire francophone au Liban, de la maternelle a la terminale.",
+    "Bienvenue au Lycée Montaigne de Beit Chabab — établissement scolaire francophone au Liban, de la maternelle à la terminale.",
   alternates: { canonical: "/" },
 };
 

@@ -29,7 +29,7 @@ export function PoleInclusionContent({ sections, pillars }: { sections: PageSect
 
   return (
     <>
-      <PageHero title="Pole Inclusion" />
+      <PageHero title="Pôle Inclusion" />
 
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
@@ -37,7 +37,7 @@ export function PoleInclusionContent({ sections, pillars }: { sections: PageSect
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div>
                 <SectionHeader
-                  title={introSection?.title || "Eleves a Besoins Educatifs Particuliers"}
+                  title={introSection?.title || "Élèves à Besoins Éducatifs Particuliers"}
                   className="text-left"
                 />
                 {introSection?.contentHtml ? (
@@ -48,13 +48,13 @@ export function PoleInclusionContent({ sections, pillars }: { sections: PageSect
                 ) : (
                   <>
                     <p className="mt-6 text-text-muted">
-                      Le Lycee Montaigne s&apos;engage pour l&apos;inclusion de tous les eleves. Notre pole inclusion
-                      accompagne les eleves a besoins educatifs particuliers (EBEP) tout au long de leur
-                      parcours scolaire, de la maternelle a la terminale.
+                      Le Lycée Montaigne s&apos;engage pour l&apos;inclusion de tous les élèves. Notre pôle inclusion
+                      accompagne les élèves à besoins éducatifs particuliers (EBEP) tout au long de leur
+                      parcours scolaire, de la maternelle à la terminale.
                     </p>
                     <p className="mt-4 text-text-muted">
-                      Notre approche repose sur le regard positif porte sur chaque personne et la confiance
-                      dans l&apos;educabilite de chacun, quels que soient ses besoins specifiques.
+                      Notre approche repose sur le regard positif porté sur chaque personne et la confiance
+                      dans l&apos;éducabilité de chacun, quels que soient ses besoins spécifiques.
                     </p>
                   </>
                 )}
@@ -62,7 +62,7 @@ export function PoleInclusionContent({ sections, pillars }: { sections: PageSect
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                 <Image
                   src={localImage(introSection?.image) || "/images/vie-s1/November2024/GS7jV1MyA75tAjglBQcx.jpg"}
-                  alt="Pole inclusion"
+                  alt="Pôle inclusion"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"

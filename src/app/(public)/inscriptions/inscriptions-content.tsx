@@ -55,7 +55,7 @@ export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLev
 
   return (
     <>
-      <PageHero title="Inscriptions et Reinscriptions" />
+      <PageHero title="Inscriptions et Réinscriptions" />
 
       {/* Procedure */}
       <section id="inscription" className="py-16 md:py-24">
@@ -63,7 +63,7 @@ export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLev
           <FadeInView>
             <div className="grid items-start gap-12 lg:grid-cols-2">
               <div>
-                <SectionHeader title={procedureSection?.title || "Procedure d'inscription 2026-2027"} className="text-left" />
+                <SectionHeader title={procedureSection?.title || "Procédure d'inscription 2026-2027"} className="text-left" />
                 {procedureSection?.contentHtml ? (
                   <div
                     className="mt-6 text-text-muted [&>p]:mt-4"
@@ -72,7 +72,7 @@ export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLev
                 ) : inscriptionDocuments.length > 0 ? (
                   <>
                     <p className="mt-6 text-text-muted">
-                      Pour inscrire votre enfant au Lycee Montaigne, veuillez preparer les documents suivants :
+                      Pour inscrire votre enfant au Lycée Montaigne, veuillez préparer les documents suivants :
                     </p>
                     <StaggerChildren className="mt-6 space-y-3">
                       {inscriptionDocuments.map((doc) => (
@@ -87,7 +87,7 @@ export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLev
                   </>
                 ) : (
                   <p className="mt-6 text-text-muted">
-                    Pour inscrire votre enfant au Lycee Montaigne, veuillez nous contacter pour obtenir la liste des documents requis.
+                    Pour inscrire votre enfant au Lycée Montaigne, veuillez nous contacter pour obtenir la liste des documents requis.
                   </p>
                 )}
               </div>
@@ -129,14 +129,14 @@ export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLev
                 ) : (
                   <>
                     <p className="mt-6 text-text-muted">
-                      Venez decouvrir notre ecole maternelle lors de nos journees portes ouvertes.
-                      Un moment d&apos;accueil, de visite des locaux et d&apos;echanges avec l&apos;equipe pedagogique
+                      Venez découvrir notre école maternelle lors de nos journées portes ouvertes.
+                      Un moment d&apos;accueil, de visite des locaux et d&apos;échanges avec l&apos;équipe pédagogique
                       vous attend.
                     </p>
                     <div className="mt-6 rounded-2xl border border-secondary/20 bg-secondary/5 p-4">
                       <p className="font-medium text-secondary">Prochaines portes ouvertes</p>
                       <p className="mt-1 text-sm text-text-muted">
-                        Consultez nos reseaux sociaux pour les dates a venir.
+                        Consultez nos réseaux sociaux pour les dates à venir.
                       </p>
                     </div>
                   </>
@@ -192,7 +192,7 @@ export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLev
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader
             title={tarifsSection?.title || `Tarifs scolaires ${tuitionYear}`}
-            subtitle="Frais de scolarite par niveau"
+            subtitle="Frais de scolarité par niveau"
           />
           <FadeInView>
             {/* CMS image of the tarifs table (e.g. Word export as image) */}
@@ -231,7 +231,7 @@ export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLev
                   <thead>
                     <tr className="border-b border-border bg-primary text-white">
                       <th className="px-4 py-3 text-left font-semibold">Niveau</th>
-                      <th className="px-4 py-3 text-left font-semibold">Frais de scolarite (LL)</th>
+                      <th className="px-4 py-3 text-left font-semibold">Frais de scolarité (LL)</th>
                       <th className="px-4 py-3 text-left font-semibold">Frais d&apos;enseignement ($)</th>
                       <th className="px-4 py-3 text-left font-semibold">Contribution en dollars ($)</th>
                       <th className="px-4 py-3 text-left font-semibold">Collation ($)</th>
@@ -283,7 +283,7 @@ export function InscriptionsContent({ sections, inscriptionDocuments, tuitionLev
 
             {!tarifsSection?.image && tuitionLevels.length > 0 && (
               <p className="mt-4 text-center text-xs text-text-muted">
-                Les montants sont donnes a titre indicatif et peuvent etre sujets a modification. Contactez l&apos;administration pour plus de details.
+                Les montants sont donnés à titre indicatif et peuvent être sujets à modification. Contactez l&apos;administration pour plus de détails.
               </p>
             )}
           </FadeInView>

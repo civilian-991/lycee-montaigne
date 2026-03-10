@@ -96,7 +96,7 @@ export function EtablissementContent({
 
   return (
     <>
-      <PageHero title="Etablissement" />
+      <PageHero title="Établissement" />
 
       {/* Mission et Vision */}
       <section id="mission" className="py-16 md:py-24">
@@ -112,16 +112,16 @@ export function EtablissementContent({
                   />
                 ) : (
                   <>
-                    <h3 className="mt-6 text-xl font-semibold text-secondary">Notre projet educatif</h3>
+                    <h3 className="mt-6 text-xl font-semibold text-secondary">Notre projet éducatif</h3>
                     <p className="mt-4 leading-relaxed text-text-muted">
-                      Le Lycee Montaigne est une ecole pour toutes les intelligences et tous les talents.
-                      Notre projet educatif repose sur le regard positif porte sur chaque personne,
-                      le refus du determinisme et la confiance dans l&apos;educabilite cognitive, affective et physiologique de chacun.
+                      Le Lycée Montaigne est une école pour toutes les intelligences et tous les talents.
+                      Notre projet éducatif repose sur le regard positif porté sur chaque personne,
+                      le refus du déterminisme et la confiance dans l&apos;éducabilité cognitive, affective et physiologique de chacun.
                     </p>
                     <p className="mt-4 leading-relaxed text-text-muted">
-                      Bienvenue a la communaute du LM, a ses amis et aux visiteurs de notre site web.
-                      Nous vous invitons a decouvrir notre etablissement, nos valeurs et notre engagement
-                      envers l&apos;excellence educative.
+                      Bienvenue à la communauté du LM, à ses amis et aux visiteurs de notre site web.
+                      Nous vous invitons à découvrir notre établissement, nos valeurs et notre engagement
+                      envers l&apos;excellence éducative.
                     </p>
                   </>
                 )}
@@ -129,7 +129,7 @@ export function EtablissementContent({
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                 <Image
                   src="/images/eta-s2/November2024/mJKjRY5yzkeXW04S1XmZ.jpg"
-                  alt="Eleves en classe au Lycee Montaigne"
+                  alt="Élèves en classe au Lycée Montaigne"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -180,7 +180,7 @@ export function EtablissementContent({
           <FadeInView>
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div>
-                <SectionHeader title="Comite des parents" className="text-left" />
+                <SectionHeader title="Comité des parents" className="text-left" />
                 {displayComite.length > 0 && (
                 <StaggerChildren className="mt-8 space-y-4">
                   {displayComite.map((member) => (
@@ -205,7 +205,7 @@ export function EtablissementContent({
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                 <Image
                   src="/images/comite-parents/December2025/ex9aVmzf9X4A0EDTgZEz.jpg"
-                  alt="Comite des parents du Lycee Montaigne"
+                  alt="Comité des parents du Lycée Montaigne"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -219,13 +219,13 @@ export function EtablissementContent({
       {/* Reglement Interieur */}
       <section id="reglement" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader title="Reglement Interieur & Instances" />
+          <SectionHeader title="Règlement Intérieur & Instances" />
           <FadeInView>
             <div className="mx-auto mt-12 max-w-4xl rounded-[20px] border border-border bg-background p-8 shadow-[var(--shadow-soft)]">
-              <h3 className="text-xl font-semibold">Reglement Interieur</h3>
+              <h3 className="text-xl font-semibold">Règlement Intérieur</h3>
               <p className="mt-4 text-text-muted">
-                Le reglement interieur du Lycee Montaigne definit les droits et devoirs de chaque membre
-                de la communaute scolaire. Il garantit un cadre de vie harmonieux et propice a l&apos;apprentissage.
+                Le règlement intérieur du Lycée Montaigne définit les droits et devoirs de chaque membre
+                de la communauté scolaire. Il garantit un cadre de vie harmonieux et propice à l&apos;apprentissage.
               </p>
             </div>
           </FadeInView>
@@ -238,7 +238,7 @@ export function EtablissementContent({
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader
             title="Instances de Gouvernance"
-            subtitle="Les organes qui assurent le fonctionnement democratique du lycee"
+            subtitle="Les organes qui assurent le fonctionnement démocratique du lycée"
           />
           <StaggerChildren className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {governanceInstances.map((inst) => {

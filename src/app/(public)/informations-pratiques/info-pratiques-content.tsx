@@ -38,7 +38,7 @@ const supplyGroupCategories = [
   { label: "Maternelle", color: "bg-secondary", category: "fournitures-maternelle" },
   { label: "Elementaire", color: "bg-secondary", category: "fournitures-elementaire" },
   { label: "College", color: "bg-primary", category: "fournitures-college" },
-  { label: "Lycee", color: "bg-primary", category: "fournitures-lycee" },
+  { label: "Lycée", color: "bg-primary", category: "fournitures-lycee" },
 ];
 
 const healthIconMap: Record<string, typeof Heart> = {
@@ -123,7 +123,7 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
                       {calendrierDoc?.title ?? "Calendrier scolaire 2025-2026"}
                     </h3>
                     <span className="mt-2 inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors group-hover:text-white">
-                      <Download className="h-3.5 w-3.5" /> Telecharger le PDF
+                      <Download className="h-3.5 w-3.5" /> Télécharger le PDF
                     </span>
                   </div>
                 </div>
@@ -153,7 +153,7 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
                       {examensDoc?.title ?? "Examens officiels 2025-2026"}
                     </h3>
                     <span className="mt-2 inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors group-hover:text-white">
-                      <Download className="h-3.5 w-3.5" /> Telecharger le PDF
+                      <Download className="h-3.5 w-3.5" /> Télécharger le PDF
                     </span>
                   </div>
                 </div>
@@ -234,7 +234,7 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
                   <div className="absolute bottom-0 p-6">
                     <h3 className="text-lg font-bold text-white">Menu Cantine</h3>
                     <span className="mt-2 inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors group-hover:text-white">
-                      <Download className="h-3.5 w-3.5" /> Telecharger le menu
+                      <Download className="h-3.5 w-3.5" /> Télécharger le menu
                     </span>
                   </div>
                 </div>
@@ -250,7 +250,7 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src="/images/restauration-files/March2025/Ga6FKNC32Bt3xf28FjPH.jpeg"
-                    alt="Menu Cafe Moliere"
+                    alt="Menu Café Molière"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -260,9 +260,9 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
                     <UtensilsCrossed className="h-5 w-5 text-primary" />
                   </div>
                   <div className="absolute bottom-0 p-6">
-                    <h3 className="text-lg font-bold text-white">Menu Cafe Moliere</h3>
+                    <h3 className="text-lg font-bold text-white">Menu Café Molière</h3>
                     <span className="mt-2 inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors group-hover:text-white">
-                      <Download className="h-3.5 w-3.5" /> Telecharger le menu
+                      <Download className="h-3.5 w-3.5" /> Télécharger le menu
                     </span>
                   </div>
                 </div>
@@ -277,7 +277,7 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
         <WaveDivider fill="var(--color-background)" flip className="relative z-10" />
         <div className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">
-            <SectionHeader title="Sante" subtitle="Une equipe medicale au service du bien-etre des eleves" />
+            <SectionHeader title="Santé" subtitle="Une équipe médicale au service du bien-être des élèves" />
             {hasHealthStaff ? (
               <StaggerChildren className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 {healthStaff.map((staff) => {
@@ -302,12 +302,12 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
               </StaggerChildren>
             ) : (
               <p className="mt-8 text-center text-text-muted">
-                Informations sur l&apos;equipe medicale a venir.
+                Informations sur l&apos;équipe médicale à venir.
               </p>
             )}
             {healthReferents && (
               <div className="mx-auto mt-8 max-w-xl rounded-2xl border border-border bg-background p-5 shadow-[var(--shadow-soft)]">
-                <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referents sante</p>
+                <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Référents santé</p>
                 <p className="mt-2 text-sm text-text">{healthReferents}</p>
               </div>
             )}
@@ -316,7 +316,7 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
                 href="/informations-pratiques/activites"
                 className="inline-flex items-center gap-2 rounded-full bg-secondary px-8 py-3 text-sm font-semibold text-white shadow-[var(--shadow-soft)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-secondary-dark hover:shadow-[var(--shadow-elevated)]"
               >
-                Voir les activites sante
+                Voir les activités santé
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -336,8 +336,8 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
                 </div>
                 <h2 className="mt-6 font-heading text-3xl font-bold text-white md:text-4xl">Recrutement</h2>
                 <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/75">
-                  Le Lycee Montaigne (Beit Chabab) recrute pour la rentree 2026-2027. Si vous souhaitez
-                  rejoindre notre equipe pedagogique ou administrative, consultez les postes disponibles.
+                  Le Lycée Montaigne (Beit Chabab) recrute pour la rentrée 2026-2027. Si vous souhaitez
+                  rejoindre notre équipe pédagogique ou administrative, consultez les postes disponibles.
                 </p>
                 <a
                   href={recrutementDoc?.fileUrl ?? "https://lycee-montaigne.datarays.co/Employee"}
@@ -345,7 +345,7 @@ export function InfoPratiquesContent({ documents, healthStaff, supplyLists, heal
                   rel="noopener noreferrer"
                   className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.2)]"
                 >
-                  Acceder au formulaire
+                  Accéder au formulaire
                   <ArrowRight className="h-4 w-4" />
                 </a>
               </div>

@@ -31,11 +31,11 @@ export function ExtrascolaireContent({ activities, sportsActivities }: Extrascol
           <FadeInView>
             {activities.length > 0 ? (
               <>
-                <SectionHeader title="Activites periscolaires" />
+                <SectionHeader title="Activités périscolaires" />
                 <p className="mx-auto mt-4 max-w-3xl text-center text-text-muted">
-                  Le Lycee Montaigne propose un large eventail d&apos;activites periscolaires pour
-                  enrichir le parcours de chaque eleve. Que vous soyez passionne de sport, d&apos;art,
-                  de robotique ou de sciences, il y a une activite pour chacun !
+                  Le Lycée Montaigne propose un large éventail d&apos;activités périscolaires pour
+                  enrichir le parcours de chaque élève. Que vous soyez passionné de sport, d&apos;art,
+                  de robotique ou de sciences, il y a une activité pour chacun !
                 </p>
                 <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {activities.map((activity) => (
@@ -71,21 +71,21 @@ export function ExtrascolaireContent({ activities, sportsActivities }: Extrascol
             ) : (
               <div className="grid items-center gap-12 lg:grid-cols-2">
                 <div>
-                  <SectionHeader title="Activites periscolaires" className="text-left" />
+                  <SectionHeader title="Activités périscolaires" className="text-left" />
                   <p className="mt-6 text-text-muted">
-                    Le Lycee Montaigne propose un large eventail d&apos;activites periscolaires pour
-                    enrichir le parcours de chaque eleve. Que vous soyez passionne de sport, d&apos;art,
-                    de robotique ou de sciences, il y a une activite pour chacun !
+                    Le Lycée Montaigne propose un large éventail d&apos;activités périscolaires pour
+                    enrichir le parcours de chaque élève. Que vous soyez passionné de sport, d&apos;art,
+                    de robotique ou de sciences, il y a une activité pour chacun !
                   </p>
                   <p className="mt-4 text-text-muted">
-                    Les activites sont organisees en deux periodes au cours de l&apos;annee scolaire.
-                    Les inscriptions se font en debut de chaque periode.
+                    Les activités sont organisées en deux périodes au cours de l&apos;année scolaire.
+                    Les inscriptions se font en début de chaque période.
                   </p>
                 </div>
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                   <Image
                     src="/images/activites-prescolaires/May2025/vjpXai9c7VbVIINjggcN.jpeg"
-                    alt="Activites periscolaires"
+                    alt="Activités périscolaires"
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 50vw"
@@ -105,9 +105,9 @@ export function ExtrascolaireContent({ activities, sportsActivities }: Extrascol
               <>
                 <SectionHeader title="Association sportive" />
                 <p className="mx-auto mt-4 max-w-3xl text-center text-text-muted">
-                  L&apos;association sportive du Lycee Montaigne offre aux eleves la possibilite de
-                  pratiquer differentes disciplines sportives et de participer a des competitions
-                  inter-etablissements dans le cadre de la ligue sportive AEFE-UNSS.
+                  L&apos;association sportive du Lycée Montaigne offre aux élèves la possibilité de
+                  pratiquer différentes disciplines sportives et de participer à des compétitions
+                  inter-établissements dans le cadre de la ligue sportive AEFE-UNSS.
                 </p>
                 <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {sportsActivities.map((activity) => (
@@ -154,13 +154,13 @@ export function ExtrascolaireContent({ activities, sportsActivities }: Extrascol
                 <div>
                   <SectionHeader title="Association sportive" className="text-left" />
                   <p className="mt-6 text-text-muted">
-                    L&apos;association sportive du Lycee Montaigne offre aux eleves la possibilite de
-                    pratiquer differentes disciplines sportives et de participer a des competitions
-                    inter-etablissements dans le cadre de la ligue sportive AEFE-UNSS.
+                    L&apos;association sportive du Lycée Montaigne offre aux élèves la possibilité de
+                    pratiquer différentes disciplines sportives et de participer à des compétitions
+                    inter-établissements dans le cadre de la ligue sportive AEFE-UNSS.
                   </p>
                   <p className="mt-4 text-text-muted">
-                    Les entrainements ont lieu en dehors des heures de cours et les competitions
-                    sont organisees tout au long de l&apos;annee.
+                    Les entraînements ont lieu en dehors des heures de cours et les compétitions
+                    sont organisées tout au long de l&apos;année.
                   </p>
                 </div>
               </div>

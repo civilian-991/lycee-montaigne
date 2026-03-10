@@ -23,7 +23,7 @@ export function SejoursContent({ sections }: { sections: PageSectionRow[] }) {
 
   return (
     <>
-      <PageHero title="Sejours Pedagogiques" />
+      <PageHero title="Séjours Pédagogiques" />
 
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
@@ -31,7 +31,7 @@ export function SejoursContent({ sections }: { sections: PageSectionRow[] }) {
             <div className="grid items-center gap-12 lg:grid-cols-2">
               <div>
                 <SectionHeader
-                  title={introSection?.title || "Voyages et sejours"}
+                  title={introSection?.title || "Voyages et séjours"}
                   className="text-left"
                 />
                 {introSection?.contentHtml ? (
@@ -42,14 +42,14 @@ export function SejoursContent({ sections }: { sections: PageSectionRow[] }) {
                 ) : (
                   <>
                     <p className="mt-6 text-text-muted">
-                      Le Lycee Montaigne organise des sejours pedagogiques et des voyages scolaires qui
-                      enrichissent le parcours educatif des eleves. Ces experiences favorisent l&apos;ouverture
-                      culturelle, l&apos;autonomie et la cohesion de groupe.
+                      Le Lycée Montaigne organise des séjours pédagogiques et des voyages scolaires qui
+                      enrichissent le parcours éducatif des élèves. Ces expériences favorisent l&apos;ouverture
+                      culturelle, l&apos;autonomie et la cohésion de groupe.
                     </p>
                     <p className="mt-4 text-text-muted">
-                      De la decouverte du patrimoine local aux echanges internationaux, chaque sejour
-                      est concu pour prolonger les apprentissages en classe et offrir aux eleves des
-                      experiences inoubliables.
+                      De la découverte du patrimoine local aux échanges internationaux, chaque séjour
+                      est conçu pour prolonger les apprentissages en classe et offrir aux élèves des
+                      expériences inoubliables.
                     </p>
                   </>
                 )}
@@ -57,7 +57,7 @@ export function SejoursContent({ sections }: { sections: PageSectionRow[] }) {
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-warm)]">
                 <Image
                   src={localImage(introSection?.image) || "/images/actions-sportives/May2025/5AyqpqwCqoBIFxIXphFP.jpeg"}
-                  alt="Sejours pedagogiques"
+                  alt="Séjours pédagogiques"
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
@@ -79,9 +79,9 @@ export function SejoursContent({ sections }: { sections: PageSectionRow[] }) {
               />
             ) : (
               <p className="mx-auto mt-6 max-w-3xl text-center text-text-muted">
-                Les eleves du Lycee Montaigne participent aux competitions sportives inter-etablissements
-                dans le cadre de la ligue sportive AEFE-UNSS, offrant des opportunites de rencontres
-                sportives au niveau regional et international.
+                Les élèves du Lycée Montaigne participent aux compétitions sportives inter-établissements
+                dans le cadre de la ligue sportive AEFE-UNSS, offrant des opportunités de rencontres
+                sportives au niveau régional et international.
               </p>
             )}
           </FadeInView>

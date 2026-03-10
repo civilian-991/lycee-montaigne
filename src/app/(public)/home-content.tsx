@@ -65,13 +65,13 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
     }
   })();
   const stats = [
-    { value: parseInt(settings.stat_eleves || "1085"), label: "Eleves" },
-    { value: parseInt(settings.stat_reussite || "100"), suffix: "%", label: "Reussite au bac" },
-    { value: parseInt(settings.stat_nationalites || "29"), label: "Nationalites" },
+    { value: parseInt(settings.stat_eleves || "1085"), label: "Élèves" },
+    { value: parseInt(settings.stat_reussite || "100"), suffix: "%", label: "Réussite au bac" },
+    { value: parseInt(settings.stat_nationalites || "29"), label: "Nationalités" },
     { value: parseInt(settings.stat_langues || "3"), label: "Langues d'enseignement" },
   ];
 
-  const siteName = settings.site_name || "Lycee Montaigne";
+  const siteName = settings.site_name || "Lycée Montaigne";
   const siteSubtitle = settings.site_subtitle || "Beit Chabab";
 
   /* ── Carousel state ── */
@@ -123,8 +123,8 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
             </FadeInView>
             <FadeInView delay={0.6}>
               <p className="mt-6 max-w-xl text-lg text-white/80">
-                Un etablissement scolaire francophone au Liban, de la maternelle a la terminale,
-                offrant un parcours d&apos;excellence pour tous les eleves.
+                Un établissement scolaire francophone au Liban, de la maternelle à la terminale,
+                offrant un parcours d&apos;excellence pour tous les élèves.
               </p>
             </FadeInView>
             <FadeInView delay={0.8}>
@@ -137,7 +137,7 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
                 </Link>
                 <Link href="/etablissement">
                   <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                    Decouvrir l&apos;etablissement
+                    Découvrir l&apos;établissement
                   </Button>
                 </Link>
               </div>
@@ -201,7 +201,7 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
       {reasons.length > 0 && (
       <section id="pourquoi" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
-          <SectionHeader title="Pourquoi choisir l'enseignement francais et le Lycee Montaigne" />
+          <SectionHeader title="Pourquoi choisir l'enseignement français et le Lycée Montaigne" />
           <div className="mt-12 grid items-center gap-10 lg:grid-cols-2">
             <FadeInView>
               <div className="space-y-6">
@@ -219,7 +219,7 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
               <div className="relative overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)]">
                 <Image
                   src="/images/enseignement-francais/November2024/rhXL22oL9pmVlxfzNBB1.png"
-                  alt="Pourquoi l'enseignement francais"
+                  alt="Pourquoi l'enseignement français"
                   width={600}
                   height={700}
                   className="h-auto w-full object-cover"
@@ -249,7 +249,7 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
             {/* Left: Info à la une (~70%) */}
             {featuredNews.length > 0 && (
               <div>
-                <SectionHeader title="Info a la une" className="text-left" />
+                <SectionHeader title="Info à la une" className="text-left" />
                 <StaggerChildren className="mt-8 grid gap-6 md:grid-cols-2">
                   {featuredNews.map((item) => (
                     <StaggerItem key={item.id}>
@@ -287,10 +287,10 @@ export function HomeContent({ quickLinks, featuredNews, heroSlides, settings }: 
         <div className="relative mx-auto max-w-3xl px-4 text-center">
           <FadeInView>
             <h2 className="text-3xl font-bold md:text-4xl">
-              Rejoignez la communaute du Lycee Montaigne
+              Rejoignez la communauté du Lycée Montaigne
             </h2>
             <p className="mt-4 text-lg text-text-muted">
-              De la maternelle a la terminale, nous accompagnons chaque eleve vers l&apos;excellence.
+              De la maternelle à la terminale, nous accompagnons chaque élève vers l&apos;excellence.
             </p>
             <div className="mt-8 flex justify-center gap-4">
               <Link href="/inscriptions">

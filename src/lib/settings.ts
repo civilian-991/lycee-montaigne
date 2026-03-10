@@ -219,7 +219,7 @@ export interface SiteSettings {
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   /* General */
-  site_name: "Lycee Montaigne",
+  site_name: "Lycée Montaigne",
   site_subtitle: "Beit Chabab",
   stat_eleves: "1085",
   stat_reussite: "100%",
@@ -260,7 +260,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   ],
   footer_nav_links: [
     { label: "Accueil", href: "/" },
-    { label: "Etablissement", href: "/etablissement" },
+    { label: "Établissement", href: "/etablissement" },
     { label: "Inscriptions", href: "/inscriptions" },
     { label: "Vie du LM", href: "/vie-du-lm" },
     { label: "Orientation", href: "/orientation" },
@@ -269,10 +269,10 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   ],
   footer_useful_links: [
     { label: "Inscriptions", href: "/inscriptions" },
-    { label: "Egalite-diversite", href: "/vie-du-lm#egalite" },
+    { label: "Égalité-diversité", href: "/vie-du-lm#egalite" },
     { label: "Anciens du LM", href: "/anciens" },
     { label: "Recrutement", href: "/informations-pratiques#recrutement" },
-    { label: "Developpement durable", href: "/vie-du-lm#dev" },
+    { label: "Développement durable", href: "/vie-du-lm#dev" },
     { label: "Webradio", href: "/vie-du-lm#web" },
     { label: "Bourses scolaires", href: "/inscriptions#bourse" },
   ],
@@ -280,73 +280,73 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   /* Academic programs */
   programs: [
     {
-      name: "Ecole Maternelle",
+      name: "École Maternelle",
       levels: "PS - MS - GS",
       ages: "3-5 ans",
       slug: "maternelle",
     },
     {
-      name: "Ecole Elementaire",
+      name: "École Élémentaire",
       levels: "CP - CE1 - CE2 - CM1 - CM2",
       ages: "6-10 ans",
       slug: "elementaire",
     },
     {
-      name: "College",
-      levels: "6eme - 5eme - 4eme - 3eme",
+      name: "Collège",
+      levels: "6ème - 5ème - 4ème - 3ème",
       ages: "11-14 ans",
       slug: "college",
     },
     {
-      name: "Lycee",
-      levels: "2nde - 1ere - Terminale",
+      name: "Lycée",
+      levels: "2nde - 1ère - Terminale",
       ages: "15-17 ans",
       slug: "lycee",
     },
   ],
   diplomas: [
     {
-      name: "Diplome National du Brevet (DNB)",
-      description: "Francais",
+      name: "Diplôme National du Brevet (DNB)",
+      description: "Français",
     },
     { name: "Brevet Libanais", description: "Libanais" },
-    { name: "Bac Francais", description: "Francais" },
+    { name: "Bac Français", description: "Français" },
     { name: "Bac Libanais", description: "Libanais" },
     {
-      name: "Bac Francais International (BFI)",
+      name: "Bac Français International (BFI)",
       description: "International",
     },
   ],
   strategic_axes: [
     {
-      title: "Assurer un parcours d'excellence a tous les eleves",
+      title: "Assurer un parcours d'excellence à tous les élèves",
       items: [
-        "Renforcer la maitrise de la langue francaise",
-        "Developper les competences en langues vivantes",
-        "Promouvoir les sciences et la culture numerique",
+        "Renforcer la maîtrise de la langue française",
+        "Développer les compétences en langues vivantes",
+        "Promouvoir les sciences et la culture numérique",
         "Favoriser les parcours artistiques et culturels",
-        "Accompagner chaque eleve vers sa reussite",
-        "Renforcer l'evaluation formative",
+        "Accompagner chaque élève vers sa réussite",
+        "Renforcer l'évaluation formative",
       ],
     },
     {
-      title: "Accompagner la montee en puissance du Lycee Montaigne",
+      title: "Accompagner la montée en puissance du Lycée Montaigne",
       items: [
-        "Developper une politique d'attractivite",
+        "Développer une politique d'attractivité",
         "Renforcer la communication interne et externe",
-        "Moderniser les pratiques pedagogiques",
+        "Moderniser les pratiques pédagogiques",
         "Optimiser la gestion des ressources",
-        "Developper les partenariats",
+        "Développer les partenariats",
       ],
     },
     {
-      title: "Cultiver l'identite humaniste de l'etablissement",
+      title: "Cultiver l'identité humaniste de l'établissement",
       items: [
-        "Promouvoir les valeurs de tolerance et de respect",
-        "Developper l'eco-citoyennete",
-        "Renforcer l'egalite filles-garcons",
-        "Favoriser l'inclusion et la diversite",
-        "Developper le sentiment d'appartenance",
+        "Promouvoir les valeurs de tolérance et de respect",
+        "Développer l'éco-citoyenneté",
+        "Renforcer l'égalité filles-garçons",
+        "Favoriser l'inclusion et la diversité",
+        "Développer le sentiment d'appartenance",
       ],
     },
   ],
@@ -354,22 +354,22 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     {
       name: "Parcours citoyen",
       description:
-        "Formation du citoyen responsable et engage, participation a la vie democratique de l'etablissement.",
+        "Formation du citoyen responsable et engagé, participation à la vie démocratique de l'établissement.",
     },
     {
       name: "Parcours Avenir",
       description:
-        "Orientation et decouverte du monde professionnel des la 6eme jusqu'a la terminale.",
+        "Orientation et découverte du monde professionnel dès la 6ème jusqu'à la terminale.",
     },
     {
-      name: "Parcours educatif de sante",
+      name: "Parcours éducatif de santé",
       description:
-        "Education a la sante, prevention et protection des eleves tout au long de leur scolarite.",
+        "Éducation à la santé, prévention et protection des élèves tout au long de leur scolarité.",
     },
     {
-      name: "Parcours d'education artistique et culturelle",
+      name: "Parcours d'éducation artistique et culturelle",
       description:
-        "Rencontre avec les oeuvres, pratique artistique et acquisition de connaissances culturelles.",
+        "Rencontre avec les œuvres, pratique artistique et acquisition de connaissances culturelles.",
     },
   ],
 
@@ -423,7 +423,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
       ],
     },
     {
-      level: "Ecole elementaire",
+      level: "École élémentaire",
       installments: [
         { label: "1er versement", fraisLL: "5 000 000", fraisUSD: "650", contributionUSD: "200", collationUSD: "100" },
         { label: "2e versement", fraisLL: "5 000 000", fraisUSD: "650", contributionUSD: "200", collationUSD: "—" },
@@ -431,7 +431,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
       ],
     },
     {
-      level: "College",
+      level: "Collège",
       installments: [
         { label: "1er versement", fraisLL: "6 000 000", fraisUSD: "750", contributionUSD: "250", collationUSD: "—" },
         { label: "2e versement", fraisLL: "6 000 000", fraisUSD: "750", contributionUSD: "250", collationUSD: "—" },
@@ -439,7 +439,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
       ],
     },
     {
-      level: "Lycee",
+      level: "Lycée",
       installments: [
         { label: "1er versement", fraisLL: "7 000 000", fraisUSD: "900", contributionUSD: "300", collationUSD: "—" },
         { label: "2e versement", fraisLL: "7 000 000", fraisUSD: "900", contributionUSD: "300", collationUSD: "—" },
@@ -467,13 +467,13 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
   /* Homepage */
   homepage_reasons: [
-    { title: "Excellence academique", description: "Un enseignement rigoureux suivant les programmes francais, avec des resultats exceptionnels aux examens nationaux et internationaux." },
-    { title: "Ouverture internationale", description: "29 nationalites representees, un Bac Francais International, et des partenariats avec des universites prestigieuses dans le monde entier." },
-    { title: "Epanouissement de l'eleve", description: "Un accompagnement personnalise de la maternelle a la terminale, avec des activites periscolaires variees et un pole inclusion dedie." },
-    { title: "Valeurs humanistes", description: "Une ecole pour toutes les intelligences et tous les talents, fondee sur le regard positif, l'educabilite et le refus du determinisme." },
+    { title: "Excellence académique", description: "Un enseignement rigoureux suivant les programmes français, avec des résultats exceptionnels aux examens nationaux et internationaux." },
+    { title: "Ouverture internationale", description: "29 nationalités représentées, un Bac Français International, et des partenariats avec des universités prestigieuses dans le monde entier." },
+    { title: "Épanouissement de l'élève", description: "Un accompagnement personnalisé de la maternelle à la terminale, avec des activités périscolaires variées et un pôle inclusion dédié." },
+    { title: "Valeurs humanistes", description: "Une école pour toutes les intelligences et tous les talents, fondée sur le regard positif, l'éducabilité et le refus du déterminisme." },
   ],
-  trait_union_title: "Numero 91 - Decembre 2025",
-  trait_union_description: "Decouvrez le dernier numero du Trait d'union, le journal du Lycee Montaigne.",
+  trait_union_title: "Numéro 91 - Décembre 2025",
+  trait_union_description: "Découvrez le dernier numéro du Trait d'union, le journal du Lycée Montaigne.",
   trait_union_image: "/images/hp-services-items/January2026/HcSaUtgkncgRCfvVKoV4.jpeg",
   trait_union_link: "/documents",
 

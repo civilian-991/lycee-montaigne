@@ -156,7 +156,7 @@ export function OrientationContent({ documents, sections, activities, universiti
                 <div className="float-left mb-4 mr-6 w-36 overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
                   <Image
                     src={localImage(orientationIntroSection.image) || orientationIntroSection.image}
-                    alt="Conseillere d'orientation"
+                    alt="Conseillère d'orientation"
                     width={144}
                     height={192}
                     className="h-auto w-full object-cover"
@@ -179,15 +179,15 @@ export function OrientationContent({ documents, sections, activities, universiti
                     Le service d&apos;orientation
                   </h2>
                   <p className="mt-4 leading-relaxed text-text-muted">
-                    Le Lycee Montaigne dispose d&apos;un service d&apos;orientation dedie a l&apos;accompagnement
-                    personnalise de chaque eleve dans la construction de son projet d&apos;avenir. Notre
-                    conseillere d&apos;orientation est presente pour informer, conseiller et guider les
-                    eleves et leurs familles a chaque etape du parcours scolaire.
+                    Le Lycée Montaigne dispose d&apos;un service d&apos;orientation dédié à l&apos;accompagnement
+                    personnalisé de chaque élève dans la construction de son projet d&apos;avenir. Notre
+                    conseillère d&apos;orientation est présente pour informer, conseiller et guider les
+                    élèves et leurs familles à chaque étape du parcours scolaire.
                   </p>
                   <p className="mt-4 leading-relaxed text-text-muted">
-                    De l&apos;exploration des metiers a la preparation des candidatures post-bac, en passant
-                    par les forums et les entretiens individualises, notre equipe met tout en oeuvre
-                    pour que chaque eleve trouve sa voie.
+                    De l&apos;exploration des métiers à la préparation des candidatures post-bac, en passant
+                    par les forums et les entretiens individualisés, notre équipe met tout en œuvre
+                    pour que chaque élève trouve sa voie.
                   </p>
                 </>
               )}
@@ -215,14 +215,14 @@ export function OrientationContent({ documents, sections, activities, universiti
                 ) : (
                   <>
                     <p className="mt-6 leading-relaxed text-text-muted">
-                      Des la classe de 6eme, le Lycee Montaigne accompagne chaque eleve dans la construction
+                      Dès la classe de 6ème, le Lycée Montaigne accompagne chaque élève dans la construction
                       de son parcours d&apos;orientation. Une PRIO (personne ressource en information et orientation),
-                      une professeure documentaliste et la CPE travaillent ensemble pour guider les eleves
-                      vers les filieres et les metiers qui correspondent a leurs talents et aspirations.
+                      une professeure documentaliste et la CPE travaillent ensemble pour guider les élèves
+                      vers les filières et les métiers qui correspondent à leurs talents et aspirations.
                     </p>
                     <p className="mt-4 leading-relaxed text-text-muted">
-                      Des forums, des rencontres avec des professionnels, des visites d&apos;universites et
-                      un accompagnement individualise permettent a chaque eleve de faire des choix eclaires.
+                      Des forums, des rencontres avec des professionnels, des visites d&apos;universités et
+                      un accompagnement individualisé permettent à chaque élève de faire des choix éclairés.
                     </p>
                   </>
                 )}
@@ -247,7 +247,7 @@ export function OrientationContent({ documents, sections, activities, universiti
           <div className="mx-auto max-w-7xl px-4">
             <SectionHeader
               title="Calendriers d'orientation"
-              subtitle="Planifiez l'annee de votre enfant avec les echeances cles"
+              subtitle="Planifiez l'année de votre enfant avec les échéances clés"
             />
             {/* Calendriers intro text + photo */}
             <FadeInView>
@@ -260,11 +260,11 @@ export function OrientationContent({ documents, sections, activities, universiti
                     />
                   ) : (
                     <p className="leading-relaxed text-text-muted">
-                      Les calendriers d&apos;orientation permettent aux eleves et a leurs familles de
-                      visualiser les etapes cles de l&apos;annee : forums des metiers, journees portes
-                      ouvertes des universites, dates limites de candidature et entretiens
-                      d&apos;orientation. Chaque niveau dispose de son propre calendrier adapte
-                      aux echeances specifiques.
+                      Les calendriers d&apos;orientation permettent aux élèves et à leurs familles de
+                      visualiser les étapes clés de l&apos;année : forums des métiers, journées portes
+                      ouvertes des universités, dates limites de candidature et entretiens
+                      d&apos;orientation. Chaque niveau dispose de son propre calendrier adapté
+                      aux échéances spécifiques.
                     </p>
                   )}
                 </div>
@@ -303,7 +303,7 @@ export function OrientationContent({ documents, sections, activities, universiti
                       <p className="text-sm leading-relaxed text-text-muted">{cal.label}</p>
                       <div className="mt-4 flex items-center gap-2 text-sm font-medium text-primary transition-colors group-hover:text-secondary">
                         <FileDown className="h-4 w-4" />
-                        Telecharger le calendrier
+                        Télécharger le calendrier
                       </div>
                     </div>
                   </a>
@@ -319,8 +319,8 @@ export function OrientationContent({ documents, sections, activities, universiti
         <section id="activites" className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">
             <SectionHeader
-              title="Activites d'orientation"
-              subtitle="Forums, rencontres et evenements pour eclairer les choix de nos eleves"
+              title="Activités d'orientation"
+              subtitle="Forums, rencontres et événements pour éclairer les choix de nos élèves"
             />
             <StaggerChildren className="mt-12 grid gap-6 md:grid-cols-3">
               {displayActivities.map((activity, i) => (
@@ -369,9 +369,9 @@ export function OrientationContent({ documents, sections, activities, universiti
                 />
               ) : (
                 <p className="mt-4 text-text-muted">
-                  Decouvrez les possibilites d&apos;admission post-bac pour les eleves du Lycee Montaigne.
-                  Notre equipe accompagne chaque eleve dans ses demarches d&apos;inscription aupres des
-                  etablissements d&apos;enseignement superieur au Liban et a l&apos;international.
+                  Découvrez les possibilités d&apos;admission post-bac pour les élèves du Lycée Montaigne.
+                  Notre équipe accompagne chaque élève dans ses démarches d&apos;inscription auprès des
+                  établissements d&apos;enseignement supérieur au Liban et à l&apos;international.
                 </p>
               )}
             </div>
@@ -396,7 +396,7 @@ export function OrientationContent({ documents, sections, activities, universiti
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-secondary to-secondary-dark text-white">
                 <Trophy className="h-7 w-7" />
               </div>
-              <SectionHeader title={admissionsSection?.title || "Les succes de l'orientation au college et au lycee"} />
+              <SectionHeader title={admissionsSection?.title || "Les succès de l'orientation au collège et au lycée"} />
               {admissionsSection?.contentHtml ? (
                 <div
                   className="mt-4 text-text-muted [&>p]:mt-4"
@@ -404,8 +404,8 @@ export function OrientationContent({ documents, sections, activities, universiti
                 />
               ) : (
                 <p className="mt-4 text-text-muted">
-                  Nos bacheliers sont admis dans les universites les plus prestigieuses au Liban et a
-                  l&apos;international, temoignant de l&apos;excellence academique et de la perseverance de nos eleves.
+                  Nos bacheliers sont admis dans les universités les plus prestigieuses au Liban et à
+                  l&apos;international, témoignant de l&apos;excellence académique et de la persévérance de nos élèves.
                 </p>
               )}
             </div>
@@ -417,7 +417,7 @@ export function OrientationContent({ documents, sections, activities, universiti
                   <div className="group relative aspect-square overflow-hidden rounded-[20px] shadow-[var(--shadow-soft)]">
                     <Image
                       src={img}
-                      alt={`Resultats d'admission ${i + 1}`}
+                      alt={`Résultats d'admission ${i + 1}`}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                       sizes="(max-width: 768px) 50vw, 25vw"
@@ -465,9 +465,9 @@ export function OrientationContent({ documents, sections, activities, universiti
                   />
                 ) : (
                   <p className="mt-4 leading-relaxed text-white/80">
-                    Parcoursup est la plateforme nationale de preinscription en premiere annee de
-                    l&apos;enseignement superieur en France. Les eleves de terminale du Lycee Montaigne
-                    sont accompagnes tout au long du processus pour formuler leurs voeux et constituer
+                    Parcoursup est la plateforme nationale de préinscription en première année de
+                    l&apos;enseignement supérieur en France. Les élèves de terminale du Lycée Montaigne
+                    sont accompagnés tout au long du processus pour formuler leurs vœux et constituer
                     leurs dossiers.
                   </p>
                 )}
@@ -505,9 +505,9 @@ export function OrientationContent({ documents, sections, activities, universiti
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-white">
                   <GraduationCap className="h-7 w-7" />
                 </div>
-                <SectionHeader title="Accompagnement personnalise au Liban" />
+                <SectionHeader title="Accompagnement personnalisé au Liban" />
                 <p className="mt-4 text-text-muted">
-                  Accedez directement aux portails d&apos;admission des universites partenaires au Liban.
+                  Accédez directement aux portails d&apos;admission des universités partenaires au Liban.
                 </p>
               </div>
             </FadeInView>
@@ -556,9 +556,9 @@ export function OrientationContent({ documents, sections, activities, universiti
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-secondary-dark to-secondary text-white">
                   <GraduationCap className="h-7 w-7" />
                 </div>
-                <SectionHeader title="Accompagnement personnalise a l'etranger" />
+                <SectionHeader title="Accompagnement personnalisé à l'étranger" />
                 <p className="mt-4 text-text-muted">
-                  Accedez directement aux portails d&apos;admission des universites partenaires a l&apos;international.
+                  Accédez directement aux portails d&apos;admission des universités partenaires à l&apos;international.
                 </p>
               </div>
             </FadeInView>
@@ -619,7 +619,7 @@ export function OrientationContent({ documents, sections, activities, universiti
               />
             ) : (
               <p className="mx-auto mt-4 max-w-xl text-white/80">
-                Notre equipe d&apos;orientation est a votre disposition pour accompagner votre enfant
+                Notre équipe d&apos;orientation est à votre disposition pour accompagner votre enfant
                 dans ses choix de parcours.
               </p>
             )}

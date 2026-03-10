@@ -30,7 +30,7 @@ export function ContactContent({ address, email, phone, fax, googleMapsUrl, goog
     },
     {
       icon: Phone,
-      label: "Telephone",
+      label: "Téléphone",
       value: phone,
       href: "tel:+9614982082",
     },
@@ -56,7 +56,7 @@ export function ContactContent({ address, email, phone, fax, googleMapsUrl, goog
               <div>
                 <h2 className="text-2xl font-bold">Formulaire de contact</h2>
                 <p className="mt-2 text-text-muted">
-                  Envoyez-nous un message et nous vous repondrons dans les plus brefs delais.
+                  Envoyez-nous un message et nous vous répondrons dans les plus brefs délais.
                 </p>
                 <ContactForm />
               </div>
@@ -65,7 +65,7 @@ export function ContactContent({ address, email, phone, fax, googleMapsUrl, goog
             {/* Contact Info + Map */}
             <FadeInView delay={0.2}>
               <div>
-                <h2 className="text-2xl font-bold">Nos coordonnees</h2>
+                <h2 className="text-2xl font-bold">Nos coordonnées</h2>
                 <StaggerChildren className="mt-6 space-y-4">
                   {contactInfo.map((item) => {
                     const Icon = item.icon;
@@ -100,7 +100,7 @@ export function ContactContent({ address, email, phone, fax, googleMapsUrl, goog
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    title="Lycee Montaigne - Beit Chabab"
+                    title="Lycée Montaigne - Beit Chabab"
                   />
                 </div>
               </div>

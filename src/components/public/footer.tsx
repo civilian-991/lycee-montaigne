@@ -141,7 +141,7 @@ export function Footer({ settings }: { settings: FooterSettings }) {
           )}
 
           <div className="mt-6 text-center text-xs text-white/50">
-            &copy; {new Date().getFullYear()} Lycee Montaigne — Beit Chabab. Tous droits reserves.
+            &copy; {new Date().getFullYear()} Lycée Montaigne — Beit Chabab. Tous droits réservés.
           </div>
         </div>
       </div>

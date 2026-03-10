@@ -90,14 +90,14 @@ export function ExcellenceContent({
 
   return (
     <>
-      <PageHero title="Excellence Academique" />
+      <PageHero title="Excellence Académique" />
 
       {/* ─── Offre pedagogique ─────────────────────────────────── */}
       <section id="pedagogie" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader
-            title="Offre pedagogique"
-            subtitle="De la maternelle au baccalaureat, un parcours d'excellence continu"
+            title="Offre pédagogique"
+            subtitle="De la maternelle au baccalauréat, un parcours d'excellence continu"
           />
           <StaggerChildren className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {displayPrograms.map((program) => (
@@ -123,7 +123,7 @@ export function ExcellenceContent({
                     </h3>
                     <p className="mt-1 text-sm text-text-muted">{program.levels}</p>
                     <div className="mt-auto flex items-center gap-1 pt-4 text-xs font-semibold text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                      Decouvrir <ArrowRight className="h-3 w-3" />
+                      Découvrir <ArrowRight className="h-3 w-3" />
                     </div>
                   </div>
                 </Link>
@@ -140,7 +140,7 @@ export function ExcellenceContent({
           <div className="mx-auto max-w-7xl px-4">
             <SectionHeader
               title="Examens et Certificats"
-              subtitle="Des diplomes reconnus et des certifications internationales"
+              subtitle="Des diplômes reconnus et des certifications internationales"
             />
 
             {/* Diplomas + Results — balanced layout */}
@@ -150,7 +150,7 @@ export function ExcellenceContent({
                 <div className="relative aspect-[4/3] overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)]">
                   <Image
                     src="/images/examens-resultats/January2026/resized_IMG_6942.PNG"
-                    alt="Resultats 2024-2025"
+                    alt="Résultats 2024-2025"
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 50vw"
@@ -158,9 +158,9 @@ export function ExcellenceContent({
                 </div>
                 {/* Diplomas */}
                 <div>
-                  <h3 className="font-heading text-2xl font-bold text-primary">Diplomes prepares</h3>
+                  <h3 className="font-heading text-2xl font-bold text-primary">Diplômes préparés</h3>
                   <p className="mt-2 text-sm text-text-muted">
-                    Nos eleves sont prepares aux examens francais, libanais et internationaux
+                    Nos élèves sont préparés aux examens français, libanais et internationaux
                   </p>
                   <div className="mt-5 space-y-2.5">
                     {diplomas.map((d) => (
@@ -190,7 +190,7 @@ export function ExcellenceContent({
               <FadeInView>
                 <h3 className="text-center font-heading text-2xl font-bold text-primary">Certifications internationales</h3>
                 <p className="mx-auto mt-2 max-w-xl text-center text-sm text-text-muted">
-                  Nos eleves preparent et obtiennent des certifications reconnues mondialement
+                  Nos élèves préparent et obtiennent des certifications reconnues mondialement
                 </p>
               </FadeInView>
               <StaggerChildren className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
@@ -222,8 +222,8 @@ export function ExcellenceContent({
       <section id="projet" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <SectionHeader
-            title="Projet d'etablissement 2021–2026"
-            subtitle="Trois axes strategiques pour accompagner chaque eleve vers la reussite"
+            title="Projet d'établissement 2021–2026"
+            subtitle="Trois axes stratégiques pour accompagner chaque élève vers la réussite"
           />
           <div className="mt-14 space-y-8">
             {displayAxes.map((axe, i) => (
@@ -273,7 +273,7 @@ export function ExcellenceContent({
         <WaveDivider fill="var(--color-background)" flip className="relative z-10" />
         <div className="py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4">
-            <SectionHeader title="Parcours educatifs" />
+            <SectionHeader title="Parcours éducatifs" />
             <StaggerChildren className="mt-12 grid gap-5 sm:grid-cols-2">
               {displayParcours.map((p) => {
                 const Icon = p.icon;
@@ -308,25 +308,25 @@ export function ExcellenceContent({
                     Engagement inclusif
                   </span>
                   <h2 className="mt-4 font-heading text-3xl font-bold text-white md:text-4xl">
-                    Pole inclusion
+                    Pôle inclusion
                   </h2>
                   <p className="mt-4 text-base leading-relaxed text-white/75">
-                    Le Lycee Montaigne s&apos;engage pour l&apos;inclusion de tous les eleves a besoins educatifs
-                    particuliers (EBEP). Notre pole inclusion accompagne chaque enfant dans son parcours scolaire
-                    avec des dispositifs adaptes.
+                    Le Lycée Montaigne s&apos;engage pour l&apos;inclusion de tous les élèves à besoins éducatifs
+                    particuliers (EBEP). Notre pôle inclusion accompagne chaque enfant dans son parcours scolaire
+                    avec des dispositifs adaptés.
                   </p>
                   <Link
                     href="/pole-inclusion"
                     className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.2)]"
                   >
-                    Decouvrir le pole inclusion
+                    Découvrir le pôle inclusion
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
                 <div className="relative min-h-[300px] lg:min-h-full">
                   <Image
                     src="/images/vie-s1/November2024/GS7jV1MyA75tAjglBQcx.jpg"
-                    alt="Pole inclusion"
+                    alt="Pôle inclusion"
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 50vw"
@@ -348,7 +348,7 @@ export function ExcellenceContent({
               <Link href="/excellence-academique/bcd" className="group relative block aspect-[16/10] overflow-hidden rounded-[20px] shadow-[var(--shadow-elevated)]">
                 <Image
                   src="/images/excellence-bcd-ccc-extras/November2025/4rQCpvOLwImnO4a1DDyT.jpg"
-                  alt="Bibliotheque Centre Documentaire"
+                  alt="Bibliothèque Centre Documentaire"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -359,7 +359,7 @@ export function ExcellenceContent({
                     Primaire
                   </span>
                   <h3 className="mt-3 text-xl font-bold text-white md:text-2xl">
-                    Bibliotheque Centre Documentaire (BCD)
+                    Bibliothèque Centre Documentaire (BCD)
                   </h3>
                   <span className="mt-2 inline-flex items-center gap-1 text-sm text-white/70 transition-colors group-hover:text-white">
                     Explorer <ArrowRight className="h-3.5 w-3.5" />

@@ -63,7 +63,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
       <section id="actualite" className="py-16 md:py-24">
         <div className="mx-auto max-w-7xl px-4">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <SectionHeader title="Actualites" className="mb-0 text-left" />
+            <SectionHeader title="Actualités" className="mb-0 text-left" />
             <a
               href={instagramLink}
               target="_blank"
@@ -95,7 +95,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                   <div className="absolute bottom-0 p-6 md:p-8">
                     <span className="inline-block rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
-                      A la une
+                      À la une
                     </span>
                     <h3 className="mt-3 text-xl font-bold text-white md:text-2xl">{displayNews[0]?.title}</h3>
                   </div>
@@ -129,7 +129,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
             </div>
           ) : (
             <p className="mt-8 text-center text-text-muted">
-              Aucune actualite pour le moment. Suivez-nous sur Instagram pour les dernieres nouvelles.
+              Aucune actualité pour le moment. Suivez-nous sur Instagram pour les dernières nouvelles.
             </p>
           )}
 
@@ -139,7 +139,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                 href="/actualites"
                 className="inline-flex items-center gap-2 rounded-full border-2 border-primary/20 px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary hover:text-white"
               >
-                Voir toutes les actualites
+                Voir toutes les actualités
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -159,7 +159,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary/10">
                       <Leaf className="h-5 w-5 text-secondary" />
                     </div>
-                    <SectionHeader title="Developpement durable" className="mb-0 text-left" />
+                    <SectionHeader title="Développement durable" className="mb-0 text-left" />
                   </div>
                   {devDurableSection?.contentHtml ? (
                     <div
@@ -168,8 +168,8 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                     />
                   ) : (
                     <p className="mt-6 leading-relaxed text-text-muted">
-                      Depuis sa creation en 2012, le Lycee Montaigne s&apos;engage en faveur du developpement durable
-                      et de l&apos;eco-citoyennete. Notre demarche vise a former des citoyens responsables et
+                      Depuis sa création en 2012, le Lycée Montaigne s&apos;engage en faveur du développement durable
+                      et de l&apos;éco-citoyenneté. Notre démarche vise à former des citoyens responsables et
                       conscients des enjeux environnementaux.
                     </p>
                   )}
@@ -180,7 +180,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                   )}
                   {sustainabilityReferents && (
                     <div className="mt-6 rounded-2xl border border-border bg-background p-5 shadow-[var(--shadow-soft)]">
-                      <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referents</p>
+                      <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Référents</p>
                       {sustainabilityReferents.split("\n").filter(Boolean).map((line, i) => (
                         <p key={i} className="mt-1 text-sm text-text">{line}</p>
                       ))}
@@ -194,7 +194,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                         <div className="relative aspect-square overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
                           <Image
                             src={localImage(img) ?? img}
-                            alt={`Developpement durable ${i + 1}`}
+                            alt={`Développement durable ${i + 1}`}
                             fill
                             className="object-cover"
                             sizes="(max-width: 1024px) 50vw, 25vw"
@@ -207,7 +207,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                   <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-soft)]">
                     <Image
                       src={localImage(devDurableSection?.image) || "/images/development-durables/November2024/IXjTyiAwx79KnYFRYWvR.jpg"}
-                      alt="Developpement durable"
+                      alt="Développement durable"
                       fill
                       className="object-cover"
                       sizes="(max-width: 1024px) 100vw, 50vw"
@@ -230,7 +230,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                 <div className="relative min-h-[280px]">
                   <Image
                     src={localImage(webradioSection?.image) || "/images/webradios/November2024/amxLKLrgOzIeBoHAVT4x.jpeg"}
-                    alt="Webradio du Lycee Montaigne"
+                    alt="Webradio du Lycée Montaigne"
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 50vw"
@@ -253,14 +253,14 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                     />
                   ) : (
                     <p className="mt-3 leading-relaxed text-text-muted">
-                      La webradio du Lycee Montaigne est un projet educatif qui permet aux eleves de
-                      developper leurs competences en communication, expression orale et travail d&apos;equipe.
-                      Les eleves produisent des emissions sur des sujets varies.
+                      La webradio du Lycée Montaigne est un projet éducatif qui permet aux élèves de
+                      développer leurs compétences en communication, expression orale et travail d&apos;équipe.
+                      Les élèves produisent des émissions sur des sujets variés.
                     </p>
                   )}
                   {webradioReferents && (
                     <div className="mt-5 rounded-2xl border border-border bg-background-alt p-4">
-                      <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Referentes</p>
+                      <p className="text-xs font-semibold tracking-wide text-text-muted uppercase">Référentes</p>
                       <p className="mt-1.5 text-sm text-text">{webradioReferents}</p>
                     </div>
                   )}
@@ -278,7 +278,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
           <div className="mx-auto max-w-7xl px-4">
             <SectionHeader
               title="Nos valeurs en action"
-              subtitle="Democratie scolaire et egalite au coeur de notre projet educatif"
+              subtitle="Démocratie scolaire et égalité au cœur de notre projet éducatif"
             />
             {/* Democratie scolaire — full-width prominent card */}
             <FadeInView>
@@ -287,7 +287,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                   <div className="relative min-h-[280px]">
                     <Image
                       src={localImage(climatSection?.image) || "/images/climat-categories/April2025/mNHwl4NOWUZkZgPfyTNi.jpeg"}
-                      alt="Democratie scolaire"
+                      alt="Démocratie scolaire"
                       fill
                       className="object-cover"
                       sizes="(max-width: 1024px) 100vw, 50vw"
@@ -298,7 +298,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                   </div>
                   <div className="flex flex-col justify-center p-8 md:p-10">
                     <h3 className="font-heading text-2xl font-bold text-primary md:text-3xl">
-                      {climatSection?.title || "Democratie scolaire"}
+                      {climatSection?.title || "Démocratie scolaire"}
                     </h3>
                     {climatSection?.contentHtml ? (
                       <div
@@ -307,9 +307,9 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                       />
                     ) : (
                       <p className="mt-3 leading-relaxed text-text-muted">
-                        Le Lycee Montaigne favorise la participation active des eleves a travers les instances de
-                        democratie scolaire : conseil de vie collegienne (CVC), conseil de vie lyceenne (CVL),
-                        et elections de delegues.
+                        Le Lycée Montaigne favorise la participation active des élèves à travers les instances de
+                        démocratie scolaire : conseil de vie collégienne (CVC), conseil de vie lycéenne (CVL),
+                        et élections de délégués.
                       </p>
                     )}
                     <div className="mt-6 flex flex-wrap gap-3">
@@ -317,14 +317,14 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                         href="/vie-du-lm/climat/cvc"
                         className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-light hover:shadow-[0_4px_16px_-2px_rgba(2,53,91,0.25)]"
                       >
-                        Acceder aux activites du CVC
+                        Accéder aux activités du CVC
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                       <Link
                         href="/vie-du-lm/climat/cvl"
                         className="inline-flex items-center gap-2 rounded-full border-2 border-primary/20 bg-background px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-primary hover:text-white"
                       >
-                        Acceder aux activites du CVL
+                        Accéder aux activités du CVL
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                     </div>
@@ -341,7 +341,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                     <div className="relative aspect-[16/9] overflow-hidden lg:aspect-auto lg:min-h-[240px]">
                       <Image
                         src={localImage(egaliteSection?.image) || "/images/egalite-intros/October2024/7QOD9LQ0ZmvqaH1ck4qJ.jpg"}
-                        alt="Egalite filles-garcons"
+                        alt="Égalité filles-garçons"
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         sizes="(max-width: 1024px) 100vw, 50vw"
@@ -352,7 +352,7 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                     </div>
                     <div className="p-6 md:p-8">
                       <h3 className="text-lg font-bold text-primary">
-                        {egaliteSection?.title || "Egalite"}
+                        {egaliteSection?.title || "Égalité"}
                       </h3>
                       {egaliteSection?.contentHtml ? (
                         <div
@@ -361,16 +361,16 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                         />
                       ) : (
                         <p className="mt-2 text-sm leading-relaxed text-text-muted">
-                          Conformement a la politique de l&apos;AEFE, le Lycee Montaigne s&apos;inscrit dans une demarche
-                          active de promotion de l&apos;egalite entre les filles et les garcons et de lutte
-                          contre les stereotypes.
+                          Conformément à la politique de l&apos;AEFE, le Lycée Montaigne s&apos;inscrit dans une démarche
+                          active de promotion de l&apos;égalité entre les filles et les garçons et de lutte
+                          contre les stéréotypes.
                         </p>
                       )}
                       <Link
                         href="/vie-du-lm/egalite/activite"
                         className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-secondary"
                       >
-                        Voir les activites
+                        Voir les activités
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                     </div>
@@ -392,27 +392,27 @@ export function VieContent({ news, sections, webradioReferents, sustainabilityRe
                 <div className="p-8 md:p-12">
                   <div className="flex items-center gap-2">
                     <Plane className="h-5 w-5 text-white/60" />
-                    <span className="text-xs font-semibold tracking-wide text-white/60 uppercase">Voyages et decouvertes</span>
+                    <span className="text-xs font-semibold tracking-wide text-white/60 uppercase">Voyages et découvertes</span>
                   </div>
                   <h2 className="mt-4 font-heading text-3xl font-bold text-white md:text-4xl">
-                    Sejours pedagogiques
+                    Séjours pédagogiques
                   </h2>
                   <p className="mt-4 text-base leading-relaxed text-white/75">
-                    Le Lycee Montaigne organise des sejours pedagogiques et des voyages scolaires qui enrichissent
-                    le parcours educatif des eleves et favorisent l&apos;ouverture culturelle et internationale.
+                    Le Lycée Montaigne organise des séjours pédagogiques et des voyages scolaires qui enrichissent
+                    le parcours éducatif des élèves et favorisent l&apos;ouverture culturelle et internationale.
                   </p>
                   <Link
                     href="/sejours-pedagogiques"
                     className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-primary transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.2)]"
                   >
-                    Voir les sejours
+                    Voir les séjours
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
                 <div className="relative min-h-[300px] lg:min-h-full">
                   <Image
                     src="/images/actions-sportives/May2025/5AyqpqwCqoBIFxIXphFP.jpeg"
-                    alt="Sejours pedagogiques"
+                    alt="Séjours pédagogiques"
                     fill
                     className="object-cover"
                     sizes="(max-width: 1024px) 100vw, 50vw"
